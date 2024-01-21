@@ -1,0 +1,68 @@
+on right click:
+    claimBounty(player) if name of clicked entity = "Bounty Hunter"
+
+function claimBounty(p: player):
+
+    #CHECK IF PLAYER ALREADY HAS A BOUNTY
+    (metadata tag "Bounty_PlayerActive" of {_p}) ? false = false
+    set (metadata tag "Bounty_PlayerActive" of {_p}) to true
+
+    #GET BOUNTY TARGET FOR PLAYER
+    loop all players where [input is not {_p}]:
+        if loop-player is online:
+            #BOUNTY_TARGETOFPLAYER = PERSON WHO IS BEING HUNTED
+            set (metadata tag "Bounty_TargetOfPlayer" of {_p}) to random element out of loop-value
+            #BOUNTY_PREYCHECK = TAG FOR TARGET OF HUNTER
+            set (metadata tag "Bounty_PreyCheck" of loop-value) to true
+            #BOUNTY_HUNTERCHECK = TAG FOR HUNTER OF TARGET
+            set (metadata tag "Bounty_HunterCheck" of loop-value) to {_p}
+        else:
+            send "&8[&fBounty Hunter&8] &7Silly boy, you cannot put a bounty on someone offline." to {_p}
+
+    send "&8[&fBounty Hunter&8] &7Target is &c%(metadata tag "Bounty_TargetOfPlayer" of {_p})%&7, reward is &8[&a$100&8]" to {_p}
+    send title "&b%font("you are being hunted")%" with subtitle "&7By: %{_p}%" to (metadata tag "Bounty_TargetOfPlayer" of {_p})
+
+
+on death of player:
+
+    attacker is a player
+
+    #CHECK IF VICTIM IS PERSON WITH BOUNTY
+    if victim = (metadata tag "Bounty_TargetOfPlayer" of attacker):
+        #SET BOUNTY STATUS OF HUNTER TO FALSE
+        set (metadata tag "Bounty_PlayerActive" of attacker) to false
+        #SET VICTIM'S STATUS TO FALSE - THE HUNTER CANNOT KEEP KILLING THEM
+        set (metadata tag "Bounty_PreyCheck" of victim) to false
+        
+        send "&8[&fBounty Hunter&8] &7Bounty claimed, received &8[&a$100&8]" to attacker
+        moneyAdd(attacker, 100)
+
+    #CHECK IF ATTACKER IS PREY (KILLING THEIR HUNTER)
+    else if attacker = (metadata tag "Bounty_TargetOfPlayer" of victim):
+        set (metadata tag "Bounty_PlayerActive" of victim) to false
+        set (metadata tag "Bounty_PreyCheck" of victim) to false
+
+        send "&8[&fBounty Hunter&8] &7Killed hunter, received &8[&a$50&8]" to attacker
+        moneyAdd(attacker, 50)
+
+
+on quit:
+
+    #CHECK IF PLAYER WITH BOUNTY LEAVES
+    if (metadata tag "Bounty_PreyCheck" of player) = true:
+
+        send "&8[&fBounty Hunter&8] &7Target has left, received &8[&a$50&8]" to (metadata tag "Bounty_HunterCheck" of player)
+        moneyAdd((metadata tag "Bounty_HunterCheck" of player), 50)
+        moneyRemove(player, 50)
+
+        delete (metadata tag "Bounty_Active" of (metadata tag "Bounty_HunterCheck" of player))
+        delete (metadata tag "Bounty_PreyCheck" of player)
+        delete (metadata tag "Bounty_HunterCheck" of player)
+
+    #CHECK IF HUNTER HAS LEFT
+    else if (metadata tag "Bounty_PlayerActive" of player) = true:
+
+        send "&8[&fBounty Hunter&8] &7Hunter has left" to (metadata tag "Bounty_TargetOfPlayer" of player)
+
+        delete (metadata tag "Bounty_PlayerActive" of player)
+        delete (metadata tag "Bounty_TargetOfPlayer" of player)

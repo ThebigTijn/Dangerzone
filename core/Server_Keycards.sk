@@ -1,0 +1,91 @@
+aliases:
+	keycione = stone button
+	keycitwo = stone button, polished blackstone button
+	keyzero = acacia button
+	keyone = acacia button, birch button
+	keytwo = acacia button, birch button, oak button
+	keythree = acacia button, birch button, oak button, jungle button
+	keyfour = acacia button, birch button, oak button, jungle button, spruce button
+	keyfive = acacia button, birch button, oak button, jungle button, spruce button, dark oak button
+	keyomni = acacia button, birch button, oak button, jungle button, spruce button, dark oak button, crimson button, warped button, stone button, polished blackstone button
+
+function checkReader(b: block) :: boolean:
+	return true if tag "custom;IsReader" of nbt compound of {_b} = 1
+	return false
+
+function returnKeyLevel(i: item) :: itemtype:
+	return keycione if tag "custom;Keycard" of nbt compound of {_i} is "11"
+	return keycitwo if tag "custom;Keycard" of nbt compound of {_i} is "12"
+	return keyone if tag "custom;Keycard" of nbt compound of {_i} is "1"
+	return keytwo if tag "custom;Keycard" of nbt compound of {_i} is "2"
+	return keythree if tag "custom;Keycard" of nbt compound of {_i} is "3"
+	return keyfour if tag "custom;Keycard" of nbt compound of {_i} is "4"
+	return keyfive if tag "custom;Keycard" of nbt compound of {_i} is "5"
+	return keyomni if tag "custom;Keycard" of nbt compound of {_i} is "6"
+	return keyzero 
+
+function returnLevelKey(b: block) :: text:
+	return "&7CI" if {_b} = stone button
+	return "&8CI Commander" if {_b} = polished blackstone button
+	return "&aL1" if {_b} = birch button
+	return "&eL2" if {_b} = oak button
+	return "&6L3" if {_b} = jungle button
+	return "&cL4" if {_b} = spruce button
+	return "&5L5" if {_b} = dark oak button
+	return "&9OMNI" if {_b} = crimson button or warped button
+	return "&4ERROR!"
+
+on right click on button:
+	checkReader(event-block) = true
+	if gamemode of player != creative or spectator:
+		if difference between (metadata tag "lastkeycard" of player) and now is less than 1.84 seconds:
+			cancel event
+			stop
+		if returnKeyLevel(player's tool) = event-block:
+			animationKeycard(player,event-block)
+			acceptCard(player)
+		else:
+			animationKeycard(player,event-block)
+			denyCard(player,event-block)
+			cancel event
+	else:
+		acceptCard(player)
+
+function acceptCard(p: player):
+	send action bar "&8&l| <##37EF10>ᴀᴄᴄᴇѕѕ ɢʀᴀɴᴛᴇᴅ" to {_p}
+	play sound "block.note_block.bit" with volume 1 with pitch 2 to players at {_p}
+
+function denyCard(p: player,b: block):
+	play sound "block.note_block.bit" with volume 1 with pitch 0 to players at {_p}
+	send action bar "&8&l| &cᴀᴄᴄᴇѕѕ ᴅᴇɴɪᴇᴅ &7(%returnLevelKey({_b})% &7ʀᴇǫᴜɪʀᴇᴅ)" to {_p}
+
+function animationKeycard(p: player,b: block):
+	set (metadata tag "lastkeycard" of {_p}) to now
+	set {_loc1} to location 0.5 above {_p}
+	spawn 1 of armor stand at {_loc1} with nbt nbt compound from "{Invisible:1b,NoGravity:1b,ShowArms:1b,Invulnerable:1b,Pose:{RightArm:[270f,90f,90f]},Small:1}"
+	set {_as} to last spawned armor stand
+	set name of {_as} to "Keycard"
+	set the held item of {_as} to {_p}'s tool
+	set {_tool} to {_p}'s tool
+	set (metadata tag "usingkeycard" of {_p}) to true
+	set {_p}'s tool to air
+	set {_loc3} to location 0.27 behind {_b}
+	set {_location} to location 1 below {_loc3}
+	teleport {_as} to {_location}
+	wait 1.5 seconds
+	teleport {_as} to location 0.5 above {_p}
+	wait 6 ticks
+	kill {_as}
+	if {_p}'s tool is air:
+		set {_p}'s tool to {_tool}
+	else:
+		give {_p} {_tool}
+	delete (metadata tag "usingkeycard" of {_p})
+
+on pick up:
+	(metadata tag "usingkeycard" of player) is true
+	cancel event
+
+on right click on armor stand:
+	name of event-entity is "Keycard"
+	cancel event

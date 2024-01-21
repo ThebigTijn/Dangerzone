@@ -1,0 +1,47 @@
+function scoreboard(p: player):
+    set {_xp} to xpGet({_p})
+    set {_n} to ((100 + levelGet({_p})) * 40)
+    set {_xp} to ({_xp} / {_n}) * 100
+    set {_xp} to "&cᴍᴀx" if {_xp} > 100
+    set title of {_p}'s scoreboard to " <##B82031>&lDANGERZONE &8[<##E5E4E2>%number of all players%/200&8]"
+    set line 15 of {_p}'s scoreboard to ""
+    set line 14 of {_p}'s scoreboard to "<##B2BEB5>│ <##D22B2B>&lᴘʀᴏꜰɪʟᴇ"
+    set line 13 of {_p}'s scoreboard to "<##B2BEB5>│ &fʀᴀɴᴋ: %prefix of {_p}%"
+    set line 12 of {_p}'s scoreboard to "<##B2BEB5>│ &fʟᴇᴠᴇʟ: &7%levelGet({_p})%"
+    set line 11 of {_p}'s scoreboard to "<##B2BEB5>│ &fхᴘ: %textB({_xp},100,"┃┃┃┃┃┃┃┃┃┃","&a","&c")% &7%round({_xp}) ? 0%%%"
+    set line 10 of {_p}'s scoreboard to ""
+    set line 9 of {_p}'s scoreboard to "<##B2BEB5>│ <##D22B2B>&lѕᴛᴀᴛɪѕᴛɪᴄѕ"
+    set line 8 of {_p}'s scoreboard to "<##B2BEB5>│ &fʙᴀʟᴀɴᴄᴇ: &a$%moneyGet({_p})%"
+    set line 7 of {_p}'s scoreboard to "<##B2BEB5>│ &fᴋɪʟʟѕ: &c%player kills stat of {_p}%"
+    set line 6 of {_p}'s scoreboard to "<##B2BEB5>│ &fᴅᴇᴀᴛʜѕ: &4%deaths stat of {_p}%"
+    set line 5 of {_p}'s scoreboard to "<##B2BEB5>│ &fᴋᴅ: &6%player kills stat of {_p} / deaths stat of {_p}%"
+    set line 4 of {_p}'s scoreboard to ""
+    set line 3 of {_p}'s scoreboard to "<##E5E4E2>ᴅᴀɴɢᴇʀᴢᴏɴᴇ.ᴍɪɴᴇʜᴜᴛ.ɢɢ"
+
+function updateScoreboard(p: player):
+    set {_xp} to xpGet({_p})
+    set {_n} to ((100 + levelGet({_p})) * 40)
+    set {_xp} to ({_xp} / {_n}) * 100
+    set {_xp} to "&cᴍᴀx" if {_xp} > 100
+    set line 13 of {_p}'s scoreboard to "<##B2BEB5>│ &fʀᴀɴᴋ: %prefix of {_p}%"
+    set line 12 of {_p}'s scoreboard to "<##B2BEB5>│ &fʟᴇᴠᴇʟ: &7%levelGet({_p})%"
+    set line 11 of {_p}'s scoreboard to "<##B2BEB5>│ &fхᴘ: %textB({_xp},100,"┃┃┃┃┃┃┃┃┃┃","&a","&c")% &7%round({_xp}) ? 0%%%"
+    set line 8 of {_p}'s scoreboard to "<##B2BEB5>│ &fʙᴀʟᴀɴᴄᴇ: &a$%moneyGet({_p})%"
+    set line 7 of {_p}'s scoreboard to "<##B2BEB5>│ &fᴋɪʟʟѕ: &c%player kills stat of {_p}%"
+    set line 6 of {_p}'s scoreboard to "<##B2BEB5>│ &fᴅᴇᴀᴛʜѕ: &4%deaths stat of {_p}%"
+    set line 5 of {_p}'s scoreboard to "<##B2BEB5>│ &fᴋᴅ: &6%player kills stat of {_p} / deaths stat of {_p}%"
+
+
+on join:
+    scoreboard(player)
+
+on death of player:
+    attacker is a player
+    updateScoreboard(victim)
+    updateScoreboard(attacker)
+
+command update-scoreboard:
+    permission: op
+    trigger:
+        loop all players:
+            updateScoreboard(loop-player)

@@ -1,0 +1,29 @@
+function hugoShop(p: player):
+
+    set {_shop} to virtual dropper inventory named "&8&l%font("contraband shop")%"
+
+    set slot 0,1,2,6,7, and 8 of {_shop} to gray dye named ""
+    set slot 3 of {_shop} to diamond sword named "item"
+    set slot 4 of {_shop} to iron sword named "item2"
+    set slot 5 of {_shop} to wooden sword named "item3"
+
+    set (metadata tag "Hugo_Shop" of {_p}) to {_shop}
+    open {_shop} to {_p}
+
+
+on inventory click:
+
+    event-inventory = (metadata tag "Hugo_Shop" of player)
+    cancel event
+
+    if event-slot = 3,4, or 5:
+
+        set {_item} to event-item
+        set {_num} to 25 if event-slot = 3
+        set {_num} to 75 if event-slot = 4
+        set {_num} to 150 if event-slot = 5
+
+        shopPurchase(player, {_item}, {_num})
+
+on right click:
+    hugoShop(player) if clicked entity = "Hugo"

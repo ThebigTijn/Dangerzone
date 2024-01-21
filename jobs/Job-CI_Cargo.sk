@@ -1,0 +1,25 @@
+on right click:
+    cargoReceive(player) if name of clicked entity = "Cargo"
+
+on place:
+    cargoSell(player, event-block)
+
+function cargoReceive(p: player):
+
+    set {_block} to barrel named "&6Cargo"
+    if {_p}'s inventory does not contain {_block}:
+        give {_p} {_block}
+        send "&8[&6Cargo&8] &7Move received cargo to warehouse" to {_p}
+    else:
+        send "<##E34234>&lSYSTEM &7» Cannot carry more cargo" to {_p}
+
+function cargoSell(p: player, block: block):
+
+    "%region at {_block}%" = "CI_Cargo"
+    {_block} = barrel
+    set block within {_block} to air
+    remove 1 of {_p}'s tool from {_p}'s tool
+
+    set {_value} to random number between 6 and 8
+    send "&8[&6Cargo&8] &7Nicely done, payment &a$%{_value}%" to {_p}
+    moneyAdd({_p}, {_value})

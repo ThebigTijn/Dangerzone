@@ -1,0 +1,11 @@
+command /reloadyaml <text>:
+	permission: op
+	trigger:
+		if arg-1 = "dishwashing":
+			load yaml "plugins/Skript/yaml/jobs/dishwashing.yml" as "dishwashing"
+		else if arg-1 = "warps"
+			load yaml "plugins/Skript/yaml/utilities/warps.yml" as "warps"
+		message "<##E34234>&lSYSTEM &7» &fReloaded yaml, <##E34234>%arg-1%&f."
+	
+on tab complete of "reloadyaml":
+	set tab completions for position 1 to all currently loaded yaml files

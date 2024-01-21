@@ -1,0 +1,11 @@
+on load:
+	load yaml "plugins/Skript/yaml/core/items.yml" as "items"
+	load yaml "plugins/Skript/yaml/core/itemsyntax.yml" as "syntax"
+
+function makeExample():
+	set yaml value "example.type" from "items" to "Weapon, Helmet, Chestplate, Leggings, Boots, Item"
+	set yaml value "example.nbt" from "items" to "NBT COMPOUND"
+	set yaml value "example.item" from "items" to iron sword
+	set yaml value "example.name" from "items" to "&9Hello World"
+	set yaml value "example.description" from "items" to "&fDescription!"
+	save yaml "items"

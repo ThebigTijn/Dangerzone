@@ -1,0 +1,17 @@
+on load:
+    set {_crowbar} to iron hoe named "&7Crowbar" with all flags hidden
+    set tag "custom;IsCrowbar" of nbt compound of {_crowbar} to true
+    set {crowbar} to {_crowbar}
+
+function heistBreakCrate(p: player, block: block):
+    if tag "custom;IsCrowbar" of nbt compound of {_p}'s tool = 1:
+        stop if (metadata tag "Heist_Block_Health" of {_block}) >= 5
+        broadcast (metadata tag "Heist_Block_Health" of {_block})
+        set (metadata tag "Heist_Block_Health" of {_block}) to (metadata tag "Heist_Block_Health" of {_block}) + 1
+        send title "<##778899>%font("cracking crate")%" with subtitle "&8[&c%textB((metadata tag "Heist_Block_Health" of {_block}),5,"▉▉▉▉▉▉▉▉▉▉","&a","&7")%&8]" to {_p}
+    else:
+        send "<##E34234>&lSYSTEM &7» Must use a crowbar." to {_p}
+
+on right click:
+    cancel event if event-block = barrel
+    heistBreakCrate(player, event-block) if (metadata tag "Heist_Crate" of event-block) = true

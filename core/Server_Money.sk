@@ -1,0 +1,51 @@
+function moneySet(p: player,n: integer):
+	nbtSet({_p},"money",{_n})
+	updateScoreboard({_p})
+
+function moneyGet(p: player) :: integer:
+	return nbtGet({_p},"money") ? 0
+
+function moneyAdd(p: player,n: integer):
+	moneySet({_p},(moneyGet({_p}) + {_n}))
+
+function moneyRemove(p: player,n: integer):
+	moneySet({_p},(moneyGet({_p}) - {_n}))
+
+function moneyCheck(p: player,n: integer) :: boolean:
+	return true if moneyGet({_p}) >= {_n}
+	return false
+
+command /money <text> [<text>] [<text>]:
+	aliases: eco, economy
+	permission: op
+	trigger:
+		if arg-1 = "give":
+			arg-2 is set
+			arg-3 is set
+			moneyAdd((arg-2 parsed as a player),(arg-3 parsed as a integer))
+			message "<##E34234>&lSYSTEM &7» &fGave %arg-2% &8[&a+$%floor(arg-3 parsed as a integer)%&8]" to player
+		else if arg-1 = "take":
+			arg-2 is set
+			arg-3 is set
+			moneyRemove((arg-2 parsed as a player),(arg-3 parsed as a integer))
+			message "<##E34234>&lSYSTEM &7» &fTaken from %arg-2% &8[&c-$%floor(arg-3 parsed as a integer)%&8]" to player
+		else if arg-1 = "reset":
+			arg-2 is set
+			moneySet((arg-2 parsed as a player),0)
+			message "<##E34234>&lSYSTEM &7» &fYou have reset %arg-2%'s balance." to player
+		else if arg-1 is "check":
+			arg-2 is set
+			message "<##E34234>&lSYSTEM &7» &f%arg-2%'s current balance &8[&a$%moneyGet(arg-2 parsed as a player)%&8]" to player
+
+on tab complete of "money", "eco" and "economy":
+	set tab completions for position 1 to "give", "take", "reset" and "check"
+	set tab completions for position 2 to all players
+
+command /bal <player>:
+	aliases: balance
+	trigger:
+		if arg-1 is set:
+			arg-1 = a player
+			message "<##E34234>&lSYSTEM &7» &f%arg-1%'s current balance &8[&a$%floor(moneyGet(arg-1))%&8]" to player
+		else:
+			message "<##E34234>&lSYSTEM &7» &fYour current balance &8[&a$%floor(moneyGet(player))%&8]" to player

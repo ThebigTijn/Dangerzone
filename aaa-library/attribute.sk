@@ -1,0 +1,59 @@
+#budgo skript
+
+function addAttribute(inputItem: item, attributeName: text, value: number, operation: text, slots: text) :: item:
+    if {_operation} is "add_number":
+        set {_operation} to 0
+
+    else if {_operation} is "add_scalar":
+        set {_operation} to 1
+
+    else if {_operation} is "multiply_scalar_1":
+        set {_operation} to 2
+
+    set {_uuid::1} to random integer between -2147483647 and 2147483647 # fuck it we ball
+    set {_uuid::2} to random integer between -2147483647 and 2147483647
+    set {_uuid::3} to random integer between -2147483647 and 2147483647
+    set {_uuid::4} to random integer between -2147483647 and 2147483647
+
+    #set {_uuid::*} to 0, 0, 0, and 0
+
+    if {_slots} is "all":
+        set {_slots::*} to "head", "chest", "legs", "feet", "mainhand", and "offhand"
+
+        add tag "AttributeModifiers" of nbt compound of {_inputItem} to {_tag::*}
+
+        loop {_slots::*}:
+            add nbt compound from "{AttributeName:""generic.%{_attributeName}%"",Amount:%{_value}%d,Operation:%{_operation}%,Slot:""%loop-value%"",UUID:[I;%{_uuid::1}%,%{_uuid::2}%,%{_uuid::3}%,%{_uuid::4}%],Name:""GENERIC_%capitalized {_attributeName}%""}" to {_tag::*}
+
+        set {_cleanTag} to "%{_tag::*}%"
+
+        replace every " and " in {_cleanTag} with ","
+
+        add nbt compound from "{AttributeModifiers:[%{_cleanTag}%]}" to nbt compound of {_inputItem}
+
+    else if {_slots} does not contain ",":
+        add tag "AttributeModifiers" of nbt compound of {_inputItem} to {_tag::*}
+
+        add nbt compound from "{AttributeName:""generic.%{_attributeName}%"",Amount:%{_value}%d,Operation:%{_operation}%,Slot:""%{_slots}%"",UUID:[I;%{_uuid::1}%,%{_uuid::2}%,%{_uuid::3}%,%{_uuid::4}%],Name:""GENERIC_%capitalized {_attributeName}%""}" to {_tag::*}
+
+        set {_cleanTag} to "%{_tag::*}%"
+
+        replace every " and " in {_cleanTag} with ","
+
+        add nbt compound from "{AttributeModifiers:[%{_cleanTag}%]}" to nbt compound of {_inputItem}
+
+    else if {_slots} contains ",":
+        set {_slots::*} to {_slots} split at ","
+
+        add tag "AttributeModifiers" of nbt compound of {_inputItem} to {_tag::*}
+
+        loop {_slots::*}:
+            add nbt compound from "{AttributeName:""generic.%{_attributeName}%"",Amount:%{_value}%d,Operation:%{_operation}%,Slot:""%loop-value%"",UUID:[I;%{_uuid::1}%,%{_uuid::2}%,%{_uuid::3}%,%{_uuid::4}%],Name:""GENERIC_%capitalized {_attributeName}%""}" to {_tag::*}
+
+        set {_cleanTag} to "%{_tag::*}%"
+
+        replace every " and " in {_cleanTag} with ","
+
+        add nbt compound from "{AttributeModifiers:[%{_cleanTag}%]}" to nbt compound of {_inputItem}
+
+    return {_inputItem}

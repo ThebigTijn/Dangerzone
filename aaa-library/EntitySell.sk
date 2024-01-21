@@ -1,0 +1,14 @@
+function jobProductSell(p: player, tag: text, tagvalue: int, entity: text, n1: int, n2: int):
+
+    broadcast tag {_tag} of nbt compound from {_p}'s tool
+    tag {_tag} of nbt compound from {_p}'s tool = {_tagvalue}
+    loop all items in {_p}'s inventory:
+        tag {_tag} of nbt compound from loop-value = {_tagvalue}
+        add 1 to {_n}
+        remove loop-value from {_p}'s inventory
+    
+    set {_value} to round((random number between {_n1} and {_n2}) * {_n}, 2)
+    moneyAdd({_p}, {_value})
+    
+    send "&8[%colored {_entity}%&8] &7Good work, received &a$%{_value}%&7." to {_p}
+    play sound "ui.cartography_table.take_result" at volume 0.5 for {_p}

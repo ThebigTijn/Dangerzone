@@ -1,0 +1,16 @@
+function DISPLAY_TEXT(p: player, n: int, t: text, t2: text):
+
+    spawn text display at {_p}
+    set {_entity} to last spawned entity
+
+    set display text of {_entity} to colored " %font({_t})% ", " %font({_t2})% "
+    set display text of {_entity} to colored " %font({_t})% " if {_t2} is not set
+    set display scale of {_entity} to vector({_n},{_n},{_n})
+
+    set display text shadowed of {_entity} to true
+    set display text opacity of {_entity} to -25
+
+command display-text <int> <text> [<text>]:
+    permission: op 
+    trigger:
+        DISPLAY_TEXT(player, arg-1, arg-2, arg-3)

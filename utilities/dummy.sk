@@ -1,0 +1,12 @@
+# /summon husk ~ ~ ~ {CustomNameVisible:1b,NoAI:1b,CustomName:'{"text":"Dummy","color":"gold"}',Attributes:[{Name:generic.max_health,Base:1000000}]}
+
+on death of a husk:
+	name of attacker's held item != "DummyDestroyer"
+	name of victim = "&6Dummy"
+	cancel event
+	heal victim
+
+on damage of a husk:
+	name of attacker's held item != "DummyDestroyer"
+	name of victim = "&6Dummy"
+	message "<##E34234>&lSYSTEM &7» &fYou did <##E34234>%damage * 2% &fdamage to the dummy." to attacker

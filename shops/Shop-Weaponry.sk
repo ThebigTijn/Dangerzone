@@ -1,0 +1,20 @@
+function weaponryGet(p: player):
+
+    set {_weaponry} to virtual chest inventory with 6 rows named "&8&l%font("ci")% &8| <##436cfb>&l%font("WEAPONRY")%"
+
+    set slot (integers between 0 and 9) of {_weaponry} to black stained glass pane named " "
+    set slot (integers between 45 and 53) of {_weaponry} to black stained glass pane named " "
+    set slot 9,17,18,26,27,35,36, and 44 of {_weaponry} to black stained glass pane named " "
+
+    set slot (integers between 20 and 24) of {_weaponry} to gray dye named " "
+    set slot (integers between 29 and 33) of {_weaponry} to gray dye named " "
+
+    set (metadata tag "Weaponry_Shop" of {_p}) to {_weaponry}
+    open {_weaponry} to {_p}
+
+on inventory click:
+    event-inventory = (metadata tag "Weaponry_Shop" of player)
+    cancel event
+
+on right click:
+    weaponryGet(player) if event-entity = "Weaponry"

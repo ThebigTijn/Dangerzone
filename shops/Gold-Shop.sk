@@ -1,0 +1,41 @@
+function goldShop(p: player):
+
+    set {_gold} to virtual chest inventory with 5 rows named "&8&l%font("dangerzone gold shop")%"
+
+    set slot (integers between 21 and 25) of {_gold} to gray dye named " "
+    set slot 10 of {_gold} to player head with nbt from "{display:{Name:'{""text"":""&6&lGOLD""}'},SkullOwner:{Id:[I;-1128642242,1904428934,-1832529789,-1117679883],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTRhZWFiMDFjMDRmMzZiYTg4N2I3YmRhOGQ5YzUzOGJjOTY4NmRiYmNlN2UzYTViYjEwZjMwOGM1MDMwMmJjNCJ9fX0=""}]}}}" with lore "&8%font("product")%", "", "&7Click to preview <##FFD700>Gold", "&7that can be purchased", ""
+    set slot 19 of {_gold} to player head with nbt from "{display:{Name:'{""text"":""<##E5E4E2>&lRANKS""}'},SkullOwner:{Id:[I;-1507782065,-1691529299,-1668498090,1779133813],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTAzOWY4NTk5MzZiMjJhMzBjZjJiY2UyNTc4MTU0ZDRiNjI0YmM3MTI2MDY3MTYxZDllZjBiZjk4ZjZiMWU5NCJ9fX0=""}]}}}" with lore "&8%font("product")%", "", "&7Click to preview &fRanks", "&7that can be purchased", ""
+    set slot 28 of {_gold} to player head with nbt from "{display:{Name:'{""text"":""<##FFA07A>&LGLOBAL BOOSTERS""}'},SkullOwner:{Id:[I;-2075649548,260654558,-1813954921,-1930456718],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDZlMDNlZTA3YTBkZDNlZWNmMDE2YmI3YzM4OWQ2Yjk0ZjJkZWVkYjkyOGQ1ZjA0NmFjOWZhNzFhZDQ1MjQ0ZSJ9fX0=""}]}}}" with lore "&8%font("product")%", "", "&7Click to preview <##FFA07A>Global Boosters", "&7that can be purchased", ""
+
+    set (metadata tag "Gold_Shop" of {_p}) to {_gold}
+    open {_gold} to {_p}
+
+on inventory click:
+
+    event-inventory = (metadata tag "Gold_Shop" of player)
+    cancel event
+
+
+    if event-slot = 10:
+        set slot 21 of (metadata tag "Gold_Shop" of player) to gold ingot named "&6&lGOLD &8[&f1,000x&8]" with lore "&8%font("currency")%", "", "&7Click to be fowarded to our store,", "&7where you can purchase this item.", "", "&fPrice: &a$8.99 USD", ""
+        set slot 22 of (metadata tag "Gold_Shop" of player) to gold ingot named "&6&lGOLD &8[&f2,800x&8]" with lore "&8%font("currency")%", "", "&7Click to be fowarded to our store,", "&7where you can purchase this item.", "", "&fPrice: &a$22.99 USD", ""
+        set slot 23 of (metadata tag "Gold_Shop" of player) to gold ingot named "&6&lGOLD &8[&f5,000x&8]" with lore "&8%font("currency")%", "", "&7Click to be fowarded to our store,", "&7where you can purchase this item.", "", "&fPrice: &a$36.99 USD", ""
+        set slot 24 of (metadata tag "Gold_Shop" of player) to gold ingot named "&6&lGOLD &8[&f13,500x&8]" with lore "&8%font("currency")%", "", "&7Click to be fowarded to our store,", "&7where you can purchase this item.", "", "&fPrice: &a$89.99 USD", ""
+        set slot 25 of (metadata tag "Gold_Shop" of player) to gray dye named " "
+    
+    if event-slot = 19:
+        set slot 22 of (metadata tag "Gold_Shop" of player) to iron ingot named "<##E5E4E2>&lPLATINA" with lore "&8%font("subscription rank")%", "", "&7Awesome, but not permanent rank.", "", "<##708090>&l%font("benefits")%", "&8- <##E5E4E2>Colored Name", "&8- &aMoney Boost &8(&f1.15x&8)", "&8- &eXP Boost &8(&f1.25x&8)", "", "&fPrice: &6&lGOLD &8[&f700x&8]",  ""
+        set slot 21 of (metadata tag "Gold_Shop" of player) to gold ingot named "<##FFD700>&lGOLD" with lore "&8%font("permanent rank")%", "", "&7Not too shabby, but permanent.", "", "<##708090>&l%font("benefits")%", "&8- <##FFD700>Colored Name", "&8- &aMoney Boost &8(&f1.5x&8)", "&8- &eXP Boost &8(&f1.75x&8)", "", "&fPrice: &6&lGOLD &8[&f1000x&8]",  ""
+        set slot 23,24,25 of (metadata tag "Gold_Shop" of player) to gray dye named " "
+
+    if event-slot = 28:
+
+        set slot 23 of (metadata tag "Gold_Shop" of player) to emerald named "&a&LMONEY BOOST" with lore "&8%font("global booster")%", "", "&7A simple global booster to show,", "&7affection to the community and yourself.", "", "&fBoost Value: &a1.25x", "&fPrice: &6&lGOLD &8[&f200x&8]", ""
+        set slot 24 of (metadata tag "Gold_Shop" of player) to emerald named "&a&LMONEY BOOST" with lore "&8%font("global booster")%", "", "&7A simple global booster to show,", "&7affection to the community and yourself.", "", "&fBoost Value: &a1.5x", "&fPrice: &6&lGOLD &8[&f275x&8]", ""
+        set slot 21 of (metadata tag "Gold_Shop" of player) to experience bottle named "&e&LXP BOOST" with lore "&8%font("global booster")%", "", "&7A simple global booster to show,", "&7affection to the community and yourself.", "", "&fBoost Value: &a1.5x", "&fPrice: &6&lGOLD &8[&f100x&8]", ""
+        set slot 22 of (metadata tag "Gold_Shop" of player) to experience bottle named "&e&LXP BOOST" with lore "&8%font("global booster")%", "", "&7A simple global booster to show,", "&7affection to the community and yourself.", "", "&fBoost Value: &a1.75x", "&fPrice: &6&lGOLD &8[&f175x&8]", ""
+        set slot 25 of (metadata tag "Gold_Shop" of player) to beacon named "&b&LPACKAGE DEAL" with lore "&8%font("global booster")%", "", "&7A simple global booster to show,", "&7affection to the community and yourself.", "", "&fBoost Value: &a1.5x Money, &e1.75x XP", "&fPrice: &6&lGOLD &8[&f400x&8]", ""
+
+command gold-shop:
+    trigger:
+        goldShop(player)

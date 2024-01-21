@@ -1,0 +1,41 @@
+function levelGet(p: player) :: integer:
+    return nbtGet({_p},"level") ? 0
+
+function levelSet(p: player, n: integer):
+    nbtSet({_p},"level",{_n})
+    updateScoreboard({_p})
+
+function levelAdd(p: player, n: integer):
+    levelSet({_p},(levelGet({_p}) + {_n}))
+
+function xpGet(p: player) :: number:
+    return nbtGet({_p},"xp") ? 0
+
+function xpSet(p: player, n: number):
+    nbtSet({_p},"xp",{_n})
+    updateScoreboard({_p})
+
+function xpAdd(p: player, n: number):
+    xpSet({_p},(xpGet({_p}) + {_n}))
+
+function xpRemove(p: player, n: number):
+    xpSet({_p},(xpGet({_p}) - {_n}))
+
+function xpCheck(p: player):
+    set {_n} to ((100 + levelGet({_p})) * 40)
+    xpGet({_p}) >= {_n}
+    xpRemove({_p}, {_n})
+    levelAdd({_p}, 1)
+    send title "&a&lLEVELUP" with subtitle "&7You are now level &b%levelGet({_p})%&7!" to {_p} for 2 seconds
+    play sound "ENTITY_PLAYER_LEVELUP" at volume 10 for {_p}
+
+command xp-set [<player>] <number>:
+    permission: op 
+    trigger:
+        xpSet(arg-1, arg-2)
+        xpCheck(arg-1)
+
+command level-set [<player>] <integer>:
+    permission: op
+    trigger:
+        levelSet(arg-1, arg-2)

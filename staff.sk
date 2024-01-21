@@ -1,0 +1,39 @@
+command sc <text>:
+    aliases: staffchat
+    permission: staffchat.use
+    trigger:
+        send "&8[<##CD5C5C>&lSTAFF CHAT&8] &f%player% &7» <##F08080>%arg%" to all players where [input has permission "staffchat.use"]
+
+function vanishMode(p: player):
+
+    combatActive({_p}) = false
+    if (metadata tag "Vanish_Active" of {_p}) ? false = false:
+        set (metadata tag "Vanish_Active" of {_p}) to true
+        hide {_p} from all players where [input does not have permission "vanish.use"]
+        send "<##E34234>&lSYSTEM &7» Vanish Enabled" to {_p}
+        send "&8[&c✘&8] &7%{_p}%" to all players
+    
+    else:
+        set (metadata tag "Vanish_Active" of {_p}) to false
+        reveal {_p} from all players
+        send "<##E34234>&lSYSTEM &7» Vanish Disabled" to {_p}
+        send "&8[&a✔&8] &7%{_p}%" to all players
+
+command vanish [<player>]:
+    aliases: v
+    permission: vanish.use
+    trigger:
+        vanishMode(arg-1) if arg is set
+        vanishMode(player) if arg is not set
+
+on join:
+    (metadata tag "Vanish_Active" of player) = true
+    set join message to ""
+    hide {_p} from all players where [input does not have permission "vanish.use"]
+    send "<##E34234>&lSYSTEM &7» Rejoined, Vanish Enabled" to player
+
+on damage:
+    cancel event if (metadata tag "Vanish_Active" of attacker) = true
+
+on pickup:
+    cancel event if (metadata tag "Vanish_Active" of player) = true

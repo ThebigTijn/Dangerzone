@@ -1,0 +1,14 @@
+on chat:
+    cancel event
+    if (metadata tag "Lock_Chat" of player) = true:
+        player does not have permission "staff.use"
+        send "<##E34234>&lSYSTEM &7» Chat has been locked, you cannot speak"
+        stop
+    if metadata tag "Radio_Toggle" of player is set:
+        set {_radio} to metadata tag "Radio_Toggle" of player
+        radioChannel(player, {_radio}, message)
+        stop
+    if player's suffix = "":
+        send formatted "%player's prefix% &8| &r%player%&7: %message%"
+    else:
+        send formatted "%player's prefix% &8| &r%player% %player's suffix%&7: %message%"

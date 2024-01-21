@@ -1,0 +1,37 @@
+function combatActive(p: player) :: boolean:
+    set {_u} to uuid of {_p}
+    return {-combat::active::%{_u}%}
+
+function combatRemoveActive(p: player):
+    set {_u} to uuid of {_p}
+    delete {-combat::active::%{_u}%}
+    delete {-combat::time::%{_u}%}
+    send "<##E34234>&lSYSTEM &7» Now out of combat" to {_p}
+
+function combatTimer(p: player):
+    set {_u} to uuid of {_p}
+
+    #CHECK IF PLAYER IS ALREADY IN COMBAT
+    #stop if combatActive({_p}) = true
+    set {-combat::active::%{_u}%} to true
+    set {-combat::time::%{_u}%} to 10 seconds
+
+    #COMBAT TIMER
+    while {-combat::active::%{_u}%} is set:
+        send action bar "&c%font("You are in combat")% &8[&f%{-combat::time::%{_u}%}%&8]" to {_p}
+
+        if {-combat::time::%{_u}%} <= 0 seconds:
+            combatRemoveActive({_p})
+        wait 0.1 second
+        remove 0.1 seconds from {-combat::time::%{_u}%}
+
+on damage of player:
+    event is not cancelled
+    combatTimer(victim)
+    combatTimer(attacker)
+    
+on death:
+    combatRemoveActive(victim)
+
+on quit:
+    kill player if combatActive(player) is true
