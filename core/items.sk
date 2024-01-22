@@ -4,27 +4,27 @@ on load:
 
 function makeExample():
 	set yaml value "example.type" from "items" to "Weapon, Helmet, Chestplate, Leggings, Boots, Item"
-	set yaml value "example.nbt" from "items" to "{Damage:0,display:{Name:''{""extra"":[{""bold"":false,""italic"":false,""underlined"":false,""strikethrough"":false,""obfuscated"":false,""color"":""dark_gray"",""text"":""[""},{""bold"":false,""italic"":false,""underlined"":false,""strikethrough"":false,""obfuscated"":false,""color"":""#363D82"",""text"":""Apollo-88""},{""italic"":false,""color"":""dark_gray"",""text"":""] ""},{""italic"":false,""color"":""white",""text"":""Graviton Claymore""}],""text"":""}''}}"
+	set yaml value "example.nbt" from "items" to ""
 	set yaml value "example.item" from "items" to iron sword
 	set yaml value "example.name" from "items" to "&9Hello World"
 	set yaml value "example.description" from "items" to "&fDescription!"
 	#attributes
-	##armor
+	#armor
 	set yaml value "example.attributes.armor" from "items" to 0
 	set yaml value "example.attributes.armor-toughness" from "items" to 0
 	set yaml value "example.attributes.speed" from "items" to 0
 	set yaml value "example.attributes.knockbackres" from "items" to 0
 	set yaml value "example.attributes.health" from "items" to 0
-	##Weapons
+	#Weapons
 	set yaml value "example.attributes.attack" from "items" to 0
 	set yaml value "example.attributes.knockback" from "items" to 0
 	#modifiers
-	##armor
+	#armor
 	set yaml value "example.enchantments.protection" from "items" to 0
 	set yaml value "example.enchantments.projprotection" from "items" to 0
 	set yaml value "example.enchantments.fireprotection" from "items" to 0
 	set yaml value "example.enchantments.blastprotection" from "items" to 0
-	##weapons
+	#weapons
 	set yaml value "example.enchantments.sharpness" from "items" to 0
 	set yaml value "example.enchantments.fireaspect" from "items" to 0
 	#Tags
@@ -35,5 +35,6 @@ function makeExample():
 
 function returnItem(id: text) :: item:
 	set {_i} to yaml value "%{_id}%.item" from "items"
-	set {_i} to {_i} with nbt compound from "%yaml value "%{_id}%.nbt" from "items"%"
+	set {_nbt} to yaml value "%{_id}%.nbt" from "items"
+	#set {_i} to {_i} with nbt compound from "%{_nbt}%"
 	return {_i}
