@@ -1,0 +1,28 @@
+function getDamage(p: player, damage: number, cause: string) :: number:
+    set {_u} to uuid of {_p}
+    set {_defense} to Get_Armor({_p})
+    set {_max} to max({_defense} / 5, {_defense} - (4 * {_damage}) / ({_toughness} + 8))
+    set {_min} to min(20, {_max})
+    set {_dmg} to {_damage} * (1 - ({_min} / 25))
+    set {_dmg} to {_dmg} / 2
+#   set {_prot} to Get_Protection({_p}, {_cause})
+    set {_prot} to {_prot} / 25
+    set {_prot} to {_prot} * {_dmg}
+    set {_dmg} to {_dmg} - {_prot}
+    return {_dmg}
+
+function Get_Armor(p: player) :: number:
+    set {_helm} to getItemAttribute({_p}'s helmet, "GENERIC_ARMOR")
+    set {_chest} to getItemAttribute({_p}'s chestplate, "GENERIC_ARMOR")
+    set {_legs} to getItemAttribute({_p}'s leggings, "GENERIC_ARMOR")
+    set {_boots} to getItemAttribute({_p}'s boots, "GENERIC_ARMOR")
+    set {_armor} to {_helm} + {_chest} + {_legs} + {_boots}
+    return {_armor}
+
+function getItemAttribute(item: item, attribute: string) :: object:
+    set {_nbt} to (nbt compound of {_item})
+    set {_attributes::*} to (compound list tag "AttributeModifiers" of {_nbt})
+    loop {_attributes::*}:
+        if (tag "Name" of loop-value) is {_attribute}:
+            set {_amount} to (tag "Amount" of loop-value)
+    return {_amount} 
