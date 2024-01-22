@@ -1,0 +1,92 @@
+on load:
+	load yaml "plugins/Skript/yaml/core/items.yml" as "items"
+	load yaml "plugins/Skript/yaml/core/itemsyntax.yml" as "itemsyntax"
+	set {item.attributes::*} to "max_health", "knockback_resistance", "movement_speed", "attack_damage", "attack_knockback", "attack_speed", "armor" and "armor_toughness"
+	set {item.modifiers::*} to "fire_protection", "sharpness", "protection", "blast_protection", "fire_aspect" and "projectile_protection"
+	set {item.tags::*} to "space_helmet", "gravity_boots" and "gas_mask"
+	set {item.information::*} to "name", "description" and "nbt"
+	set {item.types::*} to "potion", "normal"
+
+
+
+function setItemType(id: text,type: text):
+	{item.types::*} contains {_type}
+	set yaml value "%{_id}%.type" from "items" to {_type}
+
+function setItemItem(id: text,item: itemtype):
+	set yaml value "%{_id}%.item" from "items" to {_item}
+
+function setItemAttribute(id: text,type: text,amount: integer = 0):
+	{item.attributes::*} contains {_type}
+	set yaml value "%{_id}%.attributes.%{_type}%" from "items" to {_amount}
+
+function setItemModifier(id: text,type: text,amount: integer = 0):
+	{item.modifiers::*} contains {_type}
+	set yaml value "%{_id}%.enchantments.%{_type}%" from "items" to {_amount}
+
+function setItemTag(id: text,type: text,state: boolean = false):
+	{item.tags::*} contains {_type}
+	set yaml value "%{_id}%.tags.%{_type}%" from "items" to {_state}
+
+function setItemInfo(id: text,type: text,info: text):
+	{item.information::*} contains {_type}
+	set yaml value "%{_id}%.%{_type}%" from "items" to {_info}
+
+function setItemSlots(id: text,slots: text):
+	set yaml value "%{_id}%.slots" from "items" to {_slots}
+
+
+
+function returnItemSlots(id: text) :: text:
+	set {_r} to (yaml value "%{_id}%.slots" from "items" ? "all")
+	return {_r}
+
+function returnItemType(id: text) :: text:
+	set {_r} to (yaml value "%{_id}%.type" from "items" ? "normal")
+	return {_r}
+
+function returnItemItem(id: text) :: itemtype:
+	set {_i} to yaml value "%{_id}%.item" from "items"
+	return {_i}
+
+function returnItemAttribute(id: text,type: text) :: integer:
+	{item.attributes::*} contains {_type}
+	set {_r} to (yaml value "%{_id}%.attributes.%{_type}%" from "items" ? 0)
+	return {_r}
+
+function returnItemModifier(id: text,type: text) :: integer:
+	{item.modifiers::*} contains {_type}
+	set {_r} to (yaml value "%{_id}%.enchantments.%{_type}%" from "items" ? 0)
+	return {_r}
+
+function returnItemTag(id: text,type: text) :: boolean:
+	{item.tags::*} contains {_type}
+	set {_r} to (yaml value "%{_id}%.tags.%{_type}%" from "items" ? false)
+	return {_r}
+
+function returnItemInfo(id: text,type: text) :: text:
+	{item.information::*} contains {_type}
+	set {_r} to (yaml value "%{_id}%.%{_type}%" from "items")
+	return {_r}
+
+function returnItem(id: text) :: item:
+	set {_i} to returnItemItem({_id}) named returnItemInfo({_id},"name") with nbt compound from "%returnItemInfo({_id},"nbt")%" if returnItemInfo({_id},"nbt") is not ""
+	set {_i} to returnItemItem({_id}) named returnItemInfo({_id},"name") if {_i} is not set
+	return {_i} with nbt compound from "{id:""example""}"
+
+
+function makeItemExample():
+	delete yaml value "example" from "items"
+	setItemType("example","normal")
+	setItemItem("example",iron sword)
+	setItemInfo("example","name","&9Hello World!")
+	setItemInfo("example","description","&fDescription")
+	setItemInfo("example","nbt","")
+	setItemSlots("example","all")
+	loop {item.Attributes::*}:
+		setItemAttribute("example",loop-value)
+	loop {item.modifiers::*}:
+		setItemModifier("example",loop-value)
+	loop {item.tags::*}:
+		setItemTag("example",loop-value)
+	save yaml "items"
