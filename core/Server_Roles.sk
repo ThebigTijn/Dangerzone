@@ -1,0 +1,98 @@
+function groupAll(p: player):
+
+    set {_name} to "%metadata tag "Group_Target" of {_p}%"
+    set (metadata tag "Set_Group" of {_p}) to virtual hopper inventory named "&8&l%font("setgroup")% %font({_name})%"
+    set {_lore} to "&7ᴄʟɪᴄᴋ ᴛᴏ ᴠɪᴇᴡ ɢʀᴏᴜᴘs"
+
+    set slot 0 of (metadata tag "Set_Group" of {_p}) to barrier named "&7UNGOC" with lore "&7%font("click to give")%"
+
+    set slot 1 of (metadata tag "Set_Group" of {_p}) to light gray shulker box named "<##757575>SD Groups" with lore {_lore}
+    set slot 2 of (metadata tag "Set_Group" of {_p}) to cyan shulker box named "<##757575>MTF Groups" with lore {_lore}
+    set slot 3 of (metadata tag "Set_Group" of {_p}) to purple shulker box named "<##757575>ISD Groups" with lore {_lore}
+    set slot 4 of (metadata tag "Set_Group" of {_p}) to yellow shulker box named "<##757575>SCD Groups" with lore {_lore}
+
+    open (metadata tag "Set_Group" of {_p}) to {_p}
+
+
+function groupChoose(p: player, item: item):
+
+    if (metadata tag "Group_Role" of {_p}) contains "SCD Groups":
+        set {_groups::*} to "ScD-Student", "ScD-Researcher", "ScD-Professor", "ScD-Supervisor", "ScD-Trainer", "ScD-Senior-Trainer", and "Combat-Medic-Commander"
+    if (metadata tag "Group_Role" of {_p}) contains "MTF Groups":
+        set {_groups::*} to "Delta-5", "Delta-5-Commander", "Nu-7", "Nu-7-Commander", "Beta-7", "Beta-7-Commander", "Epsilon-11", "Epsilon-11-Commander", "Alpha-1", "Alpha-1-Commander", "MTF-Trainer", "MTF-Senior-Trainer", "MTF-Chief" and "MTF-Director"
+    if (metadata tag "Group_Role" of {_p}) contains "SD Groups":
+        set {_groups::*} to "SD-Guard", "SD-Senior-Guard", "SD-Trainer", "SD-Senior-Trainer", "SRU", "SRU-Commander", "HRU", "HRU-Commander", "APU", "APU-Commander", "RRT", "RRT-Commander", "SD-Chief" and "SD-Director"
+    if (metadata tag "Group_Role" of {_p}) contains "ISD Groups":
+        set {_groups::*} to "TRT", "TRT-Commander", "ISD-Agent", "ISD-Senior-Agent", "ISD-Chief" and "ISD-Director"
+
+    set {_tiny} to "%metadata tag "Group_Role" of {_p}%"
+    set (metadata tag "Group_RoleOptions" of {_p}) to virtual chest inventory named "&8&l%font("group")% &8| &r%font({_tiny})%"
+    set (metadata tag "Group_Role" of {_p}) to name of {_item}
+
+    set {_n} to 0
+    loop {_groups::*}:
+        set slot {_n} of (metadata tag "Group_RoleOptions" of {_p}) to {_item} named "&f%loop-value%" with lore "&7%font("click to set group of user.")%"
+        add 1 to {_n}
+    
+    open (metadata tag "Group_RoleOptions" of {_p}) to {_p}
+
+
+function groupConfirmSelected(p: player, target: offlineplayer, item: item):
+
+    remove uncolored name of (metadata tag "Group_ConfirmItem" of {_p}) from group of (metadata tag "Group_Target" of {_p}) if (metadata tag "Group_ConfirmItem" of {_p}) is set
+    set (metadata tag "Group_SetConfirm" of {_p}) to virtual furnace inventory named "&8&l%font("confirm your doings")%"
+    set (metadata tag "Group_ConfirmItem" of {_p}) to {_item}
+
+    set slot 0 of (metadata tag "Group_SetConfirm" of {_p}) to player head with nbt from "{display:{Name:'{""text"":""&a&lACCEPT""}'},SkullOwner:{Id:[I;1865133732,-1019457749,-1650216397,1032141214],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDEyMDdmZmU2OWYwNmY3YjgxNzNiZjViOTI0YzRkOGY3OTc2MzgzYzdlNTlkY2U1MzhmZmE2M2FmODRkNzU5NSJ9fX0=""}]}}}" with lore "&8%font("decision")%", "", "&7Click to confirm.", ""
+    set slot 1 of (metadata tag "Group_SetConfirm" of {_p}) to player head with nbt from "{display:{Name:'{""text"":""&c&lDECLINE""}'},SkullOwner:{Id:[I;657690590,-1564915963,-2080225727,263292440],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDEyZTc0YTExOTRlNzMxZmZjZDRkZmYwMjU3MDAwOWY1YjRhOTQ3ZGUzMGRmNWNkMjIwYzA0ZDMyNmYwZWI4NyJ9fX0=""}]}}}" with lore "&8%font("decision")%", "", "&7Click to decline.", ""
+    set slot 2 of (metadata tag "Group_SetConfirm" of {_p}) to {_item}
+
+    open (metadata tag "Group_SetConfirm" of {_p}) to {_p}
+
+
+function groupSet(p: player):
+
+    set group of (metadata tag "Group_Target" of {_p}) to uncolored name of (metadata tag "Group_ConfirmItem" of {_p}) if (metadata tag "Group_Target" of {_p}) does not have permission "group.mod"
+    add uncolored name of (metadata tag "Group_ConfirmItem" of {_p}) to group of (metadata tag "Group_Target" of {_p}) if (metadata tag "Group_Target" of {_p}) has permission "group.mod"
+
+    play sound "ENTITY_VILLAGER_YES" to {_p}
+    close {_p}'s inventory
+    updateScoreboard(metadata tag "Group_Target" of {_p})
+
+    set {_name} to "%{_p}%"
+    send "%nl%&a&l%font("role updated")% &8| &r%font(colored name of metadata tag "Group_ConfirmItem" of {_p})%%nl%&r&l%font("role updated by:")% &7%font({_name})%%nl%" to (metadata tag "Group_Target" of {_p})
+    send "<##E34234>&lSYSTEM &7» Changed role of &f%metadata tag "Group_Target" of {_p}% &7to &f%name of metadata tag "Group_ConfirmItem" of {_p}%" to {_p}
+    play sound "block.note_block.pling" with volume 2 and pitch 1.5 to (metadata tag "Group_Target" of {_p})
+
+
+command set-group <offlineplayer>:
+    permission: setgroup.use
+    trigger:
+        set (metadata tag "Group_Target" of player) to arg
+        groupAll(player)
+
+
+on inventory click:
+
+    cancel event if event-inventory = (metadata tag "Set_Group" of player), (metadata tag "Group_RoleOptions" of player), or (metadata tag "Group_SetConfirm" of player)
+    if event-inventory = (metadata tag "Set_Group" of player):
+        
+        if event-slot = 1,2,3 or 4:
+            set (metadata tag "Group_Role" of player) to name of event-item
+            groupChoose(player, event-item)
+        if event-slot = 0:
+            if (metadata tag "Group_Target" of player) does not have permission "group.mod":
+                set group of (metadata tag "Group_Target" of player) to "default"
+                close player's inventory
+
+    if event-inventory = (metadata tag "Group_RoleOptions" of player):
+
+        groupConfirmSelected(player, metadata tag "Group_Target" of player, event-item)
+
+    if event-inventory = (metadata tag "Group_SetConfirm" of player):
+
+        if event-slot = 0:
+            groupSet(player)
+        if event-slot = 1:
+            close player's inventory
+            send "<##E34234>&lSYSTEM &7» Request Declined" to player

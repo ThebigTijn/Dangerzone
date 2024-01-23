@@ -1,0 +1,40 @@
+on load:
+    set {-backpack} to player head with nbt from "{SkullOwner:{Id:[I;-1228305098,-1471592678,-1676904620,-677031587],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTE2NWVlMTNhNjA2ZTFiNDQ2OTVhZjQ2YzM5YjUyY2U2NjY1N2E0YzRhNjIzZDBiMjgyYTdiOGNlMDUwOTQwNCJ9fX0=""}]}}}"
+    set name of {-backpack} to "&6%font("backpack")%"
+
+function backPack(p: player):
+    set {_u} to uuid of {_p}
+    set metadata "backpack;slot" of {_p} to index of hotbar slot of {_p}
+    create a gui with chest inventory with 3 rows named "%{_p}'s name%'s Backpack" with stealable items:
+        run on gui close:
+            clear metadata "backpack;slot" of {_p}
+            set {-backpack::%{_u}%} to empty nbt compound
+            loop items within gui:
+                set {_index} to index of loop-slot
+                set {_item} to full nbt of loop-item
+                set {_items::%{_index}%} to nbt from "{slot:%{_index}%b,item:%{_item}%}"
+            set compound list tag "items" of {-backpack::%{_u}%} to {_items::*}
+        loop compound list tag "items" of {-backpack::%{_u}%}:
+            set {_value} to loop-value
+            set {_slot} to byte tag "slot" of {_value}
+            set {_item} to compound tag "item" of {_value}
+            set {_item} to item from nbt {_item}
+            format gui slot {_slot} with {_item}
+        open gui to {_p}
+
+on inventory click:
+    if any:
+        click type is swap offhand
+        index of event-slot = metadata "backpack;slot" of player
+        hotbar button > -1
+        click type is left mouse button with shift or right mouse button with shift
+    then:
+        cancel event
+
+on right click on air with a player head:
+    1 of event-item is {-backpack}
+    backPack(player)
+
+command backpack:
+    trigger:
+        give player {-backpack}

@@ -3,7 +3,7 @@ function scoreboard(p: player):
     set {_n} to ((100 + levelGet({_p})) * 40)
     set {_xp} to ({_xp} / {_n}) * 100
     set {_xp} to "&cᴍᴀx" if {_xp} > 100
-    set title of {_p}'s scoreboard to " <##B82031>&lDANGERZONE &8[<##E5E4E2>%number of all players%/200&8]"
+    set title of {_p}'s scoreboard to " <##B82031>&lDANGERZONE"
     set line 15 of {_p}'s scoreboard to ""
     set line 14 of {_p}'s scoreboard to "<##B2BEB5>│ <##D22B2B>&lᴘʀᴏꜰɪʟᴇ"
     set line 13 of {_p}'s scoreboard to "<##B2BEB5>│ &fʀᴀɴᴋ: %prefix of {_p}%"

@@ -22,4 +22,5 @@ function cargoSell(p: player, block: block):
 
     set {_value} to random number between 6 and 8
     send "&8[&6Cargo&8] &7Nicely done, payment &a$%{_value}%" to {_p}
+    xpAdd({_p}, 5)
     moneyAdd({_p}, {_value})

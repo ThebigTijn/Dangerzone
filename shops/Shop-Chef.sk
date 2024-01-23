@@ -1,6 +1,7 @@
 function chefShop(p: player):
 
     set {_chef} to virtual hopper inventory named "&8&l%font("          food shop")%"
+    set (metadata tag "Chef_Shop" of {_p}) to {_chef}
 
     set slot 0 and 4 of {_chef} to black stained glass pane named " "
 
@@ -8,7 +9,6 @@ function chefShop(p: player):
     set slot 2 of {_chef} to 5 baked potato named "&7Hot Potato" with lore "&fPrice: &a$15"
     set slot 3 of {_chef} to 5 steak named "&7Juicy Steak" with lore "&fPrice: &a$30"
 
-    set (metadata tag "Chef_Shop" of {_p}) to {_chef}
     open {_chef} to {_p}
 
 

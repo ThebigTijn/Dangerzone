@@ -6,7 +6,6 @@ command sc <text>:
 
 function vanishMode(p: player):
 
-    combatActive({_p}) = false
     if (metadata tag "Vanish_Active" of {_p}) ? false = false:
         set (metadata tag "Vanish_Active" of {_p}) to true
         hide {_p} from all players where [input does not have permission "vanish.use"]

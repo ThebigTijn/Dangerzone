@@ -1,13 +1,13 @@
 function hugoShop(p: player):
 
     set {_shop} to virtual dropper inventory named "&8&l%font("contraband shop")%"
+    set (metadata tag "Hugo_Shop" of {_p}) to {_shop}
 
     set slot 0,1,2,6,7, and 8 of {_shop} to gray dye named ""
     set slot 3 of {_shop} to diamond sword named "item"
     set slot 4 of {_shop} to iron sword named "item2"
     set slot 5 of {_shop} to wooden sword named "item3"
 
-    set (metadata tag "Hugo_Shop" of {_p}) to {_shop}
     open {_shop} to {_p}
 
 
