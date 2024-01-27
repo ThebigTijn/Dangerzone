@@ -24,7 +24,7 @@ function Get_Armor(p: player) :: number:
 	set {_armor} to {_helm} + {_chest} + {_legs} + {_boots}
 	return {_armor}
 
-function getItemAttribute(item: item, attribute: string) :: object:
+function getItemAttribute(item: item, attribute: string) :: integer:
 	set {_nbt} to (nbt compound of {_item})
 	set {_attributes::*} to (compound list tag "AttributeModifiers" of {_nbt})
 	loop {_attributes::*}:

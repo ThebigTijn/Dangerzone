@@ -1,6 +1,5 @@
 on load:
 	load yaml "plugins/Skript/yaml/core/items.yml" as "items"
-	load yaml "plugins/Skript/yaml/core/itemsyntax.yml" as "itemsyntax"
 	set {item.attributes::*} to "max_health", "knockback_resistance", "movement_speed", "attack_damage", "attack_knockback", "armor" and "armor_toughness"
 	set {item.modifiers::*} to "fire_protection", "sharpness", "protection", "blast_protection", "fire_aspect" and "projectile_protection"
 	set {item.tags::*} to "space_helmet", "gravity_boots" and "gas_mask"
@@ -74,8 +73,6 @@ function returnItem(id: text) :: item:
 	set {_i} to returnItemItem({_id}) if {_i} is not set
 	set tag "id" of nbt compound from {_i} to {_id}
 	set {_l} to returnItemLore({_id})
-	set {_i} to ({_i} with lore (lore of {_l}))
-	set {_i} to returnItemStats({_id},{_i})
-	return {_i} named returnItemInfo({_id},"name") with all flags hidden
+	return returnItemStats({_id},{_i}) named returnItemInfo({_id},"name") with lore (lore of {_l}) with all flags hidden
 
  
