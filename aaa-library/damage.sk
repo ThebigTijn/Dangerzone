@@ -1,28 +1,54 @@
+on load:
+	set {damage.fireprot::*} to "a fire", "hot floor", "melting", "melt", "magma", "burn", "lava", "fire" and "burning"
+	set {damage.blastprot::*} to "block explosion", "sonic boom", "a block explosion", "explosion" and "entity explosion"
+	set {damage.projprot::*} to "projectile", "falling block" and "a projectile"
+
 function getDamage(p: player, damage: number, cause: string) :: number:
-    set {_u} to uuid of {_p}
-    set {_defense} to Get_Armor({_p})
-    set {_max} to max({_defense} / 5, {_defense} - (4 * {_damage}) / ({_toughness} + 8))
-    set {_min} to min(20, {_max})
-    set {_dmg} to {_damage} * (1 - ({_min} / 25))
-    set {_dmg} to {_dmg} / 2
-#   set {_prot} to Get_Protection({_p}, {_cause})
-    set {_prot} to {_prot} / 25
-    set {_prot} to {_prot} * {_dmg}
-    set {_dmg} to {_dmg} - {_prot}
-    return {_dmg}
+	set {_u} to uuid of {_p}
+	set {_defense} to Get_Armor({_p})
+	set {_max} to max({_defense} / 5, {_defense} - (4 * {_damage}) / ({_toughness} + 8))
+	set {_min} to min(20, {_max})
+	set {_dmg} to {_damage} * (1 - ({_min} / 25))
+	set {_dmg} to {_dmg} / 2
+	set {_prot} to Get_Protection({_p}, {_cause})
+	set {_prot} to {_prot} / 25
+	set {_prot} to {_prot} * {_dmg}
+	set {_dmg} to {_dmg} - {_prot}
+	return {_dmg}
 
 function Get_Armor(p: player) :: number:
-    set {_helm} to getItemAttribute({_p}'s helmet, "GENERIC_ARMOR")
-    set {_chest} to getItemAttribute({_p}'s chestplate, "GENERIC_ARMOR")
-    set {_legs} to getItemAttribute({_p}'s leggings, "GENERIC_ARMOR")
-    set {_boots} to getItemAttribute({_p}'s boots, "GENERIC_ARMOR")
-    set {_armor} to {_helm} + {_chest} + {_legs} + {_boots}
-    return {_armor}
+	set {_helm} to getItemAttribute({_p}'s helmet, "GENERIC_ARMOR")
+	set {_chest} to getItemAttribute({_p}'s chestplate, "GENERIC_ARMOR")
+	set {_legs} to getItemAttribute({_p}'s leggings, "GENERIC_ARMOR")
+	set {_boots} to getItemAttribute({_p}'s boots, "GENERIC_ARMOR")
+	set {_armor} to {_helm} + {_chest} + {_legs} + {_boots}
+	return {_armor}
 
 function getItemAttribute(item: item, attribute: string) :: object:
-    set {_nbt} to (nbt compound of {_item})
-    set {_attributes::*} to (compound list tag "AttributeModifiers" of {_nbt})
-    loop {_attributes::*}:
-        if (tag "Name" of loop-value) is {_attribute}:
-            set {_amount} to (tag "Amount" of loop-value)
-    return {_amount} 
+	set {_nbt} to (nbt compound of {_item})
+	set {_attributes::*} to (compound list tag "AttributeModifiers" of {_nbt})
+	loop {_attributes::*}:
+		if (tag "Name" of loop-value) is {_attribute}:
+			set {_amount} to (tag "Amount" of loop-value)
+	return {_amount} 
+
+function Get_Protection(p: player,c: text) :: number:
+	set {_helm} to getItemProtection({_p}'s helmet,{_c}) ? 0
+	set {_chest} to getItemProtection({_p}'s chestplate,{_c}) ? 0
+	set {_legs} to getItemProtection({_p}'s leggings,{_c}) ? 0
+	set {_boots} to getItemProtection({_p}'s boots,{_c}) ? 0
+	set {_prot} to {_helm} + {_chest} + {_legs} + {_boots}
+	return {_prot}
+
+function getItemProtection(item: item, cause: string) :: number:
+	set {_nbt} to nbt compound from {_item}
+	set {_prot} to tag "modifiers;protection" of {_nbt}
+	set {_fireprot} to tag "modifiers;fire_protection" of {_nbt} if {damage.fireprot::*} contains {_cause}
+	set {_blastprot} to tag "modifiers;blast_protection" of {_nbt} if {damage.blastprot::*} contains {_cause}
+	set {_projprot} to tag "modifiers;projectile_protection" of {_nbt} if {damage.projprot::*} contains {_cause}
+	return ({_prot} + {_fireprot} + {_blastprot} + {_projprot})
+
+function addModifier(i: item,t: string,a: number):
+	set {_nbt} to nbt compound from {_item}
+	set tag "modifiers;%{_t}%" of {_nbt} to {_a}
+	

@@ -73,8 +73,9 @@ function returnItem(id: text) :: item:
 	set {_i} to returnItemItem({_id}) named returnItemInfo({_id},"name") with nbt compound from "%returnItemInfo({_id},"nbt")%" if returnItemInfo({_id},"nbt") is not ""
 	set {_i} to returnItemItem({_id}) named returnItemInfo({_id},"name") if {_i} is not set
 	set {_l} to returnItemLore({_id})
-	return ({_i} with lore (lore of {_l})) with nbt compound from "{id:""%{_id}%""}" with all flags hidden
-
+	set {_i} to {_i} with nbt compound from "%returnItemStats({_id})%"
+	set {_i} to ({_i} with lore (lore of {_l})) with nbt compound from "{id:""%{_id}%""}" with all flags hidden
+	return {_i}
 
 
 function makeItem(id: text,item: item):

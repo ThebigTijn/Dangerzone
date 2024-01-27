@@ -1,6 +1,6 @@
 #budgo skript
 
-function addAttribute(inputItem: item, attributeName: text, value: number, operation: text, slots: text) :: item:
+function addAttribute(inputItem: item, attributeName: text, value: integer, operation: text, slots: text) :: item:
     if {_operation} is "add_number":
         set {_operation} to 0
 
