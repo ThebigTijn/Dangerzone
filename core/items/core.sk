@@ -78,32 +78,4 @@ function returnItem(id: text) :: item:
 	set {_i} to returnItemStats({_id},{_i})
 	return {_i} named returnItemInfo({_id},"name") with all flags hidden
 
-
-function makeItem(id: text,item: item):
-	delete yaml value "%{_id}%" from "items"
-	setItemType({_id},"normal")
-	setItemType({_id},"potion") if {_item} is a potion, lingering potion or splash potion 
-	setItemItem({_id},{_item})
-	setItemInfo({_id},"name",name of {_item})
-	setItemInfo({_id},"description","")
-	setItemInfo({_id},"descriptiontwo","")
-	setItemInfo({_id},"nbt","%nbt compound from {_item}%")
-	setItemSlots({_id},returnDefaultSlot({_item}))
-	loop {item.Attributes::*}:
-		setItemAttribute({_id},loop-value)
-	loop {item.modifiers::*}:
-		setItemModifier({_id},loop-value)
-	loop {item.tags::*}:
-		setItemTag({_id},loop-value)
-	save yaml "items"
-
-function returnDefaultSlot(item: item) :: text:
-	return "head" if {_item} is a helmets, glass, tinted glass, white glass, light gray glass, gray glass, black glass, brown glass, red glass, orange glass, yellow glass, lime glass, green glass, cyan glass, light blue glass, blue glass, purple glass, magenta glass or pink glass
-	return "chest" if {_item} is a chestplate
-	return "legs" if {_item} is a leggings
-	return "feet" if {_item} is a boots
-	return "hand" if {_item} is a swords, pickaxes, shovels, axes or hoes
-	return "offhand" if {_item} is a shield
-	return "all"
-
  
