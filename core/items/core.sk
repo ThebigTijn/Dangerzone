@@ -1,10 +1,10 @@
 on load:
 	load yaml "plugins/Skript/yaml/core/items.yml" as "items"
 	load yaml "plugins/Skript/yaml/core/itemsyntax.yml" as "itemsyntax"
-	set {item.attributes::*} to "max_health", "knockback_resistance", "movement_speed", "attack_damage", "attack_knockback", "attack_speed", "armor" and "armor_toughness"
+	set {item.attributes::*} to "max_health", "knockback_resistance", "movement_speed", "attack_damage", "attack_knockback", "armor" and "armor_toughness"
 	set {item.modifiers::*} to "fire_protection", "sharpness", "protection", "blast_protection", "fire_aspect" and "projectile_protection"
 	set {item.tags::*} to "space_helmet", "gravity_boots" and "gas_mask"
-	set {item.information::*} to "name", "description" and "nbt"
+	set {item.information::*} to "name", "description", "descriptiontwo" and "nbt"
 	set {item.types::*} to "potion", "normal"
 
 
@@ -72,21 +72,36 @@ function returnItemInfo(id: text,type: text) :: text:
 function returnItem(id: text) :: item:
 	set {_i} to returnItemItem({_id}) named returnItemInfo({_id},"name") with nbt compound from "%returnItemInfo({_id},"nbt")%" if returnItemInfo({_id},"nbt") is not ""
 	set {_i} to returnItemItem({_id}) named returnItemInfo({_id},"name") if {_i} is not set
-	return {_i} with nbt compound from "{id:""example""}"
+	set {_l} to returnItemLore({_id})
+	return ({_i} with lore (lore of {_l})) with nbt compound from "{id:""%{_id}%""}" with all flags hidden
 
 
-function makeItemExample():
-	delete yaml value "example" from "items"
-	setItemType("example","normal")
-	setItemItem("example",iron sword)
-	setItemInfo("example","name","&9Hello World!")
-	setItemInfo("example","description","&fDescription")
-	setItemInfo("example","nbt","")
-	setItemSlots("example","all")
+
+function makeItem(id: text,item: item):
+	delete yaml value "%{_id}%" from "items"
+	setItemType({_id},"normal")
+	setItemType({_id},"potion") if {_item} is a potion, lingering potion or splash potion 
+	setItemItem({_id},{_item})
+	setItemInfo({_id},"name",name of {_item})
+	setItemInfo({_id},"description","")
+	setItemInfo({_id},"descriptiontwo","")
+	setItemInfo({_id},"nbt","%nbt compound from {_item}%")
+	setItemSlots({_id},returnDefaultSlot({_item}))
 	loop {item.Attributes::*}:
-		setItemAttribute("example",loop-value)
+		setItemAttribute({_id},loop-value)
 	loop {item.modifiers::*}:
-		setItemModifier("example",loop-value)
+		setItemModifier({_id},loop-value)
 	loop {item.tags::*}:
-		setItemTag("example",loop-value)
+		setItemTag({_id},loop-value)
 	save yaml "items"
+
+function returnDefaultSlot(item: item) :: text:
+	return "head" if {_item} is a helmets, glass, tinted glass, white glass, light gray glass, gray glass, black glass, brown glass, red glass, orange glass, yellow glass, lime glass, green glass, cyan glass, light blue glass, blue glass, purple glass, magenta glass or pink glass
+	return "chest" if {_item} is a chestplate
+	return "legs" if {_item} is a leggings
+	return "feet" if {_item} is a boots
+	return "hand" if {_item} is a swords, pickaxes, shovels, axes or hoes
+	return "offhand" if {_item} is a shield
+	return "all"
+
+ 

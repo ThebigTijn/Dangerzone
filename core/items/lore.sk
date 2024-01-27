@@ -1,0 +1,15 @@
+# should onyl be used in context (lore of returnItemlore(ID))
+function returnItemLore(id: text) :: item:
+	set {_i} to barrier named "&cPLACEHOLDER"
+	set {_d} to yaml value "%{_id}%.description" from "items"
+	set {_i} to {_i} with lore "" and formatForLines({_d},25) if {_d} is not ""
+	loop {item.attributes::*}:
+		add "&f%loop-value%: %returnItemAttribute({_id},loop-value)%" to {_l::*} if returnItemAttribute({_id},loop-value) is not 0
+		delete {_s}
+	set {_i} to {_i} with lore (lore of {_i}) and "%nl%&f| Statistics" and {_l::*} if {_l::*} is set
+	delete {_l::*}
+	loop {item.modifiers::*}:
+		add "&f%loop-value%: %returnItemModifier({_id},loop-value)%" to {_l::*} if returnItemModifier({_id},loop-value) is not 0
+		delete {_s}
+	set {_i} to {_i} with lore (lore of {_i}) and "%nl%&f| Modifiers" and {_l::*} if {_l::*} is set
+	return {_i}
