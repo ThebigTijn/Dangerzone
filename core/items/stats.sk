@@ -1,10 +1,9 @@
-function returnItemStats(id: text) :: text:
-	set {_i} to barrier named "&cPLACEHOLDER"
+function returnItemStats(id: text,i: item) :: item:
 	loop {item.attributes::*}:
 		returnItemAttribute({_id},loop-value) is not 0
-		addAttribute({_i},loop-value,returnItemAttribute({_id},loop-value),"add_number",returnItemSlots({_id})) if loop-value != "movement_speed"
-		addAttribute({_i},loop-value,returnItemAttribute({_id},loop-value),"add_scalar",returnItemSlots({_id})) if loop-value = "movement_speed"
+		set {_i} to addAttribute({_i},loop-value,returnItemAttribute({_id},loop-value),"add_number",returnItemSlots({_id})) if loop-value != "movement_speed"
+		set {_i} to addAttribute({_i},loop-value,returnItemAttribute({_id},loop-value),"add_scalar",returnItemSlots({_id})) if loop-value = "movement_speed"
 	loop {item.modifiers::*}:
 		returnItemModifier({_id},loop-value) is not 0
 		addModifier({_i},loop-value,returnItemModifier({_id},loop-value))
-	return "%nbt compound from {_i}%"
+	return {_i}
