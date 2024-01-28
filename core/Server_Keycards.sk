@@ -1,6 +1,8 @@
 aliases:
 	keycione = stone button
 	keycitwo = stone button, polished blackstone button
+	keygocone = mangrove button
+	keygoctwo = mangrove button, bamboo button
 	keyzero = acacia button
 	keyone = acacia button, birch button
 	keytwo = acacia button, birch button, oak button
@@ -16,6 +18,8 @@ function checkReader(b: block) :: boolean:
 function returnKeyLevel(i: item) :: itemtype:
 	return keycione if tag "custom;Keycard" of nbt compound of {_i} is "11"
 	return keycitwo if tag "custom;Keycard" of nbt compound of {_i} is "12"
+	return keygocone if tag "custom;Keycard" of nbt compound of {_i} is "13"
+	return keygoctwo if tag "custom;Keycard" of nbt compound of {_i} is "14"
 	return keyone if tag "custom;Keycard" of nbt compound of {_i} is "1"
 	return keytwo if tag "custom;Keycard" of nbt compound of {_i} is "2"
 	return keythree if tag "custom;Keycard" of nbt compound of {_i} is "3"
@@ -27,6 +31,8 @@ function returnKeyLevel(i: item) :: itemtype:
 function returnLevelKey(b: block) :: text:
 	return "&7CI" if {_b} = stone button
 	return "&8CI Commander" if {_b} = polished blackstone button
+	return "&9GOC" if {_b} = mangrove button
+	return "&1GOC Senior" if {_b} = bamboo button
 	return "&aL1" if {_b} = birch button
 	return "&eL2" if {_b} = oak button
 	return "&6L3" if {_b} = jungle button
@@ -89,3 +95,9 @@ on pick up:
 on right click on armor stand:
 	name of event-entity is "Keycard"
 	cancel event
+
+on place of a button:
+	player's gamemode is creative
+	name of player's tool is "keyreader"
+	set tag "custom;IsReader" of nbt compound of event-block to 1
+	message "<##E34234>&lSYSTEM &7»&f Placed Keyreader"

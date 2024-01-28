@@ -44,3 +44,20 @@ on right click on stations:
 command /shrug:
 	trigger:
 		make player send message "¯\_(ツ)_/¯"
+
+on death:
+	if victim's gamemode != creative or spectator:
+		if victim has permission "spawn.ci":
+			warpPlayer(victim,"ci-spawn")
+		else if victim has permission "spawn.goc":
+			warpPlayer(victim,"goc-spawn")
+		else if victim has permission "spawn.sd":
+			warpPlayer(victim,"sd-spawn")
+		else if victim has permission "spawn.mtf":
+			warpPlayer(victim,"mtf-spawn")
+		else if victim has permission "spawn.isd":
+			warpPlayer(victim,"isd-spawn")
+		else if victim has permission "spawn.scd":
+			warpPlayer(victim,"scd-spawn")
+	else:
+		warpPlayer(victim,"staff-spawn")
