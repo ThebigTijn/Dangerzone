@@ -45,6 +45,26 @@ command /shrug:
 	trigger:
 		make player send message "¯\_(ツ)_/¯"
 
+on join:
+	wait 4 ticks
+	if player's gamemode != creative or spectator:
+		if player has permission "spawn.ci":
+			warpPlayer(player,"ci-spawn")
+		else if player has permission "spawn.goc":
+			warpPlayer(player,"goc-spawn")
+		else if player has permission "spawn.sd":
+			warpPlayer(player,"sd-spawn")
+		else if player has permission "spawn.mtf":
+			warpPlayer(player,"mtf-spawn")
+		else if player has permission "spawn.isd":
+			warpPlayer(player,"isd-spawn")
+		else if player has permission "spawn.scd":
+			warpPlayer(player,"scd-spawn")
+		else:
+			warpPlayer(player,"class-d")
+	else:
+		warpPlayer(player,"staff-spawn")
+
 on death:
 	wait 4 ticks
 	if victim's gamemode != creative or spectator:

@@ -51,4 +51,7 @@ function getItemProtection(item: item, cause: string) :: number:
 function addModifier(i: item,t: string,a: number):
 	set {_nbt} to nbt compound from {_item}
 	set tag "modifiers;%{_t}%" of {_nbt} to {_a}
-	
+
+function makeMeleeDamage(item: item) :: number:
+	set {_nbt} to nbt compound from {_item}
+	set {_sharp} to tag "modifiers;sharpness" of {_nbt}
