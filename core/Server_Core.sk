@@ -46,6 +46,7 @@ command /shrug:
 		make player send message "¯\_(ツ)_/¯"
 
 on death:
+	wait 4 ticks
 	if victim's gamemode != creative or spectator:
 		if victim has permission "spawn.ci":
 			warpPlayer(victim,"ci-spawn")
@@ -59,5 +60,7 @@ on death:
 			warpPlayer(victim,"isd-spawn")
 		else if victim has permission "spawn.scd":
 			warpPlayer(victim,"scd-spawn")
+		else:
+			warpPlayer(victim,"class-d")
 	else:
 		warpPlayer(victim,"staff-spawn")

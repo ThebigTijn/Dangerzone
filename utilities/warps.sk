@@ -29,7 +29,7 @@ command /warp <text> [<text>]:
 			player has permission "skript.warp.%arg-1%"
 			warpPlayer(player,arg-1)
 			
-function warpPlayer(p: player,w: text)
+function warpPlayer(p: player,w: text):
 	teleport {_p} to returnWarp({_w})
 	message "<##E34234>&lSYSTEM &7» Succesfully Warped to <##E34234>%{_w}%" to {_p}
 
