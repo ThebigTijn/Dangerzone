@@ -57,6 +57,5 @@ on chat:
 	set {_recipients::*} to all players in radius 20 around player
 	loop (all players where [input has permission "skript.chatspy"]):
 		{_recipients::*} does not contain loop-value
-		tag "Chat_Spy" of nbt compound of player is set
-		send formatted "&csᴘʏ &8₪%{_format}%" to loop-player
+		send formatted "&csᴘʏ &8>> %{_format}%" to loop-player
 	send formatted "%{_format}%" to console

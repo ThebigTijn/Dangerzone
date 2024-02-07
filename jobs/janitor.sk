@@ -1,0 +1,52 @@
+function openCaretaker(p: player):
+
+	set {_shop} to virtual hopper inventory named "&8&l%font("Caretaker")%"
+	set (metadata tag "Caretaker" of {_p}) to {_shop}
+
+	set slot (numbers from 0 to 4) of {_shop} to black stained glass pane named "&7"
+
+	open {_shop} to {_p}
+
+
+on inventory click:
+
+	event-inventory = (metadata tag "Caretaker" of player)
+	cancel event
+
+on rightclick on a player:
+	event-entity's name contains "6e5f1c2e3ae0"
+	openCaretaker(player)
+
+on brush:
+	tag "breakamount" of nbt compound from event-block is set
+	set {_amount} to tag "breakamount" of nbt compound from event-block
+	addBlockDamage(event-block,{_amount})
+
+function addBlockDamage(block: block,int: int = 0)
+	set (metadata tag "break" of {_block}) to ({_int} + (metadata tag "break" of {_block}))
+	make all players see damage of {_block} as (metadata tag "break" of {_block})
+
+on brush:
+	tag "dirt" of nbt compound from event-block = "1"
+	set (metadata tag "break" of event-block) to (0.1 + (metadata tag "break" of event-block))
+	make all players see damage of event-block as (metadata tag "break" of event-block)
+	if (metadata tag "break" of event-block) >= 1:
+		make all players see damage of event-block as 0
+		delete (metadata tag "break" of event-block)
+		delete tag "dirt" of nbt compound from event-block
+		set block at {janitor.nextdirt} to brown carpet
+		set tag "dirt" of nbt compound from block at {janitor.nextdirt} to "1"
+		set {janitor.nextdirt} to event-block
+		set event-block to air
+
+on place of brown carpet:
+	name of player's tool = "Dirt"
+	set tag "dirt" of nbt compound from event-block to "1"
+	message "<##E34234>&lSYSTEM &7» &fPlaced down dirt stain."
+
+on break of brown carpet:
+	gamemode of player = creative
+	tag "dirt" of nbt compound from event-block is set
+	delete tag "dirt" of nbt compound from event-block
+	delete (metadata tag "break" of event-block)
+	message "<##E34234>&lSYSTEM &7» &fBroken dirt stain."
