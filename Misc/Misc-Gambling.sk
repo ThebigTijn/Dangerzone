@@ -1,0 +1,135 @@
+function gamblingMines(p: player, num: num):
+
+    send "<##E34234>&lSYSTEM &7» Mines Reloading" to {_p} if (metadata tag "Gambling_Active" of {_p}) is set
+    (metadata tag "Gambling_Active" of {_p}) is not set
+    set (metadata tag "Gambling_Active" of {_p}) to true
+
+    moneyRemove({_p}, {_num})
+    set {_u} to uuid of {_p}
+    set (metadata tag "Gambling_Mines" of {_p}) to virtual chest inventory with 6 rows named "  &8&l%font("mines - dz productions")%"
+
+    set slot (integers between 0 and 54) of (metadata tag "Gambling_Mines" of {_p}) to black stained glass pane named " "
+
+    set slot 19 of (metadata tag "Gambling_Mines" of {_p}) to green dye named "<##9DCEFB>&lSTATISTICS" with lore "&8%font("mines")%", "", "&fOriginal Bet: &a$%metadata tag "Original_Bet" of {_p}%", "&fBet Value: &a$%metadata tag "Original_Bet" of {_p}%", "", "&fProfit: &a$0", "", "<##B998FF>&LWIN PERCENTAGE&f: 1x", ""
+    set slot 28 of (metadata tag "Gambling_Mines" of {_p}) to anvil named "<##6EFB73>&lINFORMATION" with lore  "&8%font("mines")%", "", "&7There are less than six bombs,", "&7Click the gray dye to choose", "", "&7Each tile raises the percentage won", "", "&fBe Careful!", ""
+    set slot 37 of (metadata tag "Gambling_Mines" of {_p}) to emerald named "&a&lCASHOUT" with lore "&8%font("mines")%", "", "&7Click to cash out.", "&7This is for the weak!", "", "&fBet Value: &a$%metadata tag "Original_Bet" of {_p}%", "&fProfit: &a$0", ""
+
+    set {_n} to 12
+    set {_n2} to 16
+
+    loop 4 times:
+
+        set slot (integers between {_n} and {_n2}) of (metadata tag "Gambling_Mines" of {_p}) to gray dye named "<##B4C3C3>%font("reveal")%"
+        add (integers between {_n} and {_n2}) to {-mineslots::%{_u}%::*}
+        set {_bombs} to (random integer between {_n} and {_n2})
+
+        add {_bombs} to {-bombs::%{_u}%::*}
+        remove {_bombs} from {-mineslots::%{_u}%::*}
+
+        add 9 to {_n}
+        add 9 to {_n2}
+
+    open (metadata tag "Gambling_Mines" of {_p}) to {_p}
+
+function gamblingMinesLose(p: player, slot: int):
+
+    (metadata tag "Mines_Lose" of {_p}) is not set
+    set (metadata tag "Mines_Lose" of {_p}) to true
+
+    set (metadata tag "Bet_Value" of {_p}) to 0
+    
+    set {_u} to uuid of {_p}
+    set {_head} to player head with nbt from "{SkullOwner:{Id:[I;-81534137,1999913969,-1665530556,1582372457],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjRmODE1YmNiYWMyMzczNDA0NjRiNzc3ODA3ZjI2YjVlOTMxN2MxOWQ1NzlkYTJkZDk0Y2JiYzZhMGRlNTEzOCJ9fX0=""}]}}}"
+    set name of {_head} to "&c%font("game over")%"
+
+    set slot {_slot} of (metadata tag "Gambling_Mines" of {_p}) to {_head}
+    set lore of slot 19 of (metadata tag "Gambling_Mines" of {_p}) to "&8%font("mines")%", "", "&fOriginal Bet: &a$%metadata tag "Original_Bet" of {_p}%", "&fBet Value: &a$0", "", "&fProfit: &a$0", "", "<##B998FF>&LWIN PERCENTAGE&f: 0x", ""
+
+    wait 10 ticks
+    set slot {-bombs::%{_u}%::*} of (metadata tag "Gambling_Mines" of {_p}) to {_head}
+
+    set {_head2} to player head with nbt from "{SkullOwner:{Id:[I;-356619586,1266371908,-1619277623,-1159839898],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTcyYzEwNDBmZDQwZTRlODNhNWJlNTBlZGNiMWNkMDM3YzljNjZiOWQwYzkxNzFlNzA4MGEwMmQzZjRjZmJmIn19fQ==""}]}}}"
+    set name of {_head2} to "&fPercent: &a%metadata tag "Win_Percentage" of {_p} ? 1%x"
+    set slot {-mineslots::%{_u}%::*} of (metadata tag "Gambling_Mines" of {_p}) to {_head2}
+
+    set lore of slot 37 of (metadata tag "Gambling_Mines" of {_p}) to "&8%font("mines")%", "", "&7Click to cash out.", "&7This is for the weak!", "", "&fBet Value: &a$0", "&fProfit: &a$0", ""
+
+
+function gamblingMinesWin(p: player, slot: int):
+    
+    (metadata tag "Mines_Lose" of {_p}) is not set
+    set {_u} to uuid of {_p}
+
+    set (metadata tag "Win_Percentage" of {_p}) to ((metadata tag "Win_Percentage" of {_p} ? 1) + 0.02) * 1.25
+
+    set {_head} to player head with nbt from "{SkullOwner:{Id:[I;-356619586,1266371908,-1619277623,-1159839898],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTcyYzEwNDBmZDQwZTRlODNhNWJlNTBlZGNiMWNkMDM3YzljNjZiOWQwYzkxNzFlNzA4MGEwMmQzZjRjZmJmIn19fQ==""}]}}}"
+    set name of {_head} to "&fPercent: &a%metadata tag "Win_Percentage" of {_p} ? 1%x"
+
+    set slot {_slot} of (metadata tag "Gambling_Mines" of {_p}) to {_head}
+    add {_slot} to {-wonmines::%{_u}%::*}
+    
+    loop {-wonmines::%{_u}%::*}:
+        set slot loop-value of (metadata tag "Gambling_Mines" of {_p}) to {_head}
+
+    set (metadata tag "Bet_Value" of {_p}) to (metadata tag "Original_Bet" of {_p}) * (metadata tag "Win_Percentage" of {_p})
+    set lore of slot 19 of (metadata tag "Gambling_Mines" of {_p}) to "&8%font("mines")%", "", "&fOriginal Bet: &a$%metadata tag "Original_Bet" of {_p}%", "&fBet Value: &a$%round(metadata tag "Bet_Value" of {_p}, 2)%", "", "&fProfit: &a$%round(metadata tag "Bet_Value" of {_p} - metadata tag "Original_Bet" of {_p}, 2)%", "", "<##B998FF>&LWIN PERCENTAGE&f: %metadata tag "Win_Percentage" of {_p}%x", ""
+    set lore of slot 37 of (metadata tag "Gambling_Mines" of {_p}) to "&8%font("mines")%", "", "&7Click to cash out.", "&7This is for the weak!", "", "&fBet Value: &a$%round(metadata tag "Bet_Value" of {_p}, 2)%", "&fProfit: &a$%round(metadata tag "Bet_Value" of {_p} - metadata tag "Original_Bet" of {_p}, 2) ? 0%", ""
+
+function gamblingMinesDelete(p: player):
+
+    set {_u} to uuid of {_p}
+
+    moneyAdd({_p}, metadata tag "Original_Bet" of {_p}) if (metadata tag "Original_Bet" of {_p}) = (metadata tag "Bet_Value" of {_p}) ? (metadata tag "Original_Bet" of {_p})
+    gamblingMinesCashout({_p})
+
+    delete (metadata tag "Original_Bet" of {_p})
+    delete (metadata tag "Bet_Value" of {_p})
+    delete (metadata tag "Win_Percentage" of {_p})
+    delete (metadata tag "Mines_Lose" of {_p})
+
+    delete {-mineslots::%{_u}%::*}
+    delete {-bombs::%{_u}%::*}
+    delete {-wonmines::%{_u}%::*}
+    delete (metadata tag "Gambling_Active" of {_p})
+
+
+function gamblingMinesCashout(p: player):
+
+    send "<##E34234>&lSYSTEM &7» You lose, better luck next time!" to {_p} if (metadata tag "Bet_Value" of {_p}) <= 0
+    (metadata tag "Bet_Value" of {_p}) > 0
+
+    send "<##E34234>&lSYSTEM &7» Cashed out, received &a$%round(metadata tag "Bet_Value" of {_p}, 2) ? 0%" to {_p}
+    moneyAdd({_p}, round(metadata tag "Bet_Value" of {_p}))
+
+
+on inventory click:
+
+    event-inventory = (metadata tag "Gambling_Mines" of player)
+    cancel event
+
+    loop {-mineslots::%uuid of player%::*}:
+        if event-slot = loop-value:
+            gamblingMinesWin(player, loop-value)
+
+    loop {-bombs::%uuid of player%::*}:
+        if event-slot = loop-value:
+            gamblingMinesLose(player, loop-value)
+    
+    if event-slot = 37:
+        close player's inventory
+
+on inventory close:
+    
+    event-inventory = (metadata tag "Gambling_Mines" of player)
+    gamblingMinesDelete(player)
+
+command gamble <num>:
+    trigger:
+        send "<##E34234>&lSYSTEM &7» Bet must be over &a$1" to player if arg < 1
+        send "<##E34234>&lSYSTEM &7» Bet cannot be over &a$500" to player if arg > 500
+        send "<##E34234>&lSYSTEM &7» Insufficient Funds" to player if moneyGet(player) < arg
+        arg >= 1
+        arg <= 500
+        moneyGet(player) >= arg
+        set (metadata tag "Original_Bet" of player) to arg
+        gamblingMines(player, arg)
