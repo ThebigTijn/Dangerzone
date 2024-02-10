@@ -1,0 +1,8 @@
+command chatspy:
+	permission: staff.use
+	trigger:
+		if tag "Chat_Spy" of nbt compound of player is set:
+			delete tag "Chat_Spy" of nbt compound of player
+		else:
+			set tag "Chat_Spy" of nbt compound of player to true
+		message "<##E34234>&lSYSTEM &7» &fToggled Chatspy"

@@ -12,9 +12,10 @@ function combatTimer(p: player):
     set {_u} to uuid of {_p}
 
     #CHECK IF PLAYER IS ALREADY IN COMBAT
-    #stop if combatActive({_p}) = true
-    set {-combat::active::%{_u}%} to true
     set {-combat::time::%{_u}%} to 10 seconds
+    stop if combatActive({_p}) = true
+    set {-combat::active::%{_u}%} to true
+
 
     #COMBAT TIMER
     while {-combat::active::%{_u}%} is set:

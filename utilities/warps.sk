@@ -19,15 +19,20 @@ command /warp <text> [<text>]:
 			arg-2 is set
 			arg-2 != "set", "delete"
 			createWarp(arg-2,player's location)
-			message "&3&l| &7Succesfully created Warp &3%arg-2%"
+			message "<##E34234>&lSYSTEM &7» &7Succesfully created Warp <##E34234>%arg-2%"
 		else if arg-1 is "delete":
 			arg-2 is set
 			deleteWarp(arg-2)
-			message "&3&l| &7Deleted Warp &3%arg-2%"
+			message "<##E34234>&lSYSTEM &7» &7Deleted Warp <##E34234>%arg-2%"
 		else:
 			"%all yaml nodes of "warps"%" contains arg-1
 			player has permission "skript.warp.%arg-1%"
-			teleport player to returnWarp(arg-1)
+			warpPlayer(player,arg-1)
+			
+function warpPlayer(p: player,w: text):
+	teleport {_p} to returnWarp({_w})
+	message "<##E34234>&lSYSTEM &7» Succesfully Warped to <##E34234>%{_w}%" to {_p}
+
 
 on tab complete of "warp":
     set tab completions for position 1 to "set" and "delete" and (yaml node keys "" from "warps")
