@@ -1,54 +1,121 @@
-function openCaretaker(p: player):
+#IN PROCESS OF BEING REWORKED
 
-	set {_shop} to virtual hopper inventory named "&8&l%font("Caretaker")%"
-	set (metadata tag "Caretaker" of {_p}) to {_shop}
+function caretakerOpen(p: player):
 
-	set slot (numbers from 0 to 4) of {_shop} to black stained glass pane named "&7"
+    set {_g} to virtual crafting table inventory named "&8&l%font("Caretaker")%"
+    set (metadata tag "Caretaker" of {_p}) to {_g}
 
-	open {_shop} to {_p}
+    set slot (integers between 1 and 9) of {_g} to black stained glass pane named " "
+    set slot 0 of {_g} to beacon named "&a&lINFORMATION" with lore "&8%font("category")%", "", "&7Maintain the CDCZ by cleaning", "&7the dirt off the floors,", "&7and cleaning cells", ""
+    set slot 4 of {_g} to wooden hoe named "<##ADD8E6>&lRECEIVE TOOL" with lore "&8%font("category")%", "", "&7Receive your tools to clean", "&7dirt stains off of CDCZ", "", "&8→ <##E5E4E2>&lCLICK HERE", "" with all flags hidden
+    set slot 5 of {_g} to green dye named "&a&lSTATISTICS" with lore "&8%font("category")%", "", "&7View total amount of", "&7dirt cleaned in the CDCZ", "", "&fTotal Cleaned: &7%metadata tag "Caretaker_Cleaned" of {_p} ? 0%", "", "<##FFB448>&l%font("upgrades")%", "&8→ &fTime: &a%metadata tag "Caretaker_Speed.Value" of {_p} ? 10%s", "&8→ &fBoost Value: &a%metadata tag "Caretaker_Boost.Value" of {_p} ? 0%x", ""
+    set slot 6 of {_g} to anvil named "<##FFB448>&lUPGRADE" with lore "&8%font("category")%", "", "&7Upgrade efficiency", "&7of your tools!", "", "&8→ <##E5E4E2>&lCLICK HERE", ""
 
+    open {_g} to {_p}
+
+function caretakerUpgrade(p: player):
+
+    set {_g} to virtual dropper inventory named "&8&l%font("upgrades")%"
+    set (metadata tag "Caretaker_Upgrades" of {_p}) to {_g}
+
+    set slot (integers between 0 and 8) of {_g} to black stained glass pane named " "
+
+    set slot 3 of {_g} to sugar named "&b&lSPEED" with lore "&8%font("upgrade")%", "", "&7Decrease time needed to clean", "&7Max is 1/2 of original time", "", "&fLevel: &b%metadata tag "Caretaker_Speed.Value" of {_p} ? 0%/5", "&fTime: &b%metadata tag "Caretaker_Speed.Time" of {_p} ? 10%s", "", "&fPrice: &a$%metadata tag "Caretaker_Speed.Price" of {_p} ? 25%", "", "&8→ <##E5E4E2>&lCLICK HERE"
+    set slot 4 of {_g} to diamond named "&a&lBOOSTER" with lore "&8%font("upgrade")%", "", "&7Increase amount earned", "&7per cleaned dirt", "", "&fLevel: &a%metadata tag "Caretaker_Boost.Value" of {_p} ? 0%/5", "&fMulti: &a%metadata tag "Caretaker_Boost.Number" of {_p} ? 1%x", "", "&fPrice: &a$%metadata tag "Caretaker_Boost.Price" of {_p} ? 50%", "", "&8→ <##E5E4E2>&lCLICK HERE"
+    set slot 5 of {_g} to gray dye named "&c&l%font("coming soon...")%"
+
+    open {_g} to {_p}
+
+function caretakerUpgradePurchase(p: player, n: num, tag: string):
+
+    send "Insufficient Funds" to {_p} if moneyGet({_p}) < {_n}
+    moneyGet({_p}) >= {_n}
+
+    set {_tag} to {_tag} parsed as integer
+
+    send "Max" to {_p} if {_tag} >= 5
+    {_tag} < 5
+
+    moneyRemove({_p}, {_n})
+    send "Purchased" to {_p}
+
+    set {_tag} to {_tag} + 1
+    if {_tag} contains "Speed":
+        set (metadata tag "Caretaker_Speed.Time" of {_p}) to (metadata tag "Caretaker_Speed.Time" of {_p}) - 2
+        set (metadata tag "Caretaker_Speed.Price" of {_p}) to ((metadata tag "Caretaker_Speed.Price" of {_p} ? 25) * 1.5)
+
+    if {_tag} contains "Boost":
+        set (metadata tag "Caretaker_Boost.Number" of {_p}) to (metadata tag "Caretaker_Boost.Number" of {_p} ? 1) + 0.25
+        set (metadata tag "Caretaker_Boost.Price" of {_p}) to (metadata tag "Caretaker_Boost.Price" of {_p} ? 50) * 1.75
 
 on inventory click:
 
-	event-inventory = (metadata tag "Caretaker" of player)
-	cancel event
+    event-inventory = (metadata tag "Caretaker" of player)
+    cancel event
+
+    if index of event-slot = 4:
+
+        loop all items in player's inventory:
+            tag "custom;Caretaker.Tool" of nbt compound from loop-value = 1
+            send "Already Have Tool"
+            stop
+
+        set {_i} to brush named "&7Mop" with all flags hidden
+        set tag "custom;Caretaker.Tool" of nbt compound from {_i} to 1
+        give player {_i}
+        
+    
+    if index of event-slot = 6:
+
+        caretakerUpgrade(player)
+
+on inventory click:
+
+    event-inventory = (metadata tag "Caretaker_Upgrades" of player)
+    cancel event
+
+    caretakerUpgradePurchase(player, (metadata tag "Caretaker_Speed.Price" of {_p} ? 25), "Caretaker_Speed.Time") if index of event-slot = 3
+    caretakerUpgradePurchase(player, (metadata tag "Caretaker_Boost.Price" of {_p} ? 50), "Caretaker_Boost.Number") if index of event-slot = 4
+
+
+#NOTE - PROGRESS ENDED HERE
 
 on rightclick on a player:
-	event-entity's name contains "6e5f1c2e3ae0"
-	openCaretaker(player)
+    event-entity's name contains "6e5f1c2e3ae0"
+    caretakerOpen(player)
 
 on brush:
-	tag "breakamount" of nbt compound from event-block is set
-	set {_amount} to tag "breakamount" of nbt compound from event-block
-	addBlockDamage(event-block,{_amount})
+    tag "breakamount" of nbt compound from event-block is set
+    set {_amount} to tag "breakamount" of nbt compound from event-block
+    addBlockDamage(event-block,{_amount})
 
 function addBlockDamage(block: block,int: int = 0)
-	set (metadata tag "break" of {_block}) to ({_int} + (metadata tag "break" of {_block}))
-	make all players see damage of {_block} as (metadata tag "break" of {_block})
+    set (metadata tag "break" of {_block}) to ({_int} + (metadata tag "break" of {_block}))
+    make all players see damage of {_block} as (metadata tag "break" of {_block})
 
 on brush:
 
-	tag "dirt" of nbt compound from event-block = "1"
-	set (metadata tag "break" of event-block) to (0.1 + (metadata tag "break" of event-block))
-	make all players see damage of event-block as (metadata tag "break" of event-block)
-	
-	if (metadata tag "break" of event-block) >= 1:
-		make all players see damage of event-block as 0
-		delete (metadata tag "break" of event-block)
-		delete tag "dirt" of nbt compound from event-block
-		set block at {janitor.nextdirt} to brown carpet
-		set tag "dirt" of nbt compound from block at {janitor.nextdirt} to "1"
-		set {janitor.nextdirt} to event-block
-		set event-block to air
+    tag "dirt" of nbt compound from event-block = "1"
+    set (metadata tag "break" of event-block) to (0.1 + (metadata tag "break" of event-block))
+    make all players see damage of event-block as (metadata tag "break" of event-block)
+    
+    if (metadata tag "break" of event-block) >= 1:
+        make all players see damage of event-block as 0
+        delete (metadata tag "break" of event-block)
+        delete tag "dirt" of nbt compound from event-block
+        set block at {janitor.nextdirt} to brown carpet
+        set tag "dirt" of nbt compound from block at {janitor.nextdirt} to "1"
+        set {janitor.nextdirt} to event-block
+        set event-block to air
 
 on place of brown carpet:
-	name of player's tool = "Dirt"
-	set tag "dirt" of nbt compound from event-block to "1"
-	message "<##E34234>&lSYSTEM &7» &fPlaced down dirt stain."
+    name of player's tool = "Dirt"
+    set tag "dirt" of nbt compound from event-block to "1"
+    message "<##E34234>&lSYSTEM &7» &fPlaced down dirt stain."
 
 on break of brown carpet:
-	gamemode of player = creative
-	tag "dirt" of nbt compound from event-block is set
-	delete tag "dirt" of nbt compound from event-block
-	delete (metadata tag "break" of event-block)
-	message "<##E34234>&lSYSTEM &7» &fBroken dirt stain."
+    gamemode of player = creative
+    tag "dirt" of nbt compound from event-block is set
+    delete tag "dirt" of nbt compound from event-block
+    delete (metadata tag "break" of event-block)
+    message "<##E34234>&lSYSTEM &7» &fBroken dirt stain."

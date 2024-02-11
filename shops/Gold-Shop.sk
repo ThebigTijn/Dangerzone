@@ -47,3 +47,100 @@ on inventory click:
 command gold-shop:
     trigger:
         goldShop(player)
+
+
+
+
+
+# UNFINISHED REWORK BELOW
+
+on load:
+    set {-goldshop.ranks::*} to "Discord", "Gold", "Platina" and "Crystal"
+
+function serverGoldShop(p: player):
+
+    set {_g} to virtual chest inventory with 5 rows named "Gold Shop"
+    set (metadata tag "Server_GoldShop" of {_p}) to {_g}
+
+    set {_n} to 0
+    set {_n2} to 8
+
+    loop 2 times:
+        set slot (integers between {_n} and {_n2}) of {_g} to black stained glass pane named " "
+        add 36 to {_n} and {_n2}
+    
+    set {_n} to 9
+    loop 3 times:
+        set slot ({_n} and ({_n} + 8)) of {_g} to black stained glass pane named " "
+
+    serverResetGoldItems({_p})
+
+    set {_lore} to "&8%font("product")%", "", "&7Click to preview %{_name}%", "&7that can be purchased", "", "&e%font("click here!")%", ""
+    set slot (10,19 and 28) of {_g} to player head with nbt from "{display:{Name:'{""text"":"" ""}'},SkullOwner:{Id:[I;-112025113,2045332900,-1935955064,-556367639],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjEzMTdkMTgyMGM3N2UyOWJlMzNhYThhN2MxNzcxY2U3YTk2MmU1ZTc3MGZjYjgyN2Y1MDNkNTRmOTU2NWRhIn19fQ==""}]}}}"
+    
+    set {_name} to "<##FFD700>Gold"
+    set slot 11 of {_g} to player head with nbt from "{display:{Name:'{""text"":""&6&lGOLD""}'},SkullOwner:{Id:[I;-1128642242,1904428934,-1832529789,-1117679883],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTRhZWFiMDFjMDRmMzZiYTg4N2I3YmRhOGQ5YzUzOGJjOTY4NmRiYmNlN2UzYTViYjEwZjMwOGM1MDMwMmJjNCJ9fX0=""}]}}}" with lore {_lore}
+    
+    set {_name} to "&fRanks"
+    set slot 20 of {_g} to player head with nbt from "{display:{Name:'{""text"":""<##E5E4E2>&lRANKS""}'},SkullOwner:{Id:[I;-1507782065,-1691529299,-1668498090,1779133813],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTAzOWY4NTk5MzZiMjJhMzBjZjJiY2UyNTc4MTU0ZDRiNjI0YmM3MTI2MDY3MTYxZDllZjBiZjk4ZjZiMWU5NCJ9fX0=""}]}}}" with lore {_lore}
+    
+    set {_name} to "<##FFA07A>Global Boosters"
+    set slot 29 of {_g} to player head with nbt from "{display:{Name:'{""text"":""<##FFA07A>&LGLOBAL BOOSTERS""}'},SkullOwner:{Id:[I;-2075649548,260654558,-1813954921,-1930456718],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDZlMDNlZTA3YTBkZDNlZWNmMDE2YmI3YzM4OWQ2Yjk0ZjJkZWVkYjkyOGQ1ZjA0NmFjOWZhNzFhZDQ1MjQ0ZSJ9fX0=""}]}}}" with lore {_lore}
+
+    open {_g} to {_p}
+
+function serverResetGoldItems(p: player):
+
+    set {_g} to (metadata tag "Server_GoldShop" of {_p})
+    set {_n} to 14
+    loop 3 times:
+        set slot (integers between {_n} and ({_n} + 2)) of {_g} to gray dye named " "
+        add 9 to {_n}
+
+function serverGoldShopPurchase(p: player, num: num, s: string):
+
+    send "Insufficient Funds" to {_p} if goldGet({_p}) < {_num}
+    goldGet({_p}) >= {_num}
+
+    set player's group to {_s} if {-goldshop.ranks::*} contains {_s}
+
+    goldRemove({_p}, {_num})
+
+function serverGlobalBooster(p: player):
+
+    set {_g} to virtual chest inventory named "&8&l%font("global boosters")%"
+    set (metadata tag "Global_Boosters" of {_p}) to {_g}
+
+    loop {-global.boosts::*}:
+        set {_n} to 14
+        loop 2 times:
+            set slot (integers between {_n} and ({_n} + 2)) of {_g} to loop-value-2
+            add 9 to {_n}
+    
+    open {_g} to {_p}
+
+on inventory click:
+
+    event-inventory = (player's inventory) and (metadata tag "Server_GoldShop" of player)
+    cancel event
+
+    set {_g} to (metadata tag "Server_GoldShop" of player)
+    serverResetGoldItems(player)
+
+    if index of event-slot = 11:
+
+        set {_n} to 14
+        set {_int} to 100
+        set {_price} to 10
+        loop 2 times:
+            exit loop if {_n} = 23
+            set slot (integers between {_n} and ({_n} + 2)) to gold named "&8[&f%{_int}%x&8] &6&lGOLD" with lore "&8%font("currency")%", "", "&7Click to be fowarded to our store,", "&7where you can purchase this item.", "", "&fPrice: &a$%{_price}% USD", ""
+            set {_int} to ({_int} * 1.25)
+            set {_price} to round({_price} * 1.75, 1)
+            add 9 to {_n}
+    
+    send "DangerZone Store Link" to player if index of event-slot = (14,15,16 or 25)
+
+    if index of event-slot = 20:
+
+        serverResetGoldItems(player)
