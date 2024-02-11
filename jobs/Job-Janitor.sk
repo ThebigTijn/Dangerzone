@@ -27,9 +27,11 @@ function addBlockDamage(block: block,int: int = 0)
 	make all players see damage of {_block} as (metadata tag "break" of {_block})
 
 on brush:
+
 	tag "dirt" of nbt compound from event-block = "1"
 	set (metadata tag "break" of event-block) to (0.1 + (metadata tag "break" of event-block))
 	make all players see damage of event-block as (metadata tag "break" of event-block)
+	
 	if (metadata tag "break" of event-block) >= 1:
 		make all players see damage of event-block as 0
 		delete (metadata tag "break" of event-block)
