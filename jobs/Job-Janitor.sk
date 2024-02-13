@@ -1,82 +1,112 @@
-#IN PROCESS OF BEING REWORKED
+function openCaretaker(p: player):
 
-function caretakerOpen(p: player):
-
-    set {_g} to virtual crafting table inventory named "&8&l%font("Caretaker")%"
+    set {_g} to virtual dropper inventory named "&8&l%font("caretaker")%"
     set (metadata tag "Caretaker" of {_p}) to {_g}
-
-    set slot (integers between 1 and 9) of {_g} to black stained glass pane named " "
-    set slot 0 of {_g} to beacon named "&a&lINFORMATION" with lore "&8%font("category")%", "", "&7Maintain the CDCZ by cleaning", "&7the dirt off the floors,", "&7and cleaning cells", ""
-    set slot 4 of {_g} to wooden hoe named "<##ADD8E6>&lRECEIVE TOOL" with lore "&8%font("category")%", "", "&7Receive your tools to clean", "&7dirt stains off of CDCZ", "", "&8→ <##E5E4E2>&lCLICK HERE", "" with all flags hidden
-    set slot 5 of {_g} to green dye named "&a&lSTATISTICS" with lore "&8%font("category")%", "", "&7View total amount of", "&7dirt cleaned in the CDCZ", "", "&fTotal Cleaned: &7%metadata tag "Caretaker_Cleaned" of {_p} ? 0%", "", "<##FFB448>&l%font("upgrades")%", "&8→ &fTime: &a%metadata tag "Caretaker_Speed.Value" of {_p} ? 10%s", "&8→ &fBoost Value: &a%metadata tag "Caretaker_Boost.Value" of {_p} ? 0%x", ""
-    set slot 6 of {_g} to anvil named "<##FFB448>&lUPGRADE" with lore "&8%font("category")%", "", "&7Upgrade efficiency", "&7of your tools!", "", "&8→ <##E5E4E2>&lCLICK HERE", ""
-
-    open {_g} to {_p}
-
-function caretakerUpgrade(p: player):
-
-    set {_g} to virtual dropper inventory named "&8&l%font("upgrades")%"
-    set (metadata tag "Caretaker_Upgrades" of {_p}) to {_g}
 
     set slot (integers between 0 and 8) of {_g} to black stained glass pane named " "
 
-    set slot 3 of {_g} to sugar named "&b&lSPEED" with lore "&8%font("upgrade")%", "", "&7Decrease time needed to clean", "&7Max is 1/2 of original time", "", "&fLevel: &b%metadata tag "Caretaker_Speed.Value" of {_p} ? 0%/5", "&fTime: &b%metadata tag "Caretaker_Speed.Time" of {_p} ? 10%s", "", "&fPrice: &a$%metadata tag "Caretaker_Speed.Price" of {_p} ? 25%", "", "&8→ <##E5E4E2>&lCLICK HERE"
-    set slot 4 of {_g} to diamond named "&a&lBOOSTER" with lore "&8%font("upgrade")%", "", "&7Increase amount earned", "&7per cleaned dirt", "", "&fLevel: &a%metadata tag "Caretaker_Boost.Value" of {_p} ? 0%/5", "&fMulti: &a%metadata tag "Caretaker_Boost.Number" of {_p} ? 1%x", "", "&fPrice: &a$%metadata tag "Caretaker_Boost.Price" of {_p} ? 50%", "", "&8→ <##E5E4E2>&lCLICK HERE"
-    set slot 5 of {_g} to gray dye named "&c&l%font("coming soon...")%"
+    set slot 1 of {_g} to book named "&a&lINFORMATION" 
+    set lore of slot 1 of {_g} to "&8%font("category")%", "", "&7Cleaning the containment zone feels like", "&7doing a choreographed dance with mops and protective gear,", "&7making sure everything stays safe and tidy!", "", "<##F0F8FF>%font("upgrades")%", "<##E5E4E2>● &bSpeed of Cleaning", "<##E5E4E2>● &aMoney Earned", ""
+
+    set slot 3 of {_g} to brush named "<##C0C0C0>&lRECEIVE EQUIPMENT"
+    set lore of slot 3 of {_g} to "&8%font("category")%", "", "&7A trusty sidekick in the never-ending", "&7quest for squeaky-clean floors!", "", "&8→ <##F5F5F5>&lCLICK HERE", ""
+
+    set slot 4 of {_g} to green dye named "<##00FF00>&lSTATISTICS"
+    set lore of slot 4 of {_g} to "&8%font("category")%", "", "&7Dive into the number jungle and", "&7behold the thrilling stats safari!", "", "<##F0F8FF>%font("upgrades")%", "<##E5E4E2>● &7Time: &f%metadata tag "Caretaker_Speed.Time" of {_p} ? 10%s", "<##E5E4E2>● &7Multi: &f%metadata tag "Caretaker_Money.Multi" of {_p} ? 1%x", ""
+
+    set slot 5 of {_g} to anvil named "<##FFD700>&lUPGRADE"
+    set lore of slot 5 of {_g} to "&8%font("category")%", "", "&7Upgrading equipment efficiency is", "&7like turbocharging a machine, making it", "&7zoom through tasks with lightning speed!", "", "&8→ <##F5F5F5>&lCLICK HERE", ""
 
     open {_g} to {_p}
 
-function caretakerUpgradePurchase(p: player, n: num, tag: string):
+function openCaretakerUpgrade(p: player):
+
+    set (metadata tag "Caretaker.Upgrades" of {_p}) to virtual dropper inventory named "&8&l%font("upgrades")%"
+
+    set slot (integers between 0 and 8) of (metadata tag "Caretaker.Upgrades" of {_p}) to black stained glass pane named " "
+    
+    set slot 1 of (metadata tag "Caretaker.Upgrades" of {_p}) to book named "&a&lINFORMATION" 
+    set lore of slot 1 of (metadata tag "Caretaker.Upgrades" of {_p}) to "&8%font("category")%", "", "&7Upgrading equipment for", "&7a better gaming experience!", "", "<##F0F8FF>%font("upgrades")%", "<##E5E4E2>● &bSpeed of Cleaning", "<##E5E4E2>● &aMoney Earned", ""
+
+    set slot 3 of (metadata tag "Caretaker.Upgrades" of {_p}) to emerald named "<##90EE90>&lMONEY"
+    set lore of slot 3 of (metadata tag "Caretaker.Upgrades" of {_p}) to "&8%font("upgrade")%", "", "&7Earn up to 1.5x more money!", "", "<##E5E4E2>● &7Level: &f%metadata tag "Caretaker_Money.Level" of {_p} ? 0%/5", "<##E5E4E2>● &7Current Multi: &f%metadata tag "Caretaker_Money.Multi" of {_p} ? 1%x", "<##E5E4E2>● &7Price: &a$%metadata tag "Caretaker_Money.Price" of {_p} ? 25%", "", "&8→ <##F5F5F5>&lCLICK TO PURCHASE"
+
+    set slot 4 of (metadata tag "Caretaker.Upgrades" of {_p}) to sugar named "<##ADD8E6>&lSPEED"
+    set lore of slot 4 of (metadata tag "Caretaker.Upgrades" of {_p}) to "&8%font("upgrade")%", "", "&7Spend up to half the time cleaning!", "", "<##E5E4E2>● &7Level: &f%metadata tag "Caretaker_Speed.Level" of {_p} ? 0%/5", "<##E5E4E2>● &7Current Speed: &f%metadata tag "Caretaker_Speed.Time" of {_p} ? 10%", "<##E5E4E2>● &7Price: &a$%metadata tag "Caretaker_Speed.Price" of {_p} ? 10%", "", "&8→ <##F5F5F5>&lCLICK TO PURCHASE"
+    
+    set slot 5 of (metadata tag "Caretaker.Upgrades" of {_p}) to gray dye named " "
+
+    open (metadata tag "Caretaker.Upgrades" of {_p}) to {_p}
+
+function purchaseCaretakerUpgrade(p: player, n: num, tag: string):
 
     send "Insufficient Funds" to {_p} if moneyGet({_p}) < {_n}
     moneyGet({_p}) >= {_n}
 
-    set {_tag} to {_tag} parsed as integer
+    if {_tag} = "Money":
 
-    send "Max" to {_p} if {_tag} >= 5
-    {_tag} < 5
+        if (metadata tag "Caretaker_Money.Level" of {_p} ? 0) >= 5:
+            send "<##E34234>&lSYSTEM &7» Max Level" to {_p}
+            stop
+
+        (metadata tag "Caretaker_Money.Level" of {_p} ? 0) <= 5
+
+        set (metadata tag "Caretaker_Money.Multi" of {_p}) to ((metadata tag "Caretaker_Money.Multi" of {_p} ? 1) + 0.1)
+        set (metadata tag "Caretaker_Money.Price" of {_p}) to ((metadata tag "Caretaker_Money.Price" of {_p} ? 25) + 35)
+        set (metadata tag "Caretaker_Money.Level" of {_p}) to ((metadata tag "Caretaker_Money.Level" of {_p}) + 1)
+    
+    if {_tag} = "Speed":
+
+        if (metadata tag "Caretaker_Speed.Level" of {_p} ? 0) >= 5:
+            send "<##E34234>&lSYSTEM &7» Max Level" to {_p}
+            stop
+
+        (metadata tag "Caretaker_Speed.Level" of {_p} ? 0) <= 5
+
+        set (metadata tag "Caretaker_Speed.Time" of {_p}) to ((metadata tag "Caretaker_Speed.Time" of {_p} ? 10) - 1)
+        set (metadata tag "Caretaker_Speed.Price" of {_p}) to ((metadata tag "Caretaker_Speed.Price" of {_p} ? 10) + 15)
+        set (metadata tag "Caretaker_Speed.Level" of {_p}) to ((metadata tag "Caretaker_Speed.Level" of {_p}) + 1)
+
+    set slot 3 of (metadata tag "Caretaker.Upgrades" of {_p}) to emerald named "<##90EE90>&lMONEY"
+    set lore of slot 3 of (metadata tag "Caretaker.Upgrades" of {_p}) to "&8%font("upgrade")%", "", "&7Earn up to 1.5x more money!", "", "<##E5E4E2>● &7Level: &f%metadata tag "Caretaker_Money.Level" of {_p} ? 0%/5", "<##E5E4E2>● &7Current Multi: &f%metadata tag "Caretaker_Money.Multi" of {_p} ? 1%x", "<##E5E4E2>● &7Price: &a$%metadata tag "Caretaker_Money.Price" of {_p} ? 25%", "", "&8→ <##F5F5F5>&lCLICK TO PURCHASE"
+
+    set slot 4 of (metadata tag "Caretaker.Upgrades" of {_p}) to sugar named "<##ADD8E6>&lSPEED"
+    set lore of slot 4 of (metadata tag "Caretaker.Upgrades" of {_p}) to "&8%font("upgrade")%", "", "&7Spend up to half the time cleaning!", "", "<##E5E4E2>● &7Level: &f%metadata tag "Caretaker_Speed.Level" of {_p} ? 0%/5", "<##E5E4E2>● &7Current Speed: &f%metadata tag "Caretaker_Speed.Time" of {_p} ? 10%", "<##E5E4E2>● &7Price: &a$%metadata tag "Caretaker_Speed.Price" of {_p} ? 10%", "", "&8→ <##F5F5F5>&lCLICK TO PURCHASE"
 
     moneyRemove({_p}, {_n})
-    send "Purchased" to {_p}
-
-    set {_tag} to {_tag} + 1
-    if {_tag} contains "Speed":
-        set (metadata tag "Caretaker_Speed.Time" of {_p}) to (metadata tag "Caretaker_Speed.Time" of {_p}) - 2
-        set (metadata tag "Caretaker_Speed.Price" of {_p}) to ((metadata tag "Caretaker_Speed.Price" of {_p} ? 25) * 1.5)
-
-    if {_tag} contains "Boost":
-        set (metadata tag "Caretaker_Boost.Number" of {_p}) to (metadata tag "Caretaker_Boost.Number" of {_p} ? 1) + 0.25
-        set (metadata tag "Caretaker_Boost.Price" of {_p}) to (metadata tag "Caretaker_Boost.Price" of {_p} ? 50) * 1.75
+    send "<##E34234>&lSYSTEM &7» Purchased Upgrade, &c-&a$%{_n}%" to {_p}
 
 on inventory click:
 
     event-inventory = (metadata tag "Caretaker" of player)
     cancel event
 
-    if index of event-slot = 4:
+    if index of event-slot = 3:
 
         loop all items in player's inventory:
             tag "custom;Caretaker.Tool" of nbt compound from loop-value = 1
-            send "Already Have Tool"
+            send "Already Have Tool" to player
             stop
 
         set {_i} to brush named "&7Mop" with all flags hidden
         set tag "custom;Caretaker.Tool" of nbt compound from {_i} to 1
         give player {_i}
-        
     
-    if index of event-slot = 6:
+    if index of event-slot = 5:
 
-        caretakerUpgrade(player)
+        openCaretakerUpgrade(player)
 
 on inventory click:
 
-    event-inventory = (metadata tag "Caretaker_Upgrades" of player)
+    event-inventory = (metadata tag "Caretaker.Upgrades" of player)
     cancel event
 
-    caretakerUpgradePurchase(player, (metadata tag "Caretaker_Speed.Price" of {_p} ? 25), "Caretaker_Speed.Time") if index of event-slot = 3
-    caretakerUpgradePurchase(player, (metadata tag "Caretaker_Boost.Price" of {_p} ? 50), "Caretaker_Boost.Number") if index of event-slot = 4
+    purchaseCaretakerUpgrade(player, (metadata tag "Caretaker_Money.Price" of player ? 25), "Money") if index of event-slot = 3
+    purchaseCaretakerUpgrade(player, (metadata tag "Caretaker_Speed.Price" of player ? 10), "Speed") if index of event-slot = 4
 
+command caretaker:
+    trigger:
+        openCaretaker(player)
 
 #NOTE - PROGRESS ENDED HERE
 
