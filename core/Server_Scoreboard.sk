@@ -31,7 +31,6 @@ function updateScoreboard(p: player):
     set line 6 of {_p}'s scoreboard to "<##B2BEB5>│ &fᴅᴇᴀᴛʜѕ: &4%deaths stat of {_p}%"
     set line 5 of {_p}'s scoreboard to "<##B2BEB5>│ &fᴋᴅ: &6%player kills stat of {_p} / deaths stat of {_p}%"
 
-
 on join:
     scoreboard(player)
 
