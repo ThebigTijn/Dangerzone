@@ -95,10 +95,12 @@ function factionRename(p:player,t:string):
 
     set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
 
+    loop {faction::%{_f}%::*}:
+        set (tag "custom;Faction.Name" of nbt compound from loop-value) to {_t}
+
     set {faction::%{_t}%::*} to {faction::%{_f}%::*}
     delete {faction::%{_f}%::*}
 
-    set (tag "custom;Faction.Name" of nbt compound from {_p}) to {_t}
     send "&8[&cFactions&8] &7» Renamed Faction to &f%{_t}%&7." to {_p}
 
 
@@ -155,7 +157,7 @@ function factionInviteAccept(p: player,t:string):
     add {_p} to {faction::%{_t}%::*}
     remove {_t} from {-faction::%uuid of {_p}%::invitations::*}
 
-    set (tag "custom;Faction.Name" of nbt compound from {_p}) to "true"
+    set (tag "custom;Faction.Name" of nbt compound from {_p}) to {_t}
     set (tag "custom;Faction.Active" of nbt compound from {_p}) to "true"
 
     set {_n} to (((size of {faction::%{_t}%::*}) / 10) + 1)
@@ -209,30 +211,6 @@ function factionCheck(p:player,t:player):
     send "&8[&cFactions&8] &7» %{_t}%'s faction is &f%tag "Faction.Name" of nbt compound from {_t}%" to {_p}
 
 
-function factionToggleChat(p:player):
-
-    send "&8[&cFactions&8] &7» You are not in a faction." to {_p} if (tag "custom;Faction.Name" of nbt compound from {_p}) is not set
-    (tag "custom;Faction.Name" of nbt compound from {_p}) is set
-
-    if (tag "custom;Faction.Chat" of nbt compound from {_p}) is not set:
-        set (tag "custom;Faction.Chat" of nbt compound from {_p}) to true
-        send "&8[&cFactions&8] &7» Toggled Faction Chat" to {_p}
-
-    (tag "custom;Faction.Chat" of nbt compound from {_p}) = true
-    delete (tag "custom;Faction.Chat" of nbt compound from {_p})
-    send "&8[&cFactions&8] &7» Untoggled Faction Chat" to {_p}
-
-
-on chat:
-
-    (tag "custom;Faction.Chat" of nbt compound from player) = true
-    cancel event
-
-    set {_f} to (tag "custom;Faction.Name" of nbt compound from player)
-    loop {faction::%{_f}%::*}:
-        send "&8[&cFaction Chat&8] &f%player% &7» &6%message%" to loop-value
-
-
 on inventory click:
 
     cancel event if name of event-inventory = "&8%font("faction view")%"
@@ -254,7 +232,7 @@ command faction <string> [<string>]:
         factionInviteAccept(player, arg-2) if arg-1 = "accept"
         factionInviteDecline(player, arg-2) if arg-1 = "decline"
         factionCheck(player, arg-2 parsed as player) if arg-1 = "check"
-        factionToggleChat(player) if arg-1 = "toggle"
+        factionUninvite(player,arg-2 parsed as player) if arg-1 = "uninvite"
         send "&8[&cFactions&8] &7» Invited to &f%{faction::%uuid of player%::invitations::*} ? "None"%" to player if arg-1 = "invitations"
 
 on tab complete of "/faction":
