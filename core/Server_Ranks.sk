@@ -1,0 +1,36 @@
+on placeholderapi placeholder request for the prefix "skriptusername":
+	set {_name} to "%event-player%"
+	if hasNickname(event-player) = true:
+		set {_name} to getNickname(event-player)
+	set the result to "%getTabName(event-player,{_name})%"
+
+
+#nickname
+function getNickname(p: player) :: string:
+	return nbtGet({_p},"nickname") if nbtGet({_p},"nickname") is set
+	return "&cERROR"
+
+function hasNickname(p: player) :: boolean:
+	return true if nbtGet({_p},"nickname") is set
+	return false
+
+function setNickname(p: player,nick: string):
+	nbtSet({_p},"nickname",{_nick})
+
+function delNickname(p: player):
+	nbtDelete({_p},"nickname")
+
+#color
+function getTabName(p: player,name: string) :: string:
+	if {_p} has permission "op" or "*" or "skript.staff":
+		return "&f%{_name}%"
+	if {_p} has permission "buycraft.rank.crystal":
+		return "<##ADD8E6>%{_name}%"
+	else if {_p} has permission "buycraft.rank.platina":
+		return "<##E5E4E2>%{_name}%"
+	else if {_p} has permission "buycraft.rank.gold":
+		return "<##FFD700>%{_name}%"
+	else if {_p} has permission "booster":
+		return "<##CBC3E3>%{_name}%"
+	return "&7%{_name}%"
+
