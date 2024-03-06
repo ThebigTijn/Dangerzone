@@ -1,0 +1,60 @@
+function bountyView(p:player):
+
+    set {_g} to virtual chest inventory with 6 rows named "&8%font("bounty list")%"
+    set (metadata tag "Bounty_View" of {_p}) to {_g}
+
+    serverGUI({_p}, "Bounty_View", 4)
+    set slot 48 of {_g} to arrow named "previous"
+    set slot 49 of {_g} to green dye named "info"
+    set slot 50 of {_g} to arrow named "next"
+
+    set {_n} to 10
+    set {_t} to {_n}
+
+    loop {global.bounty::*}:
+        if {_t} = ({_n} + 8):
+            add 2 to {_n}
+            set {_t} to {_n}
+
+        set slot {_n} of {_g} to (skull of loop-value) named "&7%loop-value%" with lore "%tag "custom;Bounty.Value" of nbt compound from loop-value%"
+        add 1 to {_n}
+
+    open {_g} to {_p}
+
+
+function bountySet(p:player,n:num,t:offlineplayer):
+
+    send "insufficient funds" to {_p} if moneyGet({_p}) < {_n}
+    moneyGet({_p}) >= {_n}
+
+    send "player hasn't played before" to {_p} if {_t} hasn't played before
+    {_t} has played before
+
+    if (tag "custom;Bounty.Value" of nbt compound from {_t}) is not set:
+        send "added %{_n}% to bounty of %{_t}%" to {_p}
+        add {_t} to {global.bounty::*}
+
+    send "set bounty of %{_t}% to %{_n}%" to {_p} if (tag "custom;Bounty.Value" of nbt compound from {_t}) is set
+
+    set (tag "custom;Bounty.Value" of nbt compound from {_t}) to ((tag "custom;Bounty.Value" of nbt compound from {_t}) + {_n})
+    moneyRemove({_p},{_n})
+
+
+function bountyRemove(p:player):
+
+    remove {_p} from {global.bounty::*}
+    delete (tag "custom;Bounty.Value" of nbt compound from {_p})
+
+
+on death of player:
+
+    attacker is a player
+    (tag "custom;Bounty.Value" of nbt compound from victim) is set
+
+    moneyAdd(attacker,(tag "custom;Bounty.Value" of nbt compound from victim))
+    bountyRemove(victim)
+    send "" to attacker  
+
+command bounty:
+    trigger:
+        bountyView(player)

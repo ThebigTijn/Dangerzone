@@ -1,5 +1,3 @@
-#TESTING PHASE
-
 function factionNameCheck(p: player, t:string):
 
     #CHECK - FACTION IS NOT TAKEN
@@ -35,11 +33,12 @@ function factionView(p:player):
     send "&8[&cFactions&8] &7» You are not in a faction." to {_p}                         if (tag "custom;Faction.Name" of nbt compound from {_p}) is not set
     (tag "custom;Faction.Name" of nbt compound from {_p}) is set
 
-    set {_g} to virtual chest inventory with 6 rows named "&8%font("faction view")%"
+    set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
+
+    set {_g} to virtual chest inventory with 6 rows named "&8%font({_f})%"
     set (metadata tag "Faction_View" of {_p}) to {_g}
 
     serverGUI({_p}, "Faction_View", 4)
-    set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
 
     set slot 48 of {_g} to iron sword named "<##D6D6D6>&lDISBAND" with lore "&8%font("factions")%", "", "&7The faction dissolved like bubbles in soda,", "&7leaving behind tales of its quirky adventures.", "", "&8→ <##E5E4E2>&lCLICK HERE &8←", "" with all flags hidden
     set slot 49 of {_g} to green dye named "&a&lINFORMATION"
@@ -75,8 +74,9 @@ function factionPlayerCheck(p: player):
 function factionDisband(p:player):
 
     factionPlayerCheck({_p})
+
     set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
-    send "&8[&cFactions&8] &7» Disbanded Faction %{_f}%" to {_p}
+    send "&8[&cFactions&8] &7» Disbanded Faction &f%{_f}%&7." to {_p}
     
     delete (tag "Faction.Leader" of nbt compound from {_p})
     loop {faction::%{_f}%::*}:
@@ -95,10 +95,12 @@ function factionRename(p:player,t:string):
 
     set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
 
+    loop {faction::%{_f}%::*}:
+        set (tag "custom;Faction.Name" of nbt compound from loop-value) to {_t}
+
     set {faction::%{_t}%::*} to {faction::%{_f}%::*}
     delete {faction::%{_f}%::*}
 
-    set (tag "custom;Faction.Name" of nbt compound from {_p}) to {_t}
     send "&8[&cFactions&8] &7» Renamed Faction to &f%{_t}%&7." to {_p}
 
 
@@ -110,16 +112,16 @@ function factionInvite(p:player,t:player):
     send "&8[&cFactions&8] &7» Faction is full." to {_p}                                  if size of {faction::%{_f}%::*} >= 5
     size of {faction::%{_f}%::*} < 5
 
-    send "&8[&cFactions&8] &7» Target is not online." to {_p}                             if {_t} is not online
+    send "&8[&cFactions&8] &7» Player is not online." to {_p}                             if {_t} is not online
     {_t} is online
 
-    send "&8[&cFactions&8] &7» Target is already in your faction." to {_p}                if {faction::%{_f}%::*} contains {_t}
+    send "&8[&cFactions&8] &7» Player is already in your faction." to {_p}                if {faction::%{_f}%::*} contains {_t}
     {faction::%{_f}%::*} does not contain {_t}
 
-    send "&8[&cFactions&8] &7» Target is already in a faction." to {_p}                   if (tag "custom;Faction.Active" of nbt compound from {_t}) = "true"
+    send "&8[&cFactions&8] &7» Player is already in a faction." to {_p}                   if (tag "custom;Faction.Active" of nbt compound from {_t}) = "true"
     (tag "custom;Faction.Active" of nbt compound from {_t}) is not set
 
-    send "&8[&cFactions&8] &7» &7Target has already been invited." to {_p}                if {-faction.invited::%uuid of {_p}%::*} contains {_t}
+    send "&8[&cFactions&8] &7» Player has already been invited." to {_p}                  if {-faction.invited::%uuid of {_p}%::*} contains {_t}
     {-faction.invited::%uuid of {_p}%::*} does not contain {_t}
 
     add {_f} to {-faction::%uuid of {_t}%::invitations::*}
@@ -133,7 +135,7 @@ function factionUninvite(p:player,t:player):
 
     factionPlayerCheck({_p})
     
-    send "&8[&cFactions&8] &7» You have not invited that player." to {_p} if {-faction.invited::%uuid of {_p}%::*} does not contain {_t}
+    send "&8[&cFactions&8] &7» You have not invited that player." to {_p}                 if {-faction.invited::%uuid of {_p}%::*} does not contain {_t}
     {-faction.invited::%uuid of {_p}%::*} contains {_t}
 
     remove {_t} from {-faction.invited::%uuid of {_p}%::*}
@@ -155,7 +157,7 @@ function factionInviteAccept(p: player,t:string):
     add {_p} to {faction::%{_t}%::*}
     remove {_t} from {-faction::%uuid of {_p}%::invitations::*}
 
-    set (tag "custom;Faction.Name" of nbt compound from {_p}) to "true"
+    set (tag "custom;Faction.Name" of nbt compound from {_p}) to {_t}
     set (tag "custom;Faction.Active" of nbt compound from {_p}) to "true"
 
     set {_n} to (((size of {faction::%{_t}%::*}) / 10) + 1)
@@ -179,7 +181,7 @@ function factionKick(p:player,t:player):
     factionPlayerCheck({_p})
     set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
 
-    send "&8[&cFactions&8] &7» Target is not in your faction." to {_p}                    if {faction::%{_f}%::*} does not contain {_t}
+    send "&8[&cFactions&8] &7» Player is not in your faction." to {_p}                    if {faction::%{_f}%::*} does not contain {_t}
     {faction::%{_f}%::*} contains {_t}
 
     send "&8[&cFactions&8] &7» You cannot kick yourself." to {_p}                         if {_t} = {_p}
@@ -196,6 +198,17 @@ function factionKick(p:player,t:player):
     delete (tag "custom;Faction.Name" of nbt compound from {_t})
     delete (tag "custom;Faction.Active" of nbt compound from {_t})
     delete (tag "custom;Faction.Percent" of nbt compound from {_t})
+
+
+function factionCheck(p:player,t:player):
+
+    send "&8[&cFactions&8] &7» Player is not in a faction." to {_p} if (tag "custom;Faction.Name" of nbt compound from {_t}) is not set
+    (tag "custom;Faction.Name" of nbt compound from {_t}) is set
+
+    send "&8[&cFactions&8] &7» Player has not played before." to {_p} if {_t} has not played before
+    {_t} has played before
+
+    send "&8[&cFactions&8] &7» %{_t}%'s faction is &f%tag "Faction.Name" of nbt compound from {_t}%" to {_p}
 
 
 on inventory click:
@@ -218,9 +231,11 @@ command faction <string> [<string>]:
         factionInvite(player, arg-2 parsed as player) if arg-1 = "invite"
         factionInviteAccept(player, arg-2) if arg-1 = "accept"
         factionInviteDecline(player, arg-2) if arg-1 = "decline"
+        factionCheck(player, arg-2 parsed as player) if arg-1 = "check"
+        factionUninvite(player,arg-2 parsed as player) if arg-1 = "uninvite"
         send "&8[&cFactions&8] &7» Invited to &f%{faction::%uuid of player%::invitations::*} ? "None"%" to player if arg-1 = "invitations"
 
 on tab complete of "/faction":
 
-    set tab completions for position 1 to "view", "create", "disband", "rename", "kick", "invite", "accept", "decline" and "invitations"
+    set tab completions for position 1 to "view", "create", "disband", "rename", "kick", "invite", "accept", "decline", "invitations", "check" and "toggle"
     set tab completions for position 2 to (indexes of {-faction::%uuid of player%::invitations::*}) and all players

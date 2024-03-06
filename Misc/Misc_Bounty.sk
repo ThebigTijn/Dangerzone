@@ -1,0 +1,116 @@
+function bountyMenu(p:player,page:int):
+
+    set {_page2} to clamp({_page}, 1, 999)-1
+    set {_start} to ({_page}-1)*28
+    set {_end} to {_start}+28
+    set {_list::*} to (elements from {_start}+1 to {_end} of {global.bounty::*})
+
+    create a gui with virtual chest inventory with 6 rows named "&8Bounty (Page: %{_page}%)":
+
+        set {_n} to 0
+        loop 2 times:
+            format gui slot (numbers between {_n} and ({_n}+8)) with black stained glass pane named " "
+            add 45 to {_n}
+
+        set {_n} to 9
+        loop 4 times:
+            format gui slot {_n} and ({_n}+8) with black stained glass pane named " "
+            add 9 to {_n}
+
+        loop {_list::*}:
+            format next gui slot with (skull of loop-value) named "&7%loop-value%" with lore "&fValue: &6$%format(tag "custom;Bounty.Value" of nbt compound from {_p})%"
+
+        if {_page} > 1:
+            format gui slot 47 with arrow named "&6%font("previous")%" with lore "", "&7Flipping back, retracing steps", "&7through the narrative's labyrinth.", "", "&8→ <##E5E4E2>&lCLICK HERE &8←", "":
+                bountyMenu({_p},{_page}-1)
+
+        format gui slot 51 with arrow named "&6%font("next")%" with lore "", "&7Turning the page, embarking on the", "&7next chapter of the adventure.", "", "&8→ <##E5E4E2>&lCLICK HERE &8←", "":
+            bountyMenu({_p},{_page}+1)
+
+        format gui slot 49 with green dye named "&a&lINFORMATION" with lore "&8%font("bounty")%", "", "&7Collecting bounties, the thrill of the hunt,", "&7the satisfaction of the kill.", ""
+        format gui slot 48 with beacon named "&b&lRANDOM BOUNTY" with lore "&8%font("bounty")%", "", "&7Claim a random bounty,", "&7earn &a$100 &7for their death", "", "&8→ <##E5E4E2>&lCLICK HERE &8←", "":
+            bountyRandom(player)
+
+        set {_head} to player head with nbt from "{SkullOwner:{Id:[I;-1608379259,225986527,-1647478978,-1362862659],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzZjMGQwNDU5YzY3ZjJiZTgyZmJlNTQwNmFiOGQxMzc4ZGExZjI4ZjdhM2Y4MmYxZGZjNDc2MTVhOTU1YTcifX19""}]}}}"
+        format gui slot 50 with {_head} named "&c&lCLOSE" with lore "&8%font("bounty")%", "", "&7With a playful flick, they closed the lid,", "&7sealing away secrets and surprises for another day.", "", "&8→ <##E5E4E2>&lCLICK HERE &8←", "":
+            close inventory of {_p}
+
+        open gui to {_p}
+
+
+function bountyRandom(p:player):
+
+    send "<##E34234>&lSYSTEM &7» Bounty has already been activated." to {_p} if (metadata tag "Bounty.Active" of {_p}) = true
+    (metadata tag "Bounty.Active" of {_p}) is not set
+
+    close inventory of {_p}
+    loop all players where [input is online]:
+
+        if loop-value = {_p}:
+            send "<##E34234>&lSYSTEM &7» Nobody can be your bounty at the current moment, try again later!" to {_p}
+            stop
+        
+        set (metadata tag "Bounty.Target" of {_p}) to loop-value
+        set (metadata tag "Bounty.Hunter" of loop-value) to {_p}
+
+        send "<##E34234>&lSYSTEM &7» Bounty is &f%loop-value%" to {_p}
+        send title "&b&l%font("you are being hunted")%" with subtitle "&7By: %{_p}%" to loop-value
+
+    set (metadata tag "Bounty.Active" of {_p}) to true
+
+
+function bountySet(p:player,t:offlineplayer,n:num):
+
+    send "<##E34234>&lSYSTEM &7» Player has not joined the server." to {_p} if {_t} hasn't played before
+    {_t} has played before
+
+    send "<##E34234>&lSYSTEM &7» Insufficient Funds" to {_p} if moneyGet({_p}) < {_n}
+    moneyGet({_p}) >= {_n}
+
+    moneyRemove({_p},{_n})
+    set (tag "custom;Bounty.Value" of nbt compound from {_t}) to ((tag "custom;Bounty.Value" of nbt compound from {_t})+{_n})
+    send "<##E34234>&lSYSTEM &7» Bounty of &f%{_t}% &7has updated to &a$%format(tag "custom;Bounty.Value" of nbt compound from {_t})%" to {_p}
+
+    add {_t} to {global.bounty::*} if {global.bounty::*} does not contain {_t}
+
+
+command bounty [<offlineplayer>] [<integer>]:
+    trigger:
+        bountySet(player,arg-1,arg-2) if arg-1 and arg-2 is set
+        bountyMenu(player,1) if arg-1 and arg-2 is not set
+
+
+on tab complete of "/bounty":
+    set tab completion for position 1 to all offline players
+
+
+on death of player:
+
+    attacker is a player
+    if (metadata tag "Bounty.Hunter" of victim) = attacker:
+
+        moneyAdd(attacker,100)
+        send "<##E34234>&lSYSTEM &7» Bounty Claimed, +&a$100" to attacker
+
+        delete (metadata tag "Bounty.Hunter" of victim)
+        delete (metadata tag "Bounty.Target" of attacker)
+        delete (metadata tag "Bounty.Active" of attacker)
+
+
+    (tag "custom;Bounty.Value" of nbt compound from victim) is set
+    moneyAdd(attacker,(tag "custom;Bounty.Value" of nbt compound from victim))
+
+    send "<##E34234>&lSYSTEM &7» Bounty of &f%victim% &7collected, &8[&a+$%format(tag "custom;Bounty.Value" of nbt compound from victim)%&8]" to attacker
+    delete (tag "custom;Bounty.Value" of nbt compound from victim)
+    remove victim from {global.bounty::*}
+
+
+on quit:
+
+    (metadata tag "Bounty.Hunter" of {_p}) is set
+    moneyAdd((metadata tag "Bounty.Hunter" of {_p}),50)
+    send "<##E34234>&lSYSTEM &7» Bounty has left, &8[&a+$50&8]" to (metadata tag "Bounty.Hunter" of {_p})
+
+    delete (metadata tag "Bounty.Hunter" of {_p})
+    delete (metadata tag "Bounty.Target" of (metadata tag "Bounty.Hunter" of {_p}))
+    delete (metadata tag "Bounty.Active" of (metadata tag "Bounty.Hunter" of {_p}))
