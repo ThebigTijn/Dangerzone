@@ -1,0 +1,119 @@
+function Kits(p: player, arg1: string, arg2: string):
+	if {_arg1} is "create":
+		if {_arg2} is not set:
+			send " &eKits &8» &fYou must enter a kit name /kits create <name>" to {_p}
+			stop
+		set {_id} to 1
+		while {kits::%{_id}%::*} is set:
+			add 1 to {_id}
+		loop indices of {kits::*}:
+			uncolored {kits::%loop-value%::name} is uncolored {_arg2}
+			send " &eKits &8» &fA kit named &e%uncolored {_arg2}% &falready exists" to {_p}
+			stop
+		loop {_p}'s inventory:
+			loop-value is not air
+			set {kits::%{_id}%::contents::%index of loop-slot%} to loop-value
+		set {kits::%{_id}%::name} to {_arg2} in proper case
+		send " &eKits &8» &fCreated kit &e%uncolored {_arg2} in proper case%" to {_p}
+	if {_arg1} is "delete":
+		if {_arg2} is not set:
+			send " &eKits &8» &fYou must enter a kit name /kits delete <name>" to {_p}
+			stop
+		loop indices of {kits::*}:
+			uncolored {kits::%loop-value%::name} is uncolored {_arg2}
+			set {_id} to loop-value
+			stop loop
+		if {_id} is not set:
+			send " &eKits &8» &fKit &e%uncolored {_arg1} in proper case% &fdoes not exist" to {_p}
+			stop
+		delete {kits::%{_id}%::*}
+		send " &eKits &8» &cKit &e%uncolored {_arg2} in proper case% &cDeleted" to {_p}
+	if {_arg1} is "edit":
+		loop indices of {kits::*}:
+			uncolored {kits::%loop-value%::name} is uncolored {_arg2}
+			set {_id} to loop-value
+			stop loop
+		if {_id} is not set:
+			send " &eKits &8» &fKit &e%uncolored {_arg1} in proper case% &fdoes not exist" to {_p}
+			stop
+		delete {kits::%{_id}%::contents::*}
+		loop {_p}'s inventory:
+			set {kits::%{_id}%::contents::%index of loop-slot%} to loop-value
+		send " &eKits &8» &fEdited kit &e%uncolored {_arg2} in proper case%" to {_p}
+	if {_arg1} is "list":
+		loop indices of {kits::*}:
+			add uncolored {kits::%loop-value%::name} to {_names::*}	
+		send " &eKits &8» &a%join {_names::*} ? "N/A" with "&7, &a"%" to {_p}
+	if {_arg1} is "give":
+		if {_p} does not have permission "dangerzone.kits.%{_arg2} in lowercase%":
+			send " &eKits &8» &cYou do not have access to kit &e%uncolored {_arg2} in proper case%" to {_p}
+			stop
+		loop indices of {kits::*}:
+			uncolored {kits::%loop-value%::name} is uncolored {_arg2}
+			set {_id} to loop-value
+			stop loop
+		if {_id} is not set:
+			send " &eKits &8» &fKit &e%uncolored {_arg2} in proper case% &fdoes not exist" to {_p}
+			stop
+		Kit({_p}, {_arg2})
+		send " &eKits &8» &fReceived Kit &e%uncolored {_arg2} in proper case%" to {_p}
+
+command kits [<string>] [<string>]:
+	permission: dangerzone.kits.admin
+	trigger:
+		if arg-1 is not set:
+			send " &eKits &8» &fUse /kits <create/delete/edit/list>"
+			stop
+		if arg-1 is not "create" or "delete" or "edit" or "list":
+			send " &eKits &8» &fUse /kits <create/delete/edit/list>"
+			stop
+		Kits(player, arg-1, arg-2)
+
+command kit [<string>]:
+	trigger:
+		if arg-1 is not set:
+			send " &eKits &8» &fPlease enter a kit. /kit <name>"
+			stop
+		Kits(player, "give", arg-1)
+    
+function Kit(p: player, kit: string):
+	loop indices of {kits::*}:
+		uncolored {kits::%loop-value%::name} is uncolored {_kit}
+		set {_id} to loop-value
+		stop loop
+	if {_id} is not set:
+		send " &eKits &8» &fKit &e%uncolored {_kit} in proper case% &fdoes not exist" to {_p}
+		stop
+	loop indices of {kits::%{_id}%::contents::*}:
+		add {kits::%{_id}%::contents::%loop-value%} to {_items::*}
+	add 0 to {_slots::*} if slot 0 of {_p}'s inventory is air
+	loop 35 times:
+		set {_item} to slot loop-value of {_p}'s inventory
+		if {_item} is air:
+			add loop-value to {_slots::*}
+	loop {_slots::*}:
+		set {_slot} to loop-value
+		add 1 to {_num}
+		set slot {_slot} of {_p}'s inventory to {_items::%{_num}%}
+	loop items in {_p}'s inventory:
+		if loop-item is any helmet:
+			if {_p}'s helmet is air:
+				set {_p}'s helmet to loop-item
+				remove loop-item from {_p}
+		else if loop-item is any chestplate:
+			if {_p}'s chestplate is air:
+				set {_p}'s chestplate to loop-item					
+				remove loop-item from {_p}
+		else if loop-item is any leggings:
+			if {_p}'s leggings is air:
+				set {_p}'s leggings to loop-item
+				remove loop-item from {_p}
+		else if loop-item is any boots:
+			if {_p}'s boots is air:
+				set {_p}'s boots to loop-item
+				remove loop-item from {_p}
+		if loop-item is a player head:
+			"%name of loop-item%" does not contain "bubble" or "orb"
+			if {_p}'s helmet is air:
+				set {_p}'s helmet to loop-item
+				remove loop-item from {_p}
