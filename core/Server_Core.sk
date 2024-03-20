@@ -41,6 +41,10 @@ on right click on stations:
 	player's gamemode is not creative
 	cancel event
 
+on sign change:
+	player's gamemode != creative
+	cancel event
+
 command /shrug:
 	trigger:
 		make player send message "¯\_(ツ)_/¯"
