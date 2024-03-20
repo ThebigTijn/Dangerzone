@@ -1,51 +1,40 @@
-function medicalOrbSpawn(p: player, location: location, item: item):
+function medicalOrbSpawn(p:player,i:item):
+    remove 1 of {_i} from {_p}
+    spawn item display at center location of {_p}:
+        set display item of {_e} to (tool of {_p})
+        set display name of {_e} to name of (tool of {_p})
+        set teleporation duration of {_e} to 15
+        set {_e} to entity
+    set {_l} to location 1 block above target block of {_p}
+    teleport {_e} to {_l}
+    set {_u} to uuid of {_p}
+    set {-orb.time::%{_u}%} to 3 seconds
+    while {_e} is alive:
+        location of {_e} = {_l}
+        if {-orb.time::%{_u}%} <= 0 seconds:
+            delete {-orb.time::%{_u}%}
+            kill {_e}
+        remove 0.1 seconds from {-orb.time::%{_u}%}
+        loop all players in radius 4 around {_l}:
+            add 0.5 to health of loop-player
+        wait a tick
 
-    send action bar "<##E34234>%font("wait before placing another")%" to {_p} if (metadata tag "Medical_Orb" of {_p}) is set
-    (metadata tag "Medical_Orb" of {_p}) is not set
-    set (metadata tag "Medical_Orb" of {_p}) to true
-
-    remove 1 of {_item} from {_p}'s inventory
-    spawn item display 1 meter above {_p}:
-        set {_e} to item display
-
-    set display item of {_entity} to {_item}
-    set displayname of {_entity} to name of {_item}
-
-    set display teleport duration of {_entity} to 15
-    wait 2 ticks
-    teleport {_entity} to location 1.5 meters above {_location}
-
-    wait 15 ticks
-
-    medicalOrbCircle(location 1.5 meters above {_location}, 3, 10, happy villager)
-    set {-medicalorb::time::%uuid of {_p}%} to now
-
-    while {_entity} is alive:
-
-        if difference between {-medicalorb::time::%uuid of {_p}%} and now >= 3 seconds:
-            kill {_entity}
-            delete (metadata tag "Medical_Orb" of {_p})
-            delete {-medicalorb::time::%uuid of {_p}%}
-
-        wait 3 ticks
-        loop all players in radius 4 around {_location}:
-
-            add 0.5 to loop-player's health
-            wait 3 ticks
-
-function getMedicalOrb(p: player):
-
+function getMedicalOrb(p:player) :: item:
     set {_i} to player head with nbt from "{SkullOwner:{Id:[I;1781206786,2121155703,-1905732135,324576593],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTg4ODU3YzQ3NTMzYzk3NDg1MjUzZjU5MjkyMjI4NzIzMmU5ZGUwMDViMDdkZTY1Y2Q3NWUxNzMyODdiYWM1MCJ9fX0=""}]}}}" named "&8[&fMedical&8] &7Orb"
-    set tag "custom;IsMedicalOrb" of nbt compound from {_i} to 1
-    give {_p} {_i}
+    set (string tag "Medical_Orb" of nbt compound from {_i}) to "true"
+    return {_i}
 
 command medical-orb:
     permission: op
     trigger:
+        send action bar "&aSuccessfully received &8[&fMedical&8] &7Orb" to player
         getMedicalOrb(player)
 
 on right click:
-    if event-block is set:
-        tag "custom;IsMedicalOrb" of nbt compound from player's tool = 1
-        cancel event
-        medicalOrbSpawn(player, location of event-block, event-item)
+    event-block is set
+    (string tag "Medical_Orb" of nbt compound from (tool of player)) = "true"
+    cancel event
+    if {-orb.time::%uuid of player%} is set:
+        send action bar "<##E34234>%font("wait before placing another")%" to player
+        stop
+    medicalOrbSpawn(player,(tool of player))

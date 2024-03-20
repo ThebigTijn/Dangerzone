@@ -1,241 +1,176 @@
-function factionNameCheck(p: player, t:string):
-
-    #CHECK - FACTION IS NOT TAKEN
-    send "&8[&cFactions&8] &7» Faction &f%{_t}% &7is already taken." to {_p}              if {faction::%{_t}%::*} is set
-    {faction::%{_t}%::*} is not set
-
-    #CHECK - STRING IS <= 16
-    send "&8[&cFactions&8] &7» Faction name must be less than 16 characters." to {_p}     if length of {_t} > 16
-    length of {_t} <= 16
-
-
-function factionCreate(p:player,t:string):
-
-    #CHECK - {_p} IS IN FACTION
-    send "&8[&cFactions&8] &7» Already in a faction." to {_p}                             if (tag "custom;Faction.Active" of nbt compound from {_p}) = "true"
-    (tag "custom;Faction.Active" of nbt compound from {_p}) is not set
-    
-    factionNameCheck({_p},{_t})
-
-    #SET - {_p} INTO FACTION, {_p} = LEADER, NAME OF FACTION FOR {_p} = {_t}
-    add {_p} to {faction::%{_t}%::*}
-    
-    set (tag "custom;Faction.Leader" of nbt compound from {_p}) to {_p}
-    set (tag "custom;Faction.Name" of nbt compound from {_p}) to {_t}
-    set (tag "custom;Faction.Active" of nbt compound from {_p}) to "true"
-    set (tag "custom;Faction.Percent" of nbt compound from {_p}) to 1.1
-
-    send "&8[&cFactions&8] &7» Faction &f%{_t}% &7has been created." to {_p}
-    factionView({_p})
-
-function factionView(p:player):
-
-    send "&8[&cFactions&8] &7» You are not in a faction." to {_p}                         if (tag "custom;Faction.Name" of nbt compound from {_p}) is not set
-    (tag "custom;Faction.Name" of nbt compound from {_p}) is set
-
-    set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
-
-    set {_g} to virtual chest inventory with 6 rows named "&8%font({_f})%"
-    set (metadata tag "Faction_View" of {_p}) to {_g}
-
-    serverGUI({_p}, "Faction_View", 4)
-
-    set slot 48 of {_g} to iron sword named "<##D6D6D6>&lDISBAND" with lore "&8%font("factions")%", "", "&7The faction dissolved like bubbles in soda,", "&7leaving behind tales of its quirky adventures.", "", "&8→ <##E5E4E2>&lCLICK HERE &8←", "" with all flags hidden
-    set slot 49 of {_g} to green dye named "&a&lINFORMATION"
-
-    set lore of slot 49 of {_g} to "&8%font("factions")%", "", "&7The more members who join your faction,", "&7the greater the percentage boost you gain.", "", "<##F0E68C>&l%font("members:")%"
-    loop {faction::%{_f}%::*}:
-        add "&8● &f%loop-value%" to lore of slot 49 of {_g}
-    add "", "&fBoost Percentage: &7%tag "custom;Faction.Percent" of nbt compound from {_p}%x", "" to lore of slot 49 of {_g}
-
-    set {_h} to player head with nbt from "{SkullOwner:{Id:[I;-1608379259,225986527,-1647478978,-1362862659],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzZjMGQwNDU5YzY3ZjJiZTgyZmJlNTQwNmFiOGQxMzc4ZGExZjI4ZjdhM2Y4MmYxZGZjNDc2MTVhOTU1YTcifX19""}]}}}"
-    set slot 50 of {_g} to {_h} named "&c&lCLOSE" with lore "&8%font("factions")%", "", "&7With a playful flick, they closed the lid,", "&7sealing away secrets and surprises for another day.", "", "&8→ <##E5E4E2>&lCLICK HERE &8←", ""
-
-    set slot (numbers between 20 and 24) of {_g} to gray dye named " "
-
-    set {_n} to 20
-    loop {faction::%{_f}%::*}:
-        set {_h} to "%loop-value%"
-        set slot {_n} of {_g} to skull of loop-value named "&c%font({_h})%" with lore "&8%font("member")%", "", "&7Statistics:", "&8● &fKills: &c%player kills stat of loop-value%", "&8● &fDeaths: &4%deaths stat of loop-value%", "&8● &fKD: &6%player kills stat of loop-value / deaths stat of loop-value%", "&8● &fBalance: &a$%moneyGet(loop-value)%", "&8● &fLevel: &c%levelGet(loop-value)%", ""
-        add 1 to {_n}
-
-    open {_g} to {_p}
-
-
-function factionPlayerCheck(p: player):
-
-    send "&8[&cFactions&8] &7» You are not in a faction." to {_p}                         if (tag "custom;Faction.Name" of nbt compound from {_p}) is not set
-    (tag "custom;Faction.Name" of nbt compound from {_p}) is set
-
-    send "&8[&cFactions&8] &7» Must be the leader of your faction to do this." to {_p}    if (tag "custom;Faction.Leader" of nbt compound from {_p}) is not set
-    (tag "custom;Faction.Leader" of nbt compound from {_p}) = "true"
-
-
-function factionDisband(p:player):
-
-    factionPlayerCheck({_p})
-
-    set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
-    send "&8[&cFactions&8] &7» Disbanded Faction &f%{_f}%&7." to {_p}
-    
-    delete (tag "Faction.Leader" of nbt compound from {_p})
-    loop {faction::%{_f}%::*}:
-        delete (tag "custom;Faction.Name" of nbt compound from loop-value)
-        delete (tag "custom;Faction.Active" of nbt compound from loop-value)
-        delete (tag "custom;Faction.Percent" of nbt compound from loop-value)
-    
-    delete {faction::%{_f}%::*}
-    close inventory of {_p}
-
-
-function factionRename(p:player,t:string):
-
-    factionPlayerCheck({_p})
-    factionNameCheck({_p},{_t})
-
-    set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
-
-    loop {faction::%{_f}%::*}:
-        set (tag "custom;Faction.Name" of nbt compound from loop-value) to {_t}
-
-    set {faction::%{_t}%::*} to {faction::%{_f}%::*}
-    delete {faction::%{_f}%::*}
-
-    send "&8[&cFactions&8] &7» Renamed Faction to &f%{_t}%&7." to {_p}
-
-
-function factionInvite(p:player,t:player):
-
-    factionPlayerCheck({_p})
-    set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
-
-    send "&8[&cFactions&8] &7» Faction is full." to {_p}                                  if size of {faction::%{_f}%::*} >= 5
-    size of {faction::%{_f}%::*} < 5
-
-    send "&8[&cFactions&8] &7» Player is not online." to {_p}                             if {_t} is not online
-    {_t} is online
-
-    send "&8[&cFactions&8] &7» Player is already in your faction." to {_p}                if {faction::%{_f}%::*} contains {_t}
-    {faction::%{_f}%::*} does not contain {_t}
-
-    send "&8[&cFactions&8] &7» Player is already in a faction." to {_p}                   if (tag "custom;Faction.Active" of nbt compound from {_t}) = "true"
-    (tag "custom;Faction.Active" of nbt compound from {_t}) is not set
-
-    send "&8[&cFactions&8] &7» Player has already been invited." to {_p}                  if {-faction.invited::%uuid of {_p}%::*} contains {_t}
-    {-faction.invited::%uuid of {_p}%::*} does not contain {_t}
-
-    add {_f} to {-faction::%uuid of {_t}%::invitations::*}
-    add {_t} to {-faction.invited::%uuid of {_p}%::*}
-
-    send "&8[&cFactions&8] &7» &f%{_t}% &7has been invited to the faction." to {_p}
-    send "&8[&cFactions&8] &7» You have been invited to faction &f%{_f}%&7." to {_t}
-
-
-function factionUninvite(p:player,t:player):
-
-    factionPlayerCheck({_p})
-    
-    send "&8[&cFactions&8] &7» You have not invited that player." to {_p}                 if {-faction.invited::%uuid of {_p}%::*} does not contain {_t}
-    {-faction.invited::%uuid of {_p}%::*} contains {_t}
-
-    remove {_t} from {-faction.invited::%uuid of {_p}%::*}
-    send "&8[&cFactions&8] &7» Uninvited &f%{_t}%" to {_p}
-
-
-function factionInviteAccept(p: player,t:string):
-
-    send "&8[&cFactions&8] &7» You have not been invited to this clan." to {_p}           if {-faction::%uuid of {_p}%::invitations::*} does not contain {_t}
-    {-faction::%uuid of {_p}%::invitations::*} contains {_t}
-
-    send "&8[&cFactions&8] &7» Faction is full." to {_p}                                  if size of {faction::%{_f}%::*} >= 5
-    size of {faction::%{_f}%::*} < 5
-
-    send "&8[&cFactions&8] &7» Joined faction &f%{_t}%&7." to {_p}
-    loop {faction::%{_t}%::*}:
-        send "&8[&cFactions&8] &7» &f%{_p}% &7has joined your faction." to loop-value
-
-    add {_p} to {faction::%{_t}%::*}
-    remove {_t} from {-faction::%uuid of {_p}%::invitations::*}
-
-    set (tag "custom;Faction.Name" of nbt compound from {_p}) to {_t}
-    set (tag "custom;Faction.Active" of nbt compound from {_p}) to "true"
-
-    set {_n} to (((size of {faction::%{_t}%::*}) / 10) + 1)
-    set (tag "custom;Faction.Percent" of nbt compound from {_p}) to {_n}
-
-
-
-function factionInviteDecline(p:player,t:string):
-
-    #CHECK IF PLAYER HAS BEEN INVITED TO CLAN
-    send "&8[&cFactions&8] &7» You have not been invited to this clan" to {_p}            if {-faction::%uuid of {_p}%::invitations::*} does not contain {_t}
-    {-faction::%uuid of {_t}%::invitations::*} contains {_t}
-
-    #CONFIRMATION MSGS
-    send "&8[&cFactions&8] &7» Declined Invitation" to {_p}
-    remove {_t} from {-faction::%uuid of {_p}%::invitations::*}
-
-
-function factionKick(p:player,t:player):
-
-    factionPlayerCheck({_p})
-    set {_f} to (tag "custom;Faction.Name" of nbt compound from {_p})
-
-    send "&8[&cFactions&8] &7» Player is not in your faction." to {_p}                    if {faction::%{_f}%::*} does not contain {_t}
-    {faction::%{_f}%::*} contains {_t}
-
-    send "&8[&cFactions&8] &7» You cannot kick yourself." to {_p}                         if {_t} = {_p}
-    {_t} != {_p}
-
-    remove {_t} from {faction::%{_f}%::*}
-    send "&8[&cFactions&8] &7» You have been kicked from your faction" to {_t}
-    set {_n} to (((size of {faction::%{_t}%::*}) / 10) + 1)
-
-    loop {faction::%{_f}%::*}:
-        send "&8[&cFactions&8] &7» &f%{_t}% &7has been kicked from the faction." to loop-value
-        set (tag "custom;Faction.Percent" of nbt compound from loop-value) to {_n}
-
-    delete (tag "custom;Faction.Name" of nbt compound from {_t})
-    delete (tag "custom;Faction.Active" of nbt compound from {_t})
-    delete (tag "custom;Faction.Percent" of nbt compound from {_t})
-
-
-function factionCheck(p:player,t:player):
-
-    send "&8[&cFactions&8] &7» Player is not in a faction." to {_p} if (tag "custom;Faction.Name" of nbt compound from {_t}) is not set
-    (tag "custom;Faction.Name" of nbt compound from {_t}) is set
-
-    send "&8[&cFactions&8] &7» Player has not played before." to {_p} if {_t} has not played before
-    {_t} has played before
-
-    send "&8[&cFactions&8] &7» %{_t}%'s faction is &f%tag "Faction.Name" of nbt compound from {_t}%" to {_p}
-
-
-on inventory click:
-
-    cancel event if name of event-inventory = "&8%font("faction view")%"
-    event-inventory = (metadata tag "Faction_View" of player)
-    cancel event
-
-    close inventory of player if index of event-slot = 50
-    factionDisband(player) if index of event-slot = 48
-
+local function factionYMLValue(id:int,dataid:string,data:string):
+    set yaml value "%{_dataid}%" from "faction-%{_id}%" to "%{_data}%"
+
+local function factionYMLGetValue(id:int,dataid:string) :: string:
+    return yaml value "%{_dataid}%" from "faction-%{_id}%" if yaml value "%{_dataid}%" from "faction-%{_id}%" is set
+    return "&cData not found!"
+
+function inFaction(p:player) :: boolean:
+    return true if (int tag "custom;Faction_ID" of nbt compound from {_p}) is set
+    return false
+
+function isLeader(p:player) :: boolean:
+    inFaction({_p}) = true
+    return true if factionYMLGetValue((int tag "custom;Faction_ID" of nbt compound from {_p}),"leader") = uuid of {_p}
+    return false
+
+function factionCreate(p:player,name:string):
+    add 1 to {faction.amount}
+    set {_id} to {faction.amount}
+    load yaml "plugins/Skript/yaml/factions/faction-%{_id}%" as "faction-%{_id}%"
+    factionYMLValue({_id},"name",{_name})
+    factionYMLValue({_id},"leader",uuid of {_p})
+    loop 7 times: 
+        factionYMLValue({_id},"members.%loop-number%",{_emptystring}) 
+    save yaml "faction-%{_id}%"
+    set (int tag "custom;Faction_ID" of nbt compound from {_p}) to {_id}
+
+local function factionDisbandNBT(id:int):
+    set {_leader} to yaml value "leader" from "faction-%{_id}%"
+    set {_leader} to {_leader} parsed as a offlineplayer
+    delete (int tag "custom;Faction_ID" of nbt compound from {_leader})
+    loop 7 times:
+        set {_member} to yaml value "members" from "faction-%{_id}%"
+        {_member} != "<none>"
+        delete (int tag "custom;Faction_ID" of nbt compound from {_member})
+
+local function factionDisbandYML(id:int):
+    factionYMLValue({_id},"leader",{_emptyString})
+    factionYMLValue({_id},"name",{_emptyString})
+    loop 7 times:
+        factionYMLValue({_id},"members.%loop-value%",{_emptyString})
+    save yaml "faction-%{_id}%"
+
+function factionDisband(id:int):
+    factionDisbandNBT({_id})
+    factionDisbandYML({_id})
+
+function factionRename(id:int,name:string):
+    factionYMLValue({_id},"name",{_name})
+    save yaml "faction-%{_id}%"
+
+function factionInvite(p:player,t:offlineplayer,id:int):
+    {-faction::%uuid of {_t}%::invites::*} does not contain {_id}
+    add {_id} to {-faction::%uuid of {_t}%::invites::*}
+
+function factionUninvite(p:player,t:offlineplayer,id:int):
+    {-faction::%uuid of {_t}%::invites::*} contains {_id}
+    remove {_id} from {-faction::%uuid of {_t}%::invites::*}
+
+function factionGetInvites(p:player,name:string) :: boolean:
+    loop {-faction::%uuid of {_p}%::invites::*}:
+        broadcast "Inputted Name: %{_name}%, Required Name: %factionYMLGetValue(loop-value,"name")%"
+        factionYMLGetValue(loop-value,"name") = {_name}
+        set (int tag "custom;Faction_ID" of nbt compound from {_p}) to loop-value
+        return true
+    return false
+
+local function factionAddMember(p:player,id:int):
+    loop 7 times:
+        set {_lv} to factionYMLGetValue({_id},"members.%loop-value%")
+        {_lv} = "<none>"
+        factionYMLValue({_id},"members.%loop-value%",uuid of {_p})
+        remove {_id} from {-faction::%uuid of {_p}%::invites::*}
+        stop loop
+    save yaml "faction-%{_id}%"
+
+function factionKick(p:player,t:offlineplayer,id:int):
+    loop 7 times:
+        set {_member} to factionYMLGetValue({_id},"members.%loop-value%")
+        {_member} = uuid of {_t}
+        delete (int tag "custom;Faction_ID" of nbt compound from {_member} parsed as player)
+        factionYMLValue({_id},"members.%loop-number%",{_emptystring})
+        stop loop
+    save yaml "faction-%{_id}%"
+
+function factionChat(p:player,id:int,t:string):
+    loop all players where [(int tag "custom;Faction_ID" of nbt compound from input) = {_id}]:
+        send "&8[&f%factionYMLGetValue({_id},"name")%&8] >> %{_t}%" to loop-value
+
+function factionToggle(p:player):
+    if (tag "Faction_Chat" of nbt compound from {_p}) is not set:
+        set (tag "Faction_Chat" of nbt compound from {_p}) to "true"
+        stop
+    (tag "Faction_Chat" of nbt compound from {_p}) = "true"
+    delete (tag "Faction_Chat" of nbt compound from {_p})
 
 command faction <string> [<string>]:
     trigger:
-        factionView(player) if arg-1 = "view"
-        factionCreate(player, arg-2) if arg-1 = "create"
-        factionDisband(player) if arg-1 = "disband"
-        factionRename(player, arg-2) if arg-1 = "rename"
-        factionKick(player, arg-2 parsed as player) if arg-1 = "kick"
-        factionInvite(player, arg-2 parsed as player) if arg-1 = "invite"
-        factionInviteAccept(player, arg-2) if arg-1 = "accept"
-        factionInviteDecline(player, arg-2) if arg-1 = "decline"
-        factionCheck(player, arg-2 parsed as player) if arg-1 = "check"
-        factionUninvite(player,arg-2 parsed as player) if arg-1 = "uninvite"
-        send "&8[&cFactions&8] &7» Invited to &f%{faction::%uuid of player%::invitations::*} ? "None"%" to player if arg-1 = "invitations"
-
-on tab complete of "/faction":
-
-    set tab completions for position 1 to "view", "create", "disband", "rename", "kick", "invite", "accept", "decline", "invitations", "check" and "toggle"
-    set tab completions for position 2 to (indexes of {-faction::%uuid of player%::invitations::*}) and all players
+        if arg-1 is set:
+            set {_name} to factionYMLGetValue((int tag "custom;Faction_ID" of nbt compound from player),"name")
+            set {_id} to (int tag "custom;Faction_ID" of nbt compound from player)
+        if arg-1 = "create":
+            arg-2 is set
+            if length of arg-2 > 16:
+                send "<##E34234>&lSYSTEM &7» Faction name must be under 16 characters." to player
+                stop
+            inFaction(player) = false
+            factionCreate(player,arg-2)
+            send "<##E34234>&lSYSTEM &7» Faction &f%arg-2% &7has been created." to player
+        else if arg-1 = "accept":
+            arg-2 is set
+            if inFaction(player) = true:
+                send "Already in a faction" to player
+                stop
+            if factionGetInvites(player,arg-2) = false:
+                send "you are not invited to that faction" to player
+                stop
+            factionGetInvites(player,arg-2) = true
+            set {_id} to (int tag "custom;Faction_ID" of nbt compound from player)
+            set {_name} to factionYMLGetValue({_id},"name")
+            factionAddMember(player,{_id})
+            send "joined faction %{_name}%" to player
+        else if arg-1 = "decline":
+            arg-2 is set
+            factionUninvite(player,player,arg-2 parsed as integer)
+            send "declined invite" to player
+        else if arg-1 = "disband":
+            if arg-2 = "confirm":
+                factionDisband({_id})
+                send "<##E34234>&lSYSTEM &7» Faction &f%{_name}% &7has been disbanded." to player
+                stop
+            send "<##E34234>&lSYSTEM &7» Confirm this action by doing /faction disband confirm" to player
+        else if arg-1 = "rename":
+            arg-2 is set
+            if isLeader(player) = false:
+                send "<##E34234>&lSYSTEM &7» Must be the leader of your faction." to player
+                stop
+            if length of arg-2 > 16:
+                send "<##E34234>&lSYSTEM &7» Faction name must be under 16 characters." to player
+                stop
+            factionRename({_id},arg-2)
+            send "<##E34234>&lSYSTEM &7» Faction has been renamed to &f%arg-2%&7." to player
+        else if arg-1 = "invite":
+            arg-2 is set
+            if isLeader(player) = false:
+                send "<##E34234>&lSYSTEM &7» Must be the leader of your faction." to player
+                stop
+            set {_arg-2} to (arg-2 parsed as offlineplayer)
+            if {_arg-2} = player:
+                send "cannot invite yourself" to player
+                stop
+            inFaction({_arg-2}) = false
+            if {_arg-2} is online:
+                {-faction::%uuid of {_arg-2}%::invites::*} does not contain {_id}
+                send "invited to faction %{_name}% by %player%" to {_arg-2}
+            factionInvite(player,{_arg-2},{_id})
+            send "invited %{_arg-2}%" to player
+        else if arg-1 = "uninvite":
+            arg-2 is set
+            if isLeader(player) = false:
+                send "<##E34234>&lSYSTEM &7» Must be the leader of your faction." to player
+                stop
+            set {_arg-2} to (arg-2 parsed as offlineplayer)
+            factionUninvite(player,{_arg-2},{_id})
+            send "uninvited %{_arg-2}%" to player
+        else if arg-1 = "kick":
+            if isLeader(player) = false:
+                send "<##E34234>&lSYSTEM &7» Must be the leader of your faction." to player
+                stop
+            factionKick(player,arg-2 parsed as offlineplayer,{_id})
+        else if arg-1 = "chat":
+            arg-2 is set
+            if inFaction(player) = false:
+                send "<##E34234>&lSYSTEM &7» Must be in a faction." to player
+                stop
+            factionChat(player,{_id},arg-2)
