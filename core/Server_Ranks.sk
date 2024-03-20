@@ -34,3 +34,14 @@ function getTabName(p: player,name: string) :: string:
 		return "<##CBC3E3>%{_name}%"
 	return "&7%{_name}%"
 
+#nickname w/ reflect (for tijn - hibers)
+expression [player] profile name of %player%:
+    get:
+        return (expr-1).getPlayerProfile().getName()
+    set:
+        set {_player} to expr-1
+        set {_name} to change value
+
+        set {_pro} to {_player}.getPlayerProfile()
+        {_pro}.setName({_name})
+        {_player}.setPlayerProfile({_pro})

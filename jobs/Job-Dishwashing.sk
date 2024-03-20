@@ -5,12 +5,12 @@ function getDishwashingItem(n: text) :: item:
     set {_name} to yaml value "%{_n}%.name" from "dishwashing"
     set {_item} to yaml value "%{_n}%.item" from "dishwashing"
     set {_i} to {_item} named {_name} with nbt compound from "{AttributeModifiers:[{AttributeName:""generic.attack_damage"",Name:""generic.attack_damage"",Amount:0,Operation:0,UUID:[I;549828122,1243172269,-1420982898,-1929562899]}]}" with all flags hidden
-    set tag "custom;IsDishes" of nbt compound from {_i} to 1
+    set tag "IsDishes" of nbt compound from {_i} to 1
     return {_i}
 
 function dishwashingItemReceive(p: player):
     loop all items in {_p}'s inventory:
-        tag "custom;IsDishes" of nbt compound from loop-value = 1 or 2
+        tag "IsDishes" of nbt compound from loop-value = 1 or 2
         add 1 to {_n}
         {_n} >= 4
         send "<##E34234>&lSYSTEM &7» Cannot carry anymore dishes" to {_p}
@@ -20,7 +20,7 @@ function dishwashingItemReceive(p: player):
     play sound "item.armor.equip_generic" with volume 10 and pitch 1 to {_p}
 
 function dishwashingEvent(p: player):
-    tag "custom;IsDishes" of nbt compound from {_p}'s tool = 1
+    tag "IsDishes" of nbt compound from {_p}'s tool = 1
     set {_item} to {_p}'s held item
     remove {_item} from {_p}'s inventory
     loop 4 times:
@@ -28,29 +28,14 @@ function dishwashingEvent(p: player):
         play sound "block.water.ambient" at volume 0.5 for {_p}
         add 1 to {_t}
         wait a second
-    set tag "custom;IsDishes" of nbt compound from {_item} to 2
+    set tag "IsDishes" of nbt compound from {_item} to 2
     give {_p} {_item} named "&f(Clean) %name of {_item}%"
     send action bar "&aSucessfully Washed &r%name of {_item}%" to {_p}
 
 on right click:
     dishwashingItemReceive(player) if (metadata tag "Dishwashing_Receive_Block" of event-block) = true
     dishwashingEvent(player) if (metadata tag "Dishwashing_Sink_Block" of event-block) = true
-    jobProductSell(player, "custom;IsDishes", 2, "&fChef", 2, 4) if (metadata tag "Dishwashing_Sell_Block" of event-block) = true
+    jobProductSell(player, "IsDishes", 2, "&fChef", 2, 4) if (metadata tag "Dishwashing_Sell_Block" of event-block) = true
 
 on drop:
-    remove event-item from player's inventory if tag "custom;IsDishes" of nbt compound from event-item = 1 or 2
-
-
-function jobProductSell(p: player, tag: text, tagvalue: int, entity: text, n1: int, n2: int):
-
-    tag {_tag} of nbt compound from {_p}'s tool = {_tagvalue}
-    loop all items in {_p}'s inventory:
-        tag {_tag} of nbt compound from loop-value = {_tagvalue}
-        add 1 to {_n}
-        remove loop-value from {_p}'s inventory
-    
-    set {_value} to round((random number between {_n1} and {_n2}) * {_n}, 2)
-    moneyAdd({_p}, {_value})
-    
-    send "&8[%colored {_entity}%&8] &7Good work, received &a$%{_value}%&7." to {_p}
-    play sound "ui.cartography_table.take_result" at volume 0.5 for {_p}
+    remove event-item from player's inventory if tag "IsDishes" of nbt compound from event-item = 1 or 2

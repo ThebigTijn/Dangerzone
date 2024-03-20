@@ -1,89 +1,73 @@
-function contractGet(p: player):
-
-    set {_contract} to virtual hopper inventory named "           &8&l%font("contractor")%"
-
-    set slot 0 and 4 of {_contract} to black stained glass pane named " "
-    set slot 1 and 3 of {_contract} to gray dye named " "
-    if (metadata tag "Contract_Active" of {_p}) = true:
-        set slot 2 of {_contract} to anvil named "<##FB9C57>&lUPGRADE" with lore "&8%font("contractor")%", "", "&7Upgrade your contract to earn more cash", "&7when eliminating FP", "", "&fPrice: &a$%metadata tag "Contract_UpgradePrice" of {_p} ? 100%", "", "&fLevel: <##FB9C57>%metadata tag "Contract_Level" of {_p} ? 0%", "&fValue: <##C4CABF>%metadata tag "Contract_Value" of {_p}%" and ""
+function contractGet(p:player):
+    set {_g} to virtual hopper inventory named "           &8&l%font("contractor")%"
+    set slot 0 and 4 of {_g} to black stained glass pane named " "
+    set slot 1 and 3 of {_g} to gray dye named " "
+    if (int tag "custom;Contract" of nbt compound from {_p}) is set:
+        set slot 2 of {_g} to anvil named "<##FB9C57>&lUPGRADE" with lore "&8%font("contractor")%", "", "&7Upgrade your contract to earn more cash", "&7when eliminating FP", "", "&fPrice: &a$%metadata tag "Contract_UpgradePrice" of {_p} ? 100%", "", "&fLevel: <##FB9C57>%metadata tag "Contract_Level" of {_p} ? 0%", "&fValue: <##C4CABF>%metadata tag "Contract_Value" of {_p}%" and ""
     else:
-        set slot 2 of {_contract} to banner pattern named "<##AA96FB>&lPURCHASE CONTRACT" with lore "&8%font("contractor")%", "", "&7Purchase a contract to earn", "&7cash when eliminating FP", "", "&fPrice: &a$100", "" with all flags hidden
-    set (metadata tag "Contractor_Shop" of {_p}) to {_contract}
-    open {_contract} to {_p}
+        set slot 2 of {_g} to banner pattern named "<##AA96FB>&lPURCHASE CONTRACT" with lore "&8%font("contractor")%", "", "&7Purchase a contract to earn", "&7cash when eliminating FP", "", "&fPrice: &a$100", "" with all flags hidden
+    set (metadata tag "Contract" of {_p}) to {_g}
+    open {_g} to {_p}
 
 on inventory click:
-
     event-inventory = (metadata tag "Contractor_Shop" of player)
     cancel event
+    event-slot = 2
+    if event-item = anvil:
+        if moneyGet(player) < ((int tag "custom;Contract" of nbt compound from player) * 2.25):
+            send "<##E34234>&lSYSTEM &7» Insufficient Funds" to player
+            stop
+        if (int tag "custom;Contract.Level" of nbt compound from {_p}) >= 5:
+            send "<##E34234>&lSYSTEM &7» Max Level Reached" to player
+            stop
+        contractUpgrade(player)
+        send "<##E34234>&lSYSTEM &7» Upgraded &fContract &a$%int tag "custom;Contract" of nbt compound from {_p}%, &8[<##FB9C57>%int tag "custom;Contract.Level" of nbt compound from {_p}%/5&8]" to player
+    if event-item = banner pattern:
+        if moneyGet(player) < 100:
+            send "" to player
+            stop
+        contractPurchase(player)
+        send "<##E34234>&lSYSTEM &7» Purchased contract for &a$100&7." to player
 
-    if event-slot = 2:
-        contractUpgrade(player) if event-item = anvil
-        contractPurchase(player) if event-item = banner pattern
+function purchaseContract(p:player):
+    moneyRemove({_p},100)
+    set (int tag "custom;Contract" of nbt compound from {_p}) to 25
+    set {_item} to anvil named "<##FB9C57>&lUPGRADE"
+    set lore of {_item} to "&8%font("contractor")%", "", "&7Upgrade your contract to earn more cash", "&7when eliminating FP", "", "&fPrice: &a$%%", "", "&fLevel: <##FB9C57>0/5", "&fValue: <##C4CABF>25", ""
+    set slot 2 of (metadata tag "Contractor" of {_p}) to {_item}
 
+function upgradeContract(p:player):
+    moneyRemove({_p},(int tag "custom;Contract" of nbt compound from {_p})*2.25)
+    set (int tag "custom;Contract" of nbt compound from {_p}) to ((int tag "Contract" of nbt compound from {_p})+15)
+    set (int tag "custom;Contract.Level" of nbt compound from {_p}) to (int tag "Contract.Level" of nbt compound from {_p})+1
+    set {_price} to (int tag "Contract" of nbt compound from {_p})*2.25
+    set {_item} to anvil named "<##FB9C57>&lUPGRADE"
+    set lore of {_item} to "&8%font("contractor")%", "", "&7Upgrade your contract to earn more cash", "&7when eliminating FP", "", "&fPrice: &a$%{_price}%", "", "&fLevel: <##FB9C57>%int tag "custom;Contract.Level" of nbt compound from {_p}%/5", "&fValue: <##C4CABF>%int tag "custom;Contract" of nbt compound from {_p}%", "" 
+    set slot 2 of (metadata tag "Contractor" of {_p}) to {_item}
 
-function contractPurchase(p: player):
+function resetContract(p:player):
+    delete (int tag "custom;Contract" of nbt compound from {_p})
+    delete (int tag "custom;Contract.Level" of nbt compound from {_p})
+    delete (int tag "custom;Contract.Lives" of nbt compound from {_p})
 
-    send "<##E34234>&lSYSTEM &7» Insufficient Funds" to {_p} if moneyGet({_p}) <= 100
-    moneyGet({_p}) >= 100
+function contractReward(p:player):
+    moneyAdd({_p},(int tag "custom;Contract" of nbt compound from {_p}))
 
-    set (metadata tag "Contract_Active" of {_p}) to true
-    set (metadata tag "Contract_Value" of {_p}) to 25
+function contractLives(p:player):
+    ((int tag "custom;Contract.Lives" of nbt compound from {_p}) ? 2) > 0
+    set (int tag "custom;Contract.Lives" of nbt compound from {_p}) to (int tag "custom;Contract" of nbt compound from {_p})-1
 
-    set slot 2 of (metadata tag "Contractor_Shop" of {_p}) to anvil named "<##FB9C57>&lUPGRADE" with lore "&8%font("contractor")%", "", "&7Upgrade your contract to earn more cash", "&7when eliminating FP", "", "&fPrice: &a$%metadata tag "Contract_UpgradePrice" of {_p} ? 150%", "", "&fLevel: <##FB9C57>%metadata tag "Contract_Level" of {_p} ? 0%", "&fValue: <##C4CABF>%metadata tag "Contract_Value" of {_p}%" and ""
-
-    send "&8[&cContractor&8] &7Contract purchased, costed &a$100" to {_p}
-    moneyRemove({_p}, 100)
-
-
-function contractUpgrade(p: player):
-
-    send "<##E34234>&lSYSTEM &7» Max contract level reached" to {_p} if (metadata tag "Contract_Level" of {_p}) ? 0 > 5
-    (metadata tag "Contract_Level" of {_p}) ? 0 < 5
-
-    send "<##E34234>&lSYSTEM &7» Insufficient Funds" to {_p} if moneyGet({_p}) <= (metadata tag "Contract_UpgradePrice" of {_p})
-    moneyGet({_p}) >= (metadata tag "Contract_UpgradePrice" of {_p}) ? 150
-
-    set (metadata tag "Contract_UpgradePrice" of {_p}) to round(((metadata tag "Contract_Value" of {_p}) * 2) + 100, 2)
-    set (metadata tag "Contract_Value" of {_p}) to round((metadata tag "Contract_Value" of {_p}) * 1.25, 2)
-    set (metadata tag "Contract_Level" of {_p}) to ((metadata tag "Contract_Level" of {_p}) ? 0) + 1
-
-    set slot 2 of (metadata tag "Contractor_Shop" of {_p}) to anvil named "<##FB9C57>&lUPGRADE" with lore "&8%font("contractor")%", "", "&7Upgrade your contract to earn more cash", "&7when eliminating FP", "", "&fPrice: &a$%metadata tag "Contract_UpgradePrice" of {_p} ? 150%", "", "&fLevel: <##FB9C57>%metadata tag "Contract_Level" of {_p} ? 0%", "&fValue: <##C4CABF>%metadata tag "Contract_Value" of {_p}%" and ""
-
-    send "&8[&cContractor&8] &7Contract upgraded, costed &a$%metadata tag "Contract_UpgradePrice" of {_p}%" to {_p}
-    moneyRemove({_p}, (metadata tag "Contract_UpgradePrice" of {_p}))
-
-function contractReset(p: player):
-    
-    delete (metadata tag "Contract_Level" of {_p})
-    delete (metadata tag "Contract_UpgradePrice" of {_p})
-    delete (metadata tag "Contract_Active" of {_p})
-    set (metadata tag "Contract_Lives" of {_p}) to 2
-    set (metadata tag "Contract_Value" of {_p}) to 25
-
-
-function contractReward(p: player):
-
-    send "&8[&cContractor&8] &7Killed FP, received &a$%metadata tag "Contract_Value" of {_p}%" to {_p}
-    moneyAdd({_p}, (metadata tag "Contract_Value" of {_p}))
-
-function contractLivesCheck(p: player):
-
-    (metadata tag "Contract_Lives" of {_p}) ? 2 > 0
-    set (metadata tag "Contract_Lives" of {_p}) to (metadata tag "Contract_Lives" of {_p}) - 1
-
-    send "&8[&cContractor&8] &7You have died, &f%metadata tag "Contract_Lives" of {_p}% &7life left." to {_p} if (metadata tag "Contract_Lives" of {_p}) > 0
-    send "&8[&cContractor&8] &7Ran out of lives, contract lost" to {_p} if (metadata tag "Contract_Lives" of {_p}) <= 0
-    contractReset({_p}) if (metadata tag "Contract_Lives" of {_p}) <= 0
-
+on death:
+    if (int tag "custom;Contract.Lives" of nbt compound from victim) is set:
+        if (int tag "custom;Contract.Lives" of nbt compound from victim) <= 0:
+            resetContract(victim)
+            send "<##E34234>&lSYSTEM &7» Ran out of lives, contract lost" to victim
+            stop
+        contractLives(victim)
+        send "<##E34234>&lSYSTEM &7» You have died, &f1 &7life left." to victim
+    (int tag "custom;Contract" of nbt compound from attacker) is set
+    contractReward(attacker)
+    send "<##E34234>&lSYSTEM &7» Killed FP, received &a$%int tag "custom;Contract" of nbt compound from attacker%" to attacker
 
 on right click:
     contractGet(player) if event-entity = "Contractor"
-
-on death of player:
-    #getFaction(player) = "FP"
-    contractLivesCheck(victim) if (metadata tag "Contract_Active" of victim) = true
-    contractReward(attacker) if (metadata tag "Contract_Active" of attacker) = true
-
-command reset-contract:
-    trigger:
-        contractLivesCheck(player)

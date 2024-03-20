@@ -1,36 +1,21 @@
-function medicalGun(p: player, l: location, target: player):
-
-    set {_u} to uuid of {_p}
-    tag "custom;MedicalGun" of nbt compound from {_p}'s tool = 1
-    set {_i} to {_p}'s tool
-
+function medicalGun(p:player):
+    set {_i} to (tool of {_p})
+    (string tag "MedicalGun" of nbt compound from {_i}) = "true"
     item cooldown of {_i} for {_p} = 0 seconds
     loop all players in radius 8 of {_p}:
         target of {_p} = loop-player
-        stop if group of {_target} = "default" or "CI"
-
-        set {_v} to vector from {_p} to {_target}
+        set {_pl} to target of {_p}
+        stop if group of {_pl} = "default" or "CI"
+        set {_v} to vector from {_p} to {_pl}
         set vector length of {_v} to 0.2
-
-        set {_l} to location 1 meter above {_p}
         heal loop-player by 0.5 hearts
-
-        play sound "minecraft:block.beacon.activate" at volume 0.1 to loop-player and {_p}
-
-        lerp 5 heart at loop-player with offset vector(0.5, 1, 0.5) with extra 0.04
-        loop (distance between {_l} and {_target}) / 0.2 times:
+        play sound "minecraft:block.beacon.activate" at volume 0.1 to {_p} and {_pl}
+        lerp 5 heart at {_pl} with offset vector(0.5, 1, 0.5) with extra 0.04
+        loop ((distance between {_p} and {_pl})/0.2) times:
             draw 1 dust_color_transition using dustTransition(red,red,1.5) at {_l} with force
             set {_l} to {_l} ~ {_v}
-
-    healthSystemCooldown({_p}, {_i}, 0.5 seconds)
+    set item cooldown of {_i} for {_p} to 0.5 seconds
 
 on right click:
     target of player is a player
     medicalGun(player, location of player, target of player)
-
-command medical-gun:
-    permission: op
-    trigger:
-        set {_i} to shears named "&7[&cMedical&7] &fSyringe Launcher"
-        set tag "custom;MedicalGun" of nbt compound from {_i} to 1
-        give player {_i}

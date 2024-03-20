@@ -1,26 +1,24 @@
 on right click:
-    cargoReceive(player) if name of clicked entity = "Cargo"
+    uuid of entity = ""
+    set {_i} to barrel named "&6Cargo"
+    set (string tag "cargo" of nbt compound from {_i}) to "true"
+    if inventory of {_p} contains {_i}:
+        send "<##E34234>&lSYSTEM &7» Already carrying cargo." to player
+        stop
+    give player {_i}
 
-on place:
-    cargoSell(player, event-block)
+on block place:
+    (string tag "cargo" of nbt compound from event-item) = "true"
+    "%region at event-block%" contains "Cargo"
+    set event-block to air
+    set {_rewardValue} to (random number between 6 and 8)
+    moneyAdd(player,{_rewardValue})
+    xpAdd(player,5)
 
-function cargoReceive(p: player):
+on inventory click:
+    cancel event if (string tag "cargo" of nbt compound from event-item) = "true"
 
-    set {_block} to barrel named "&6Cargo"
-    if {_p}'s inventory does not contain {_block}:
-        give {_p} {_block}
-        send "&8[&6Cargo&8] &7Move received cargo to warehouse" to {_p}
-    else:
-        send "<##E34234>&lSYSTEM &7» Cannot carry more cargo" to {_p}
-
-function cargoSell(p: player, block: block):
-
-    "%region at {_block}%" = "CI_Cargo"
-    {_block} = barrel
-    set block within {_block} to air
-    remove 1 of {_p}'s tool from {_p}'s tool
-
-    set {_value} to random number between 6 and 8
-    send "&8[&6Cargo&8] &7Nicely done, payment &a$%{_value}%" to {_p}
-    xpAdd({_p}, 5)
-    moneyAdd({_p}, {_value})
+on drop:
+    (string tag "cargo" of nbt compound from event-item) = "true"
+    cancel event
+    set (tool of player) to air
