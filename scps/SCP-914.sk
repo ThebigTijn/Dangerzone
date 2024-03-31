@@ -7,7 +7,7 @@ on load:
 			if loop-player is op:
 				send "&7[&aSCP-914&7] | &fLoaded YAML item-%{_id}%" to loop-player
 
-local function SCP914_ItemCreate(p:player,i:item):
+function SCP914_ItemCreate(p:player,i:item):
 	add 1 to {914items::amount}
 	set {_id} to {914items::amount}
 	set {914items::items::%{_id}%} to {_i}
@@ -16,10 +16,27 @@ local function SCP914_ItemCreate(p:player,i:item):
 	else:
 		set {_name} to "default (%{_i}%)"
 	set {_itemtype} to "%{_i}'s type%"
+	set {_defaultchance} to "100"
+	set {_id2} to "%{_id}%"
 	load yaml "plugins/Skript/yaml/scp914items/item-%{_id}%" as "item-%{_id}%"
 	SCP914_YMLValue({_id},"name",{_name})
 	SCP914_YMLValue({_id},"itemtype",{_itemtype})
 	SCP914_YMLValue({_id},"creator",uuid of {_p})
+	SCP914_YMLValue({_id},"upgrades.rough.item1",{_id2})
+	SCP914_YMLValue({_id},"upgrades.rough.item2",{_emptystring})
+	SCP914_YMLValue({_id},"upgrades.rough.chance",{_defaultchance})
+	SCP914_YMLValue({_id},"upgrades.coarse.item1",{_id2})
+	SCP914_YMLValue({_id},"upgrades.coarse.item2",{_emptystring})
+	SCP914_YMLValue({_id},"upgrades.coarse.chance",{_defaultchance})
+	SCP914_YMLValue({_id},"upgrades.1to1.item1",{_id2})
+	SCP914_YMLValue({_id},"upgrades.1to1.item2",{_emptystring})
+	SCP914_YMLValue({_id},"upgrades.1to1.chance",{_defaultchance})
+	SCP914_YMLValue({_id},"upgrades.fine.item1",{_id2})
+	SCP914_YMLValue({_id},"upgrades.fine.item2",{_emptystring})
+	SCP914_YMLValue({_id},"upgrades.fine.chance",{_defaultchance})
+	SCP914_YMLValue({_id},"upgrades.veryfine.item1",{_id2})
+	SCP914_YMLValue({_id},"upgrades.veryfine.item2",{_emptystring})
+	SCP914_YMLValue({_id},"upgrades.veryfine.chance",{_defaultchance})
 	save yaml "item-%{_id}%"
     
 local function SCP914_YMLValue(id:int,dataid:string,data:string):
@@ -35,7 +52,8 @@ local function SCP914_ItemConfig(p:player,id:int):
 		create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
 			loop (9*3) times:
 				format gui slot (loop-number - 1) with black stained glass pane named "&7"
-			format gui slot 13 with {914items::items::%{_id}%}
+			format gui slot 10 with {914items::items::%{_id}%}
+			#format gui slot 
 		open last gui to {_p}
 	
 local function SCP914_ItemMenu(p:player):
