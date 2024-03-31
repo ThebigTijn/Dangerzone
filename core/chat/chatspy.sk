@@ -1,9 +1,0 @@
-command chatspy:
-    permission: staff.use
-    trigger:
-        if (string tag "custom;chatspy" of nbt compound from player) = "true":
-            delete (string "custom;chatspy" of nbt compound from player)
-            send "<##E34234>&lSYSTEM &7» &fDisabled Chatspy" to player
-            stop
-        set (string tag "custom;chatspy" of nbt compound from player) to "true"
-        send "<##E34234>&lSYSTEM &7» &fEnabled Chatspy" to player
