@@ -1,0 +1,29 @@
+local function returnCombat(p:player) :: boolean:
+    return true if (int tag "custom;combat" of nbt compound from {_p}) is set else false
+
+function combatRemove(p:player):
+    delete (int tag "custom;combat" of nbt compound from {_p})
+    send action bar "&a%font("now out of combat")%" to {_p}
+
+function combatSet(p:player):
+    set (int tag "custom;combat" of nbt compound from {_p}) to 10
+    while (int tag "custom;combat" of nbt compound from {_p}) is set:
+        send action bar "&c%font("you are in combat")% &8[&f%int tag "custom;combat" of nbt of {_p}%s&8]" to {_p}
+        if (int tag "custom;combat" of nbt compound from {_p}) <= 0:
+            combatRemove({_p})
+            stop
+        wait 0.1 second
+        set (int tag "custom;combat" of nbt compound from {_p}) to (int tag "custom;combat" of nbt compound from {_p})-0.1
+
+on damage of player:
+    returnCombat(victim) = false
+    event is not cancelled
+    attacker is a player
+    combatSet(victim)
+    combatSet(attacker)
+
+on death:
+    combatRemove(victim) if returnCombat(victim) = true
+
+on quit:
+    kill player if returnCombat(player) = true

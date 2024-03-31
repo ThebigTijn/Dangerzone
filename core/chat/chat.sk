@@ -35,7 +35,7 @@ on chat:
 	if {~IsDoingFunny261::%player's uuid%::timer} is set:
 		send "test"
 		stop
-	if (metadata tag "Lock_Chat" of player) = true:
+	if {-lockchat} = true:
 		player does not have permission "dangerzone.chatbypass"
 		play sound "block.note_block.pling" to player
 		send "&c| &7Chat is currently locked!"

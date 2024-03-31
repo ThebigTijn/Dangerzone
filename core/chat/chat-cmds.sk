@@ -1,22 +1,23 @@
 command clearchat:
-    aliases: cc
     permission: staff.use
+    aliases: cc
     trigger:
-        loop 100 times:
-            send "%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%" to all players 
-            send "%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%%nl%" to all players 
-        wait 1 tick
-        send "" and "<##E34234>&lSYSTEM &7» Chat has been cleared.", "" to all players
-        
+        loop 250 times:
+            send " " to all players
+            send " %nl%%nl%" to all players
+        send "&a&LCHAT CLEARED &7By &r%prefix of player% &r%player%&7!" to all players
+
 command lockchat:
     permission: staff.use
+    aliases: lc
     trigger:
-        if (metadata tag "Lock_Chat" of player) = true:
-            send "<##E34234>&lSYSTEM &7» Chat has been unlocked." to all players
-            delete (metadata tag "Lock_Chat" of player)
+        if {-lockchat} is not set:
+            set {-lockchat} to true
+            send "&c&LCHAT LOCKED &7By &r%prefix of player% &r%player%&7!" to all players
         else:
-            send "<##E34234>&lSYSTEM &7» Chat has been locked." to all players
-            set (metadata tag "Lock_Chat" of player) to true
+            delete {-lockchat}
+            send "&c&LCHAT UNLOCKED &7By &r%prefix of player% &r%player%&7!" to all players
+
 
 command store:
     trigger:

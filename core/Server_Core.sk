@@ -2,36 +2,9 @@ aliases:
 	stations = composter, loom, smoker, blast furnace, furnace, smithing table, stone cutter, cartography table, crafting table, brewing stand, cauldron, anvil, chipped anvil, damaged anvil, beacon, grindstone, end portal frame, enchantment table 
 
 on join:
-	set join message to "&8[&a✔&8] &7%player%"
-	wait 4 ticks
-	send "<##B82031>Dangerzone%nl%&9Skripted by: Hibers, Almosst, ThebigTijn and Haahl%nl%&8"
-	loop 300 times:
-		send "&7"
-	set {_pixels::*} to getSkinPixels(player)
-	set {_face} to ""
-	loop {_pixels::*}:
-		if (loop-index parsed as a number) = 2:
-			set {_face} to "&7%{_face}%%loop-value% <##B82031>Dangerzone &8- &7&o(Development)%nl%"
-		else if (loop-index parsed as a number) = 3:
-			set {_face} to "%{_face}%%loop-value% &8> &7Welcome back!%nl%"
-		else if (loop-index parsed as a number) = 4:
-			set {_face} to "%{_face}%%loop-value% &8> &7%player%%nl%"
-		else if (loop-index parsed as a number) = 5:
-			set {_face} to "%{_face}%%loop-value% &8> &7Have fun! destroy some noobs :)%nl%"
-		else if (loop-index parsed as a number) = 6:
-			set {_face} to "%{_face}%%loop-value% %nl%"
-		else if (loop-index parsed as a number) = 7:
-			set {_face} to "%{_face}%%loop-value% <##B82031>dangerzone.minehut.gg%nl%"
-		else if (loop-index parsed as a number) = 8:
-			set {_face} to "%{_face}%%loop-value% <##B82031>store.mhdangerzone.com"
-		else:
-			if (loop-index parsed as a number) != 8:
-				set {_face} to "%{_face}%%loop-value%%nl%"
-			else:
-				set {_face} to "%{_face}%%loop-value%"
-	send formatted "&8&m                                      " to player
-	send formatted "%{_face}%" to player
-	send formatted "&8&m                                      " to player
+	set join message to ""
+	send "&8[&a✔&8] &7%player%" to all players
+	join_Msg(player)
 
 on quit:
 	set quit message to ""
