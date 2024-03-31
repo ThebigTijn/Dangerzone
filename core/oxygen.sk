@@ -1,0 +1,24 @@
+function oxgyenPillar(b:block):
+    set (string tag "custom;pillar" of nbt compound from {_b}) to "true"
+    spawn text display at location 1 block above {_b}:
+        set display text of entity to "Oxygen Pillar"
+        set {_e} to entity
+    while {_e} is set:
+        loop all players in radius 5 of {_b}:
+            if loop-value.getRemainingAir() >= loop-value.getMaximumAir():
+                loop-value.setRemainingAir(loop-value.getMaximumAir())
+            loop-value.setRemainingAir(loop-value.getRemainingAir()+25)
+            loop-value.setRemainingAir((loop-value.getRemainingAir()-80))
+            set {_remaining} to loop-value.getRemainingAir()
+            set {_max} to loop-value.getMaximumAir() if {_max} is not set
+            send action bar "&b%font("oxygen")% &8[%textB(10,{_remaining},{_max})%&8]" to loop-value
+        wait a second
+
+on place:
+    name of event-item = "oxygen"
+    oxgyenPillar(event-block)
+
+on break:
+    (string tag "custom;pillar" of nbt compound from event-block) = "true"
+    kill all entities in radius 1 of event-block
+    delete (string tag "custom;pillar" of nbt compound from event-block)
