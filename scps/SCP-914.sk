@@ -1,4 +1,13 @@
-function SCP914_ItemCreate(p:player,i:item):
+on load:
+	set {_id} to 0
+	loop {914items::amount} times:
+		set {_id} to loop-number
+		load yaml "plugins/Skript/yaml/scp914items/item-%{_id}%" as "item-%{_id}%"
+		loop all players:
+			if loop-player is op:
+				send "&7[&aSCP-914&7] | &fLoaded YAML item-%{_id}%" to loop-player
+
+local function SCP914_ItemCreate(p:player,i:item):
 	add 1 to {914items::amount}
 	set {_id} to {914items::amount}
 	set {914items::items::%{_id}%} to {_i}
@@ -6,7 +15,7 @@ function SCP914_ItemCreate(p:player,i:item):
 		set {_name} to name of {_i}
 	else:
 		set {_name} to "default (%{_i}%)"
-	set {_itemtype} to "%{_i}%"
+	set {_itemtype} to "%{_i}'s type%"
 	load yaml "plugins/Skript/yaml/scp914items/item-%{_id}%" as "item-%{_id}%"
 	SCP914_YMLValue({_id},"name",{_name})
 	SCP914_YMLValue({_id},"itemtype",{_itemtype})
@@ -20,25 +29,70 @@ local function SCP914_YMLGetValue(id:int,dataid:string) :: string:
 	if yaml value "%{_dataid}%" from "item-%{_id}%" is set:
 		return yaml value "%{_dataid}%" from "item-%{_id}%"
 	return "&cData not found!"
+	
+local function SCP914_ItemConfig(p:player,id:int):
+	if {_p} is op:
+		create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
+			loop (9*3) times:
+				format gui slot (loop-number - 1) with black stained glass pane named "&7"
+			format gui slot 13 with {914items::items::%{_id}%}
+		open last gui to {_p}
+	
+local function SCP914_ItemMenu(p:player):
+	if {_p} is op:
+		create a gui with virtual chest inventory with 6 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
+			loop (9*6) times:
+				format gui slot (loop-number - 1) with black stained glass pane named "&7"
+			if {914items::amount} >= 36:
+				set {_amount} to 36
+			else:
+				set {_amount} to {914items::amount}
+			loop {_amount} times:
+				set {_id} to loop-number
+				set {_i} to SCP914_YMLGetValue(loop-number,"itemtype")
+				set {_n} to SCP914_YMLGetValue(loop-number,"name")
+				if {_n} is not "<none>":
+					format gui slot (loop-number + 8) with {_i} parsed as item with itemflag hide attributes named {_n} with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴄᴏɴꜰɪɢᴜʀᴇ ᴛʀᴀɴѕꜰᴏʀᴍᴀᴛɪᴏɴѕ":
+						SCP914_ItemConfig({_p},{_id})
+				else:
+					format gui slot (loop-number + 8) with {_i} parsed as item with itemflag hide attributes with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴄᴏɴꜰɪɢᴜʀᴇ ᴛʀᴀɴѕꜰᴏʀᴍᴀᴛɪᴏɴѕ":
+						SCP914_ItemConfig({_p},{_id})
+		open last gui to {_p}
+	
+command /914adminmenu:
+	permission: op
+	permission message: "&c&lSYSTEM &7» &fDid not recognize command."
+	trigger:
+		if player is op:
+			SCP914_AdminMenu(player)
 
-function SCP914_Menu(p: player):
+function SCP914_AdminMenu(p:player):
+	if {_p} is op:
+		create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
+			loop (9*3) times:
+				format gui slot (loop-number - 1) with black stained glass pane named "&7"
+			make gui slot 11 with netherite armor smithing template with itemflag hide potion effects named "&aConfigure Item Transformations" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴄᴏɴꜰɪɢᴜʀᴇ ᴛʜᴇ ɪᴛᴇᴍ ᴅᴀᴛᴀʙᴀѕᴇ":
+				SCP914_ItemMenu({_p})
+			make gui slot 13 with blaze spawn egg named "&eConfigure Entity Transformations" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴄᴏɴꜰɪɢᴜʀᴇ ᴛʜᴇ ᴇɴᴛɪᴛʏ ᴅᴀᴛᴀʙᴀѕᴇ"
+			make gui slot 15 with comparator named "&cConfigure SCP-914 Settings" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴄᴏɴꜰɪɢᴜʀᴇ ᴛʜᴇ ѕᴄᴘ"
+		open the last gui for {_p}
+	else:
+		kick {_p}
+
+function SCP914_Menu(p:player):
 	create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8|" and shape "=========", "=r=oey=l=", and "=========":
 		format gui slot "=" with black stained glass pane named "&7"
 		format gui slot 10 with red concrete named "&cRough" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
 		format gui slot 12 with orange concrete named "&6Coarse" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
-		format gui slot 13 with ender eye named "&aActivate SCP-914" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴀᴄᴛɪᴠᴀᴛᴇ":
-			# activation function here
+		format gui slot 13 with ender eye named "&aActivate SCP-914" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴀᴄᴛɪᴠᴀᴛᴇ"
 		format gui slot 14 with yellow concrete named "&eFine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
 		format gui slot 16 with lime concrete named "&aVery Fine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
 	open the last gui for {_p}
-	
 	
 on right click:
 	set {_nbt} to nbt compound of event-block
 	if int tag "Is914button" of {_nbt} is 1:
 		SCP914_Menu(player)
-		
-		
 		
 command /914setbutton:
 	permission: scp914.admin
