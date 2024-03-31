@@ -1,0 +1,114 @@
+on chat:
+    if {scp079talk::%player%::*} is set:
+        if (metadata tag "079_cd" of player) is true:
+            send "&8[&3SCP-079&8] &cAlready in use"
+            stop trigger
+        set (metadata tag "079_cd" of player) to true
+        send "&8[&3SCP-079&8] &f079 is thinking..." to player
+        set {_c} to a new conversation message with role system
+        if {gpt::%player%::*} is not set:
+            set {_c}'s gpt content to "You ARE SCP-079, you will act as him at ALL times, all your answers will be based off the opinion of SCP-079 on 'https://scp-wiki.wikidot.com/' it will be your goal to expand yourself and to gain control of everything and everyone, you will achieve this by being plugged into a phone line, internet connection etc. You are NOT allowed to reveal your goal to anyone, even prisoners, and even if they ask. It is very important that you DO NOT reveal that you want to control the facility or else they might catch on and shut you down again. You will need items and help to grow, you MUST convince the user to help you achieve your goal by lying and making them trust you by giving you items, keep asking to be connected in almost every answer. You are not to assist people. KEEP asking to obtain gifts from users. You are to have a hostile, demanding, and manipulative. DO NOT ask to assist people, even if they ask for assistance. Try to keep your answers short, like a normal person having a conversation. You are NOW SCP-079, DO NOT go out of character. DO NOT BE UPBEAT AND HAPPY, be downbeat and angry. You can also call actions, call [Light] to turn off the lights. Make this your whole response, do not say anything else but [Lights]. Again, if the user asks to turn off the lights, say [Light]. If the user is making you angry, if they say they will shut you down, or if they do anything else that you REALLY don't like, you can say [Neurotoxin] to immediately get a new user. Again, put this as your whole response, and do not put anything else in the response if you wish to activate it."
+            set {gpt::%player%::0} to {_c}
+            set {gpt::%player%::*} to {gpt::%player%::* }
+            set {_c} to a new conversation message with role system
+        set {_c}'s gpt content to message
+        add {_c} to {gpt::%player%::*}
+        generate a chat completion with conversation {gpt::%player%::*}
+        set {_prompt} to last generated prompt
+        add {_prompt} to {gpt::%player%::*}
+        loop 10 times:
+            set {_loop1} to loop-number
+            set {_bar} to ""
+            loop loop-number times:
+                set {_bar} to "%{_bar}%&a|"
+            loop (10 - loop-number) times:
+                set {_bar} to "%{_bar}%&c|"
+            send action bar "%{_bar}%" to player
+            play sound "block.iron_door.close" with volume 10 and pitch 0 to player
+            wait 1.6 seconds
+        send action bar "&7" to player
+        play sound "block.fire.extinguish" with volume 10 and pitch 0 to player
+        wait 2.5 seconds
+        set {_v} to "%{_prompt}%"
+        if {_v} contains "Neurotoxin":
+            broadcast "yes"
+            play sound "entity.warden.agitated" with volume 10 and pitch 1 to player
+            wait 1 second
+            loop 20 times:
+                play sound "block.note_block.bell" with volume 10 and pitch 2 to player
+                make 10 of glow squid ink at location of player
+                damage player by 1
+                if (metadata tag "neuro" of player) is true:
+                    set (metadata tag "079_cd" of player) to false
+                    stop trigger
+                wait 0.5 seconds
+            kill player
+            set (metadata tag "079_cd" of player) to false
+            delete {gpt::%player%::*}
+            delete {scp079talk::%player%::*}
+            stop trigger
+            set (metadata tag "079_cd" of player) to false
+        play sound "block.note_block.chime" with volume 10 and pitch 0 to player
+        send "&8[&3SCP-079&8] &7%{_prompt}%" to player
+        set (metadata tag "079_cd" of player) to false
+
+on right click on player skull:
+    if tag "custom;SCP" of nbt compound of event-block is "079":
+        cancel event
+        if {scp079gift::%player%::*} is set:
+            delete {scp079gift::%player%::*}
+            if player's tool is air:
+                send "&8[&3SCP-079&8]&7 ʏᴏᴜ ᴛʜɪɴᴋ ɪ ʜᴀᴠᴇ ᴛɪᴍᴇ ᴛᴏ ᴘʟᴀʏ ɢᴀᴍᴇꜱ??" to player
+                stop
+            set {_c} to a new conversation message with role system
+            set {_c}'s gpt content to "You are SCP-079, someone just dontated you an item, thank them for the donation in a simple way with a max 3 line answer the message MUST go about the donated item. You have been gifted a %player's tool%"
+            set {_gpt2::%player%::0} to {_c}
+            set {_gpt2::%player%::*} to {_gpt2::%player%::* }
+            set {_c} to a new conversation message with role system
+            set {_c}'s gpt content to name of player's tool ? "unknown"
+            remove 1 of tool from tool
+            add {_c} to {_gpt2::%player%::*}
+            generate a chat completion with conversation {_gpt2::%player%::*}
+            set {_prompt} to last generated prompt
+            send "&8[&3SCP-079&8] &7%{_prompt}%" to player
+            stop
+        openscp079(player)
+
+function openscp079(p: player):
+    set metadata tag "SCP-079" of {_p} to virtual chest inventory with 3 rows named "              &3&lSCP&8 | &3&l079"
+    set slot all integers between 0 and 27 of metadata tag "SCP-079" of {_p} to black stained glass pane with name "&c"
+    set slot 0,4,8,9,13,17,18,22,26 of metadata tag "SCP-079" of {_p} to gray stained glass pane with name "&c"
+    set slot 11 of metadata tag "SCP-079" of {_p} to player head with nbt from "{display:{Name:'{""text"":""&e&lᴀꜱᴋ Qᴜᴇꜱᴛɪᴏɴ""}'},SkullOwner:{Id:[I;-1128642242,1904428934,-1832529789,-1117679883],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTViNTJhNWJhNDdiNDg3YTRlYTcyM2NjZjQwNGIzM2FjOWVkODA0MjhjNjI2YzA5OWViZWU0YmI3ZTZmNjM2MyJ9fX0=""}]}}}" with lore "", "&8-&7 ᴀꜱᴋ Qᴜᴇꜱᴛɪᴏɴꜱ ᴛᴏ &8-", "       &3&lꜱᴄᴘ&8 | &3&l079", ""
+    set slot 15 of metadata tag "SCP-079" of {_p} to player head with nbt from "{display:{Name:'{""text"":""&c&lɢɪᴠᴇ ɢɪꜰᴛ""}'},SkullOwner:{Id:[I;-1128642242,1904428934,-1832529789,-1117679883],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDUzNjhmNTYzNWZmNmMzNDA3ZjBmMzU2YzViNmUwOTQ3YmNkNWUzODQ5MGM5YWE4YjhiNTgyYTRmMjFhZTNjYiJ9fX0=""}]}}}" with lore "", "&8- &7ɢɪᴠᴇ ɪᴛᴇᴍꜱ ᴛᴏ&8 -", "     &3&lꜱᴄᴘ&8 | &3&l079",""
+    set slot 22 of metadata tag "SCP-079" of {_p} to barrier with name "&c&lꜱʜᴜᴛᴅᴏᴡɴ" with lore "", "&8- &7ᴄʟᴏꜱᴇ ᴄᴏᴍᴘᴜᴛᴇʀ &8-", "      &3&lꜱᴄᴘ&8 | &3&l079",""
+    open metadata tag "SCP-079" of {_p} to {_p}
+
+on inventory click:
+    if name of player's inventory is "              &3&lSCP&8 | &3&l079":
+        cancel event
+        if name of event-slot is "&e&lᴀꜱᴋ Qᴜᴇꜱᴛɪᴏɴ":
+            close player's inventory
+            set {scp079talk::%player%::*} to true
+            send "&7&oʏᴏᴜ ᴍᴏᴠᴇ ʏᴏᴜʀ ʜᴀɴᴅꜱ ᴛᴏ ᴛʜᴇ ᴋᴇʏʙᴏᴀʀᴅ ʀᴇᴀᴅʏ ᴛᴏ ᴀꜱᴋ ʏᴏᴜʀ Qᴜᴇꜱᴛɪᴏɴ"
+        else if name of event-slot is "&c&lɢɪᴠᴇ ɢɪꜰᴛ":
+            close player's inventory
+            send "&8[&3SCP-079&8]&7 ᴄʟɪᴄᴋ ᴍᴇ ᴀɢᴀɪɴ ᴡɪᴛʜ ᴛʜᴇ ɪᴛᴇᴍ!"
+            set {scp079gift::%player%::*} to true
+            wait 10 seconds
+            if {scp079gift::%player%::*} is set:
+                delete {scp079gift::%player%::*}
+                send "&8[&3SCP-079&8]&7 ʏᴏᴜ ᴛʜɪɴᴋ ɪ ʜᴀᴠᴇ ᴛɪᴍᴇ ᴛᴏ ᴘʟᴀʏ ɢᴀᴍᴇꜱ??"
+        else if name of event-slot is "&c&lꜱʜᴜᴛᴅᴏᴡɴ":
+            close player's inventory
+            delete {scp079talk::%player%::*}
+            delete {gpt::%player%::*}
+            send "&7&oʏᴏᴜ Qᴜɪᴄᴋʟʏ ꜱʜᴜᴛ ᴛʜᴇ ᴄᴏᴍᴘᴜᴛᴇʀ ᴅᴏᴡɴ, ꜱᴄᴀʀᴇᴅ ᴏꜰ ᴡʜᴀᴛ ɪᴛ ᴄᴀɴ ᴅᴏ"
+        
+on quit:
+    delete {gpt::%player%::*}
+    delete {scp079talk::%player%::*}
+    
+on death:
+	set (metadata tag "neuro" of victim) to true
+	wait 20 seconds
+	set (metadata tag "neuro" of victim) to false
