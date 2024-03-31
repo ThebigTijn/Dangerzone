@@ -16,7 +16,32 @@ function SCP914_ItemCreate(p:player,i:item):
 local function SCP914_YMLValue(id:int,dataid:string,data:string):
     set yaml value "%{_dataid}%" from "item-%{_id}%" to "%{_data}%"
     
-local function clanYMLGetValue(id:int,dataid:string) :: string:
+local function SCP914_YMLGetValue(id:int,dataid:string) :: string:
 	if yaml value "%{_dataid}%" from "item-%{_id}%" is set:
 		return yaml value "%{_dataid}%" from "item-%{_id}%"
 	return "&cData not found!"
+
+function SCP914_Menu(p: player):
+	create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8|" and shape "=========", "=r=oey=l=", and "=========":
+		format gui slot "=" with black stained glass pane named "&7"
+		format gui slot 10 with red concrete named "&cRough" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
+		format gui slot 12 with orange concrete named "&6Coarse" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
+		format gui slot 13 with ender eye named "&aActivate SCP-914" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴀᴄᴛɪᴠᴀᴛᴇ":
+			# activation function here
+		format gui slot 14 with yellow concrete named "&eFine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
+		format gui slot 16 with lime concrete named "&aVery Fine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
+	open the last gui for {_p}
+	
+	
+on right click:
+	set {_nbt} to nbt compound of event-block
+	if int tag "Is914button" of {_nbt} is 1:
+		SCP914_Menu(player)
+		
+		
+		
+command /914setbutton:
+	permission: scp914.admin
+	trigger:
+		set {_nbt} to nbt compound of player's target block
+		set int tag "Is914button" of {_nbt} to 1
