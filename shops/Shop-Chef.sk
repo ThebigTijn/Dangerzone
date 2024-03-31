@@ -1,7 +1,13 @@
 function chefShop(p:player):
-    create a gui with virtual hopper inventory named "         &8%font("food shop")%":
+    create a gui with virtual hopper inventory named "              &8%font("food shop")%":
         format gui slot (numbers from 0 to 4) with black stained glass pane named " "
-        format gui slot 1 with 5 carrot named "&7Carrot &8[&f]&8]":
-        format gui slot 2 with 5 baked potato named "&7Baked Potato"
-        format gui slot 3 with 5 steak named "&7Steak"
+        format gui slot 1 with 5 carrot named "&7Carrot &8[<##F5F5DC>¢5&8]":
+            purchaseItem({_p},5,5 carrot named "&7Carrot")
+        format gui slot 2 with 5 baked potato named "&7Baked Potato &8[<##F5F5DC>¢15&8]":
+            purchaseItem({_p},15,5 baked potato named "&7Baked Potato")
+        format gui slot 3 with 5 steak named "&7Steak &8[<##F5F5DC>¢30&8]":
+            purchaseItem({_p},30,5 steak named "&7Steak")
         open gui to {_p}
+
+on right click:
+    chefShop(player) if entity id of event-entity = ""

@@ -2,6 +2,6 @@ function purchaseItem(p:player,n:num,i:item):
     if currencyGet({_p},"credits") < {_n}:
         send "<##E34234>&lSYSTEM &7» Insufficient Funds" to {_p}
         stop
-    send "<##E34234>&lSYSTEM &7» Purchased &f%{_i}% &7for <##F5F5DC>¢%{_n}%&7."
+    send "<##E34234>&lSYSTEM &7» Purchased &f%name of {_i}% &7for <##F5F5DC>¢%{_n}%&7."
     currencyRemove({_p},"credits",{_n})
     give {_p} {_i}
