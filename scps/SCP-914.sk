@@ -1,0 +1,22 @@
+function SCP914_ItemCreate(p:player,i:item):
+	add 1 to {914items::amount}
+	set {_id} to {914items::amount}
+	set {914items::items::%{_id}%} to {_i}
+	if name of {_i} exists:
+		set {_name} to name of {_i}
+	else:
+		set {_name} to "default (%{_i}%)"
+	set {_itemtype} to "%{_i}%"
+	load yaml "plugins/Skript/yaml/scp914items/item-%{_id}%" as "item-%{_id}%"
+	SCP914_YMLValue({_id},"name",{_name})
+	SCP914_YMLValue({_id},"itemtype",{_itemtype})
+	SCP914_YMLValue({_id},"creator",uuid of {_p})
+	save yaml "item-%{_id}%"
+    
+local function SCP914_YMLValue(id:int,dataid:string,data:string):
+    set yaml value "%{_dataid}%" from "item-%{_id}%" to "%{_data}%"
+    
+local function clanYMLGetValue(id:int,dataid:string) :: string:
+	if yaml value "%{_dataid}%" from "item-%{_id}%" is set:
+		return yaml value "%{_dataid}%" from "item-%{_id}%"
+	return "&cData not found!"
