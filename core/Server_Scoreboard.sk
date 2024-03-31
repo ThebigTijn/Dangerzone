@@ -28,7 +28,7 @@ function updateScoreboard(p: player):
     set line 10 of {_p}'s scoreboard to " <##B2BEB5>│ &f%font("credits")%: <##F5F5DC>¢%format(currencyGet({_p},"credits"))%"
     set line 9 of {_p}'s scoreboard to " <##B2BEB5>│ &fᴋɪʟʟѕ: &c%player kills stat of {_p}%"
     set line 7 of {_p}'s scoreboard to " <##B2BEB5>│ &fᴅᴇᴀᴛʜѕ: &4%deaths stat of {_p}%"
-    set line 6 of {_p}'s scoreboard to " <##B2BEB5>│ &fᴋᴅ: &6%player kills stat of {_p} / deaths stat of {_p} ? "N/A"%"
+    set line 6 of {_p}'s scoreboard to " <##B2BEB5>│ &fᴋᴅ: &6%(player kills stat of {_p} / deaths stat of {_p}) ? "N/A"%"
 
 on join:
     scoreboard(player)
