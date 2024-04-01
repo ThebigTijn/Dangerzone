@@ -7,14 +7,11 @@ on load:
 			if loop-player is op:
 				send "&7[&aSCP-914&7] | &fLoaded YAML item-%{_id}%" to loop-player
 
-function SCP914_ItemCreate(p:player,i:item):
+local function SCP914_ItemCreate(p:player,i:item):
 	add 1 to {914items::amount}
 	set {_id} to {914items::amount}
 	set {914items::items::%{_id}%} to 1 of {_i}
-	if name of {_i} exists:
-		set {_name} to name of {_i}
-	else:
-		set {_name} to "default (%{_i}%)"
+	set {_name} to name of {_i}
 	set {_itemtype} to "%{_i}'s type%"
 	set {_defaultchance} to "100"
 	set {_id2} to "%{_id}%"
@@ -119,7 +116,7 @@ local function SCP914_ItemMenu(p:player):
 				format gui slot (loop-number - 1) with black stained glass pane named "&7"
 			format gui slot 0 with barrier named "&cBack" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ɢᴏ ʙᴀᴄᴋ":
 				SCP914_AdminMenu(player)
-			format gui slot 1 with netherite upgrade smithing template with itemflag hide potion effects named "&aAdd item" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴀᴅᴅ ᴀɴ ɪᴛᴇᴍ ᴛᴏ ᴛʜᴇ ᴄᴏɴꜰɪɢ:":
+			format gui slot 1 with netherite upgrade smithing template with itemflag hide potion effects named "&aAdd item" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴀᴅᴅ ᴀɴ ɪᴛᴇᴍ ᴛᴏ ᴛʜᴇ ᴄᴏɴꜰɪɢ":
 				SCP914_AddItem({_p},false,{_emptyint},{_emptyitem})
 			if {914items::amount} >= 36:
 				set {_amount} to 36
@@ -143,7 +140,6 @@ local function SCP914_AddItem(p:player,b:boolean,id:int,i:item):
 		create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
 			loop (9*3) times:
 				format gui slot (loop-number - 1) with black stained glass pane named "&7"
-				SCP914_ItemMenu({_p})
 			make gui slot 13 with lime stained glass pane named "&aPlease select an item" with lore "&7ᴘʟᴇᴀѕᴇ ᴄʟɪᴄᴋ ʏᴏᴜʀ ɪᴛᴇᴍ ʙᴇꜰᴏʀᴇ ᴄᴏɴᴛɪɴᴜɪɴɢ"
 		open the last gui for {_p}
 		wait 1 tick
@@ -181,7 +177,7 @@ command /914adminmenu:
 		if player is op:
 			SCP914_AdminMenu(player)
 
-function SCP914_AdminMenu(p:player):
+local function SCP914_AdminMenu(p:player):
 	if {_p} is op:
 		create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
 			loop (9*3) times:
@@ -194,7 +190,7 @@ function SCP914_AdminMenu(p:player):
 	else:
 		kick {_p}
 
-function SCP914_Menu(p:player):
+local function SCP914_Menu(p:player):
 	create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8|" and shape "=========", "=r=oey=l=", and "=========":
 		format gui slot "=" with black stained glass pane named "&7"
 		format gui slot 10 with red concrete named "&cRough" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
@@ -207,9 +203,9 @@ function SCP914_Menu(p:player):
 on inventory click:
 	if (metadata tag "914item_select" of player) is true:
 		if (metadata tag "914item_select_id" of player) exists:
-			SCP914_AddItem(player,true,(metadata tag "914item_select_id" of player),event-item)
+			SCP914_AddItem(player,true,(metadata tag "914item_select_id" of player),1 of event-item)
 		else:
-			SCP914_AddItem(player,false,{_emptyint},event-item)
+			SCP914_AddItem(player,false,{_emptyint},1 of event-item)
 		
 	
 on right click:
