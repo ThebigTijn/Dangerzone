@@ -1,11 +1,8 @@
-on load:
-	set {_id} to 0
-	loop {914items::amount} times:
-		set {_id} to loop-number
-		load yaml "plugins/Skript/yaml/scp914items/item-%{_id}%" as "item-%{_id}%"
-		loop all players:
-			if loop-player is op:
-				send "&7[&aSCP-914&7] | &fLoaded YAML item-%{_id}%" to loop-player
+# SCP-914 Script | Made by Almosst or https://github.com/Almosst-DEV
+# Only authorized for use by Dangerzone.
+# For any issues/complaints please reach out to myself via Discord (almosst.)
+
+# Functions
 
 local function SCP914_ItemCreate(p:player,i:item):
 	add 1 to {914items::amount}
@@ -81,13 +78,20 @@ local function SCP914_ItemConfig(p:player,id:int):
 				set {_gui1} to ({_gui1} + 1)
 				set {_gui2} to ({_gui2} + 1)
 		open last gui to {_p}
-	
+
 # Function used to select a new item
 local function SCP914_SelectMenu(p:player,oid:int,u:int,type:int):
 	if {_p} is op:
 		create a gui with virtual chest inventory with 6 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
 			loop (9*6) times:
 				format gui slot (loop-number - 1) with black stained glass pane named "&7"
+			if {_type} is 1:
+				format gui slot 0 with recovery compass named "&bAdjust Chance" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴀᴅᴊᴜsᴛ ᴘɪᴄᴋ ᴘᴇʀᴄᴇɴᴛᴀɢᴇ":
+					set (metadata tag "914chance" of {_p}) to true
+					set (metadata tag "914chanceid" of {_p}) to {_oid}
+					set (metadata tag "914chanceup" of {_p}) to {_u}
+					close {_p}'s inventory
+					send "%nl%&fPlease type the percentage you would like as a number from 1-100.%nl%"
 			if {914items::amount} >= 36:
 				set {_amount} to 36
 			else:
@@ -169,13 +173,6 @@ local function SCP914_AddItem(p:player,b:boolean,id:int,i:item):
 					wait 1 tick
 					SCP914_ItemConfig({_p},{914items::amount})
 		open the last gui for {_p}
-	
-command /914adminmenu:
-	permission: op
-	permission message: "&c&lSYSTEM &7» &fDid not recognize command."
-	trigger:
-		if player is op:
-			SCP914_AdminMenu(player)
 
 local function SCP914_AdminMenu(p:player):
 	if {_p} is op:
@@ -200,27 +197,50 @@ local function SCP914_Menu(p:player):
 		format gui slot 16 with lime concrete named "&aVery Fine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
 	open the last gui for {_p}
 
+# Commands
+
+command /914adminmenu:
+	permission: op
+	permission message: "&c&lSYSTEM &7» &fDid not recognize command."
+	trigger:
+		if player is op:
+			SCP914_AdminMenu(player)
+			
+command /914setbutton:
+	permission: scp914.admin
+	trigger:
+		set {_nbt} to nbt compound of player's target block
+		set int tag "Is914button" of {_nbt} to 1
+
+# Events
+
 on inventory click:
 	if (metadata tag "914item_select" of player) is true:
 		if (metadata tag "914item_select_id" of player) exists:
 			SCP914_AddItem(player,true,(metadata tag "914item_select_id" of player),1 of event-item)
 		else:
 			SCP914_AddItem(player,false,{_emptyint},1 of event-item)
-		
 	
 on right click:
 	set {_nbt} to nbt compound of event-block
 	if int tag "Is914button" of {_nbt} is 1:
 		SCP914_Menu(player)
 		
-command /914setbutton:
-	permission: scp914.admin
-	trigger:
-		set {_nbt} to nbt compound of player's target block
-		set int tag "Is914button" of {_nbt} to 1
-		
 on inventory close:
 	if (metadata tag "914item_select" of player) exists:
 		delete (metadata tag "914item_select" of player)
 	if (metadata tag "914item_select_id" of player) exists:
 		delete (metadata tag "914item_select_id" of player)
+		
+on chat:
+	if (metadata tag "914chance" of player) is true:
+		if message parsed as int >= 1:
+			if message parsed as int <= 100:
+				SCP914_YMLValue((metadata tag "914chanceid" of player),"upgrades.%(metadata tag "914chanceup" of player)%.chance","%message parsed as int%")
+				save yaml "item-%(metadata tag "914chanceid" of player)%"
+				SCP914_ItemConfig(player,(metadata tag "914chanceid" of player))
+				broadcast "%(metadata tag "914chanceid" of player)%"
+				broadcast "%(metadata tag "914chanceup" of player)%"
+		delete (metadata tag "914chance" of player)
+		delete (metadata tag "914chanceid" of player)
+		delete (metadata tag "914chanceup" of player)
