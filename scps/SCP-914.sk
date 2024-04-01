@@ -10,7 +10,7 @@ on load:
 function SCP914_ItemCreate(p:player,i:item):
 	add 1 to {914items::amount}
 	set {_id} to {914items::amount}
-	set {914items::items::%{_id}%} to {_i}
+	set {914items::items::%{_id}%} to 1 of {_i}
 	if name of {_i} exists:
 		set {_name} to name of {_i}
 	else:
@@ -22,45 +22,105 @@ function SCP914_ItemCreate(p:player,i:item):
 	SCP914_YMLValue({_id},"name",{_name})
 	SCP914_YMLValue({_id},"itemtype",{_itemtype})
 	SCP914_YMLValue({_id},"creator",uuid of {_p})
-	SCP914_YMLValue({_id},"upgrades.rough.item1",{_id2})
-	SCP914_YMLValue({_id},"upgrades.rough.item2",{_emptystring})
-	SCP914_YMLValue({_id},"upgrades.rough.chance",{_defaultchance})
-	SCP914_YMLValue({_id},"upgrades.coarse.item1",{_id2})
-	SCP914_YMLValue({_id},"upgrades.coarse.item2",{_emptystring})
-	SCP914_YMLValue({_id},"upgrades.coarse.chance",{_defaultchance})
-	SCP914_YMLValue({_id},"upgrades.1to1.item1",{_id2})
-	SCP914_YMLValue({_id},"upgrades.1to1.item2",{_emptystring})
-	SCP914_YMLValue({_id},"upgrades.1to1.chance",{_defaultchance})
-	SCP914_YMLValue({_id},"upgrades.fine.item1",{_id2})
-	SCP914_YMLValue({_id},"upgrades.fine.item2",{_emptystring})
-	SCP914_YMLValue({_id},"upgrades.fine.chance",{_defaultchance})
-	SCP914_YMLValue({_id},"upgrades.veryfine.item1",{_id2})
-	SCP914_YMLValue({_id},"upgrades.veryfine.item2",{_emptystring})
-	SCP914_YMLValue({_id},"upgrades.veryfine.chance",{_defaultchance})
+	SCP914_YMLValue({_id},"upgrades.1.item1",{_id2})
+	SCP914_YMLValue({_id},"upgrades.1.item2","1")
+	SCP914_YMLValue({_id},"upgrades.1.chance",{_defaultchance})
+	SCP914_YMLValue({_id},"upgrades.2.item1",{_id2})
+	SCP914_YMLValue({_id},"upgrades.2.item2","1")
+	SCP914_YMLValue({_id},"upgrades.2.chance",{_defaultchance})
+	SCP914_YMLValue({_id},"upgrades.3.item1",{_id2})
+	SCP914_YMLValue({_id},"upgrades.3.item2","1")
+	SCP914_YMLValue({_id},"upgrades.3.chance",{_defaultchance})
+	SCP914_YMLValue({_id},"upgrades.4.item1",{_id2})
+	SCP914_YMLValue({_id},"upgrades.4.item2","1")
+	SCP914_YMLValue({_id},"upgrades.4.chance",{_defaultchance})
+	SCP914_YMLValue({_id},"upgrades.5.item1",{_id2})
+	SCP914_YMLValue({_id},"upgrades.5.item2","1")
+	SCP914_YMLValue({_id},"upgrades.5.chance",{_defaultchance})
 	save yaml "item-%{_id}%"
     
 local function SCP914_YMLValue(id:int,dataid:string,data:string):
     set yaml value "%{_dataid}%" from "item-%{_id}%" to "%{_data}%"
     
 local function SCP914_YMLGetValue(id:int,dataid:string) :: string:
-	if yaml value "%{_dataid}%" from "item-%{_id}%" is set:
-		return yaml value "%{_dataid}%" from "item-%{_id}%"
+	if yaml value "%{_dataid}%" from "item-%{_id}%" exists:
+		set {_r} to yaml value "%{_dataid}%" from "item-%{_id}%"
+		return "%{_r}%"
 	return "&cData not found!"
 	
 local function SCP914_ItemConfig(p:player,id:int):
 	if {_p} is op:
+		delete (metadata tag "914item_select_id" of {_p})
 		create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
 			loop (9*3) times:
 				format gui slot (loop-number - 1) with black stained glass pane named "&7"
-			format gui slot 10 with {914items::items::%{_id}%}
-			#format gui slot 
+			format gui slot 0 with barrier named "&cBack" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ɢᴏ ʙᴀᴄᴋ":
+				SCP914_ItemMenu({_p})
+			format gui slot 10 with {914items::items::%{_id}%}:
+				SCP914_AddItem({_p},true,{_id},{_emptyitem})
+			format gui slot 3 with red concrete named "&cRough" with lore "&7ѕᴇʟᴇᴄᴛ ɪᴛᴇᴍ(ѕ) ʙᴇʟᴏᴡ"
+			format gui slot 4 with orange concrete named "&6Coarse" with lore "&7ѕᴇʟᴇᴄᴛ ɪᴛᴇᴍ(ѕ) ʙᴇʟᴏᴡ"
+			format gui slot 5 with yellow concrete named "&e1:1" with lore "&7ѕᴇʟᴇᴄᴛ ɪᴛᴇᴍ(ѕ) ʙᴇʟᴏᴡ"
+			format gui slot 6 with lime concrete named "&aFine" with lore "&7ѕᴇʟᴇᴄᴛ ɪᴛᴇᴍ(ѕ) ʙᴇʟᴏᴡ"
+			format gui slot 7 with light blue concrete named "&bVery Fine" with lore "&7ѕᴇʟᴇᴄᴛ ɪᴛᴇᴍ(ѕ) ʙᴇʟᴏᴡ"
+			set {_gui1} to 12
+			set {_gui2} to 21
+			loop 5 times:
+				set {_upgradevalue} to loop-number
+				set {_upgrade1.%{_upgradevalue}%} to SCP914_YMLGetValue({_id},"upgrades.%{_upgradevalue}%.item1")
+				set {_upgrade2.%{_upgradevalue}%} to SCP914_YMLGetValue({_id},"upgrades.%{_upgradevalue}%.item2")
+				set {_chance.%{_upgradevalue}%} to SCP914_YMLGetValue({_id},"upgrades.%{_upgradevalue}%.chance")
+				set {_name} to SCP914_YMLGetValue({_id},"name")
+				format gui slot {_gui1} with {914items::items::%{_upgrade1.%{_upgradevalue}%}%} with lore "&fᴄʜᴀɴᴄᴇ: %{_chance.%{_upgradevalue}%}%%%%nl%&7ᴄʟɪᴄᴋ ᴛᴏ ʀᴇᴘʟᴀᴄᴇ ᴄᴜʀʀᴇɴᴛ ɪᴛᴇᴍ":
+					SCP914_SelectMenu({_p},{_id},{_upgradevalue},1)
+				if {_chance.%{_upgradevalue}%} is not "100":
+					if {_upgrade2.%{_upgradevalue}%} is not "<none>":
+						format gui slot {_gui2} with {914items::items::%{_upgrade2.%{_upgradevalue}%}%} with lore "&eɪᴛᴇᴍ ɪѕ ᴘɪᴄᴋᴇᴅ ɪꜰ ᴛʜᴇ ᴀʙᴏᴠᴇ ɪᴛᴇᴍ ɪѕ ɴᴏᴛ%nl%&7ᴄʟɪᴄᴋ ᴛᴏ ʀᴇᴘʟᴀᴄᴇ ᴄᴜʀʀᴇɴᴛ ᴏᴠᴇʀꜰʟᴏᴡ ɪᴛᴇᴍ":
+							SCP914_SelectMenu({_p},{_id},{_upgradevalue},2)
+					else:
+						format gui slot {_gui2} with barrier named "&c&lDatabase Error &8| &fID: %{_id}%" with lore "&7ᴘʟᴇᴀѕᴇ ᴄᴏɴᴛᴀᴄᴛ ᴀʟᴍᴏѕѕᴛ ɪꜰ ʏᴏᴜ ѕᴇᴇ ᴛʜɪѕ"
+				else:
+					format gui slot {_gui2} with red stained glass pane named "&cChance is 100%%, overflow item unnecesary" with lore "&7ᴏᴠᴇʀꜰʟᴏᴡ ɪᴛᴇᴍ ᴡɪʟʟ ɴᴏᴛ ʙᴇ ᴘɪᴄᴋᴇᴅ ɪꜰ ᴄʜᴀɴᴄᴇ ɪѕ 100%%"
+				set {_gui1} to ({_gui1} + 1)
+				set {_gui2} to ({_gui2} + 1)
 		open last gui to {_p}
 	
+# Function used to select a new item
+local function SCP914_SelectMenu(p:player,oid:int,u:int,type:int):
+	if {_p} is op:
+		create a gui with virtual chest inventory with 6 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
+			loop (9*6) times:
+				format gui slot (loop-number - 1) with black stained glass pane named "&7"
+			if {914items::amount} >= 36:
+				set {_amount} to 36
+			else:
+				set {_amount} to {914items::amount}
+			loop {_amount} times:
+				set {_id} to loop-number
+				set {_i} to SCP914_YMLGetValue(loop-number,"itemtype")
+				set {_n} to SCP914_YMLGetValue(loop-number,"name")
+				if {_n} is not "<none>":
+					format gui slot (loop-number + 8) with {_i} parsed as item with itemflag hide attributes named {_n} with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴄᴏɴꜰɪɢᴜʀᴇ ᴛʀᴀɴѕꜰᴏʀᴍᴀᴛɪᴏɴѕ":
+						SCP914_YMLValue({_oid},"upgrades.%{_u}%.item%{_type}%","%{_id}%")
+						save yaml "item-%{_oid}%"
+						SCP914_ItemConfig({_p}, {_oid})
+				else:
+					format gui slot (loop-number + 8) with {_i} parsed as item with itemflag hide attributes with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴄᴏɴꜰɪɢᴜʀᴇ ᴛʀᴀɴѕꜰᴏʀᴍᴀᴛɪᴏɴѕ":
+						SCP914_YMLValue({_oid},"upgrades.%{_u}%.item%{_type}%","%{_id}%")
+						save yaml "item-%{_oid}%"
+						SCP914_ItemConfig({_p}, {_oid})
+		open last gui to {_p}
+
+# Function used to select the item you would like to edit
 local function SCP914_ItemMenu(p:player):
 	if {_p} is op:
 		create a gui with virtual chest inventory with 6 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
 			loop (9*6) times:
 				format gui slot (loop-number - 1) with black stained glass pane named "&7"
+			format gui slot 0 with barrier named "&cBack" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ɢᴏ ʙᴀᴄᴋ":
+				SCP914_AdminMenu(player)
+			format gui slot 1 with netherite upgrade smithing template with itemflag hide potion effects named "&aAdd item" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴀᴅᴅ ᴀɴ ɪᴛᴇᴍ ᴛᴏ ᴛʜᴇ ᴄᴏɴꜰɪɢ:":
+				SCP914_AddItem({_p},false,{_emptyint},{_emptyitem})
 			if {914items::amount} >= 36:
 				set {_amount} to 36
 			else:
@@ -76,6 +136,43 @@ local function SCP914_ItemMenu(p:player):
 					format gui slot (loop-number + 8) with {_i} parsed as item with itemflag hide attributes with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴄᴏɴꜰɪɢᴜʀᴇ ᴛʀᴀɴѕꜰᴏʀᴍᴀᴛɪᴏɴѕ":
 						SCP914_ItemConfig({_p},{_id})
 		open last gui to {_p}
+	
+local function SCP914_AddItem(p:player,b:boolean,id:int,i:item):
+	if {_i} is not set:
+		wait 1 tick
+		create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
+			loop (9*3) times:
+				format gui slot (loop-number - 1) with black stained glass pane named "&7"
+				SCP914_ItemMenu({_p})
+			make gui slot 13 with lime stained glass pane named "&aPlease select an item" with lore "&7ᴘʟᴇᴀѕᴇ ᴄʟɪᴄᴋ ʏᴏᴜʀ ɪᴛᴇᴍ ʙᴇꜰᴏʀᴇ ᴄᴏɴᴛɪɴᴜɪɴɢ"
+		open the last gui for {_p}
+		wait 1 tick
+		set (metadata tag "914item_select" of {_p}) to true
+		if {_id} exists:
+			set (metadata tag "914item_select_id" of {_p}) to {_id}
+	else:
+		delete (metadata tag "914item_select" of {_p})
+		delete (metadata tag "914item_select_id" of {_p})
+		create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8| &cᴀᴅᴍɪɴ ᴍᴇɴᴜ":
+			loop (9*3) times:
+				format gui slot (loop-number - 1) with black stained glass pane named "&7"
+			make gui slot 11 with red stained glass pane named "&cCancel" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ɢᴏ ʙᴀᴄᴋ":
+				SCP914_ItemMenu({_p})
+			make gui slot 13 with {_i}
+			make gui slot 15 with lime stained glass pane named "&aConfirm" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴀᴅᴅ ɪᴛᴇᴍ":
+				if {_id} exists:
+					set {914items::items::%{_id}%} to {_i}
+					set {_name} to name of {_i}
+					set {_itemtype} to "%{_i}'s type%"
+					SCP914_YMLValue({_id},"name",{_name})
+					SCP914_YMLValue({_id},"itemtype",{_itemtype})
+					save yaml "item-%{_id}%"
+					SCP914_ItemConfig({_p},{_id})
+				else:
+					SCP914_ItemCreate({_p},{_i})
+					wait 1 tick
+					SCP914_ItemConfig({_p},{914items::amount})
+		open the last gui for {_p}
 	
 command /914adminmenu:
 	permission: op
@@ -106,6 +203,14 @@ function SCP914_Menu(p:player):
 		format gui slot 14 with yellow concrete named "&eFine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
 		format gui slot 16 with lime concrete named "&aVery Fine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
 	open the last gui for {_p}
+
+on inventory click:
+	if (metadata tag "914item_select" of player) is true:
+		if (metadata tag "914item_select_id" of player) exists:
+			SCP914_AddItem(player,true,(metadata tag "914item_select_id" of player),event-item)
+		else:
+			SCP914_AddItem(player,false,{_emptyint},event-item)
+		
 	
 on right click:
 	set {_nbt} to nbt compound of event-block
@@ -117,3 +222,9 @@ command /914setbutton:
 	trigger:
 		set {_nbt} to nbt compound of player's target block
 		set int tag "Is914button" of {_nbt} to 1
+		
+on inventory close:
+	if (metadata tag "914item_select" of player) exists:
+		delete (metadata tag "914item_select" of player)
+	if (metadata tag "914item_select_id" of player) exists:
+		delete (metadata tag "914item_select_id" of player)
