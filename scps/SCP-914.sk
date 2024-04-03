@@ -188,16 +188,94 @@ local function SCP914_AdminMenu(p:player):
 		kick {_p}
 
 local function SCP914_Menu(p:player):
-	create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8|" and shape "=========", "=r=oey=l=", and "=========":
-		format gui slot "=" with black stained glass pane named "&7"
-		format gui slot 10 with red concrete named "&cRough" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
-		format gui slot 12 with orange concrete named "&6Coarse" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
-		format gui slot 13 with ender eye named "&aActivate SCP-914" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴀᴄᴛɪᴠᴀᴛᴇ"
-		format gui slot 14 with yellow concrete named "&eFine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
-		format gui slot 16 with lime concrete named "&aVery Fine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ"
+	create a gui with virtual chest inventory with 3 rows named "&1SCP-914 &8|":
+		loop (9*3) times:
+			format gui slot (loop-number - 1) with black stained glass pane named "&7"
+		format gui slot 10 with ender eye named "&aActivate SCP-914" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴀᴄᴛɪᴠᴀᴛᴇ":
+			SCP914_Activate()
+			close {_p}'s inventory
+		format gui slot 12 with red concrete named "&cRough" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ":
+			set {scp914::setting} to 1
+			set line 3 of {scp914::sign} to "&cRough"
+			close {_p}'s inventory
+			play sound "block.iron_trapdoor.open" with volume 10 and pitch 0 to {_p}
+		format gui slot 13 with orange concrete named "&6Coarse" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ":
+			set {scp914::setting} to 2
+			set line 3 of {scp914::sign} to "&6Coarse"
+			close {_p}'s inventory
+			play sound "block.iron_trapdoor.open" with volume 10 and pitch 0 to {_p}
+		format gui slot 14 with yellow concrete named "&e1:1" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ":
+			set {scp914::setting} to 3
+			set line 3 of {scp914::sign} to "&e1:1"
+			close {_p}'s inventory
+			play sound "block.iron_trapdoor.open" with volume 10 and pitch 0 to {_p}
+		format gui slot 15 with lime concrete named "&aFine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ":
+			set {scp914::setting} to 4
+			set line 3 of {scp914::sign} to "&aFine"
+			close {_p}'s inventory
+			play sound "block.iron_trapdoor.open" with volume 10 and pitch 0 to {_p}
+		format gui slot 16 with light blue concrete named "&bVery Fine" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ѕᴀᴠᴇ ѕᴇᴛᴛɪɴɢ":
+			set {scp914::setting} to 5
+			play sound "block.iron_trapdoor.open" with volume 10 and pitch 0 to {_p}
+			set line 3 of {scp914::sign} to "&bVery Fine"
+			close {_p}'s inventory
 	open the last gui for {_p}
-
+	
+function SCP914_GetItem(i:item) :: item:
+	loop {914items::items::*}:
+		if loop-value is {_i}:
+			set {_id} to loop-index parsed as int
+	set {_i2::item1} to SCP914_YMLGetValue({_id},"upgrades.%{scp914::setting}%.item1")
+	set {_i2::chance} to SCP914_YMLGetValue({_id},"upgrades.%{scp914::setting}%.chance")
+	if {_i2::chance} parsed as int is not 100:
+		set {_i2::item2} to SCP914_YMLGetValue({_id},"upgrades.%{scp914::setting}%.item2")
+	chance of {_i2::chance} parsed as int%:
+		return {914items::items::%{_i2::item1}%}
+	else:
+		return {914items::items::%{_i2::item2}%}
+	
+	
+function SCP914_Activate():
+	set {_loc} to location of {scp914::sign}
+	play sound "item.axe.scrape" with pitch 0 at {_loc}
+	wait 2 seconds
+	play sound "block.iron_door.close" with pitch 0.6 at {_loc}
+	# CLOSE DOORS
+	close {scp914::doors::*}
+	wait 1.5 seconds
+	play sound "entity.minecart.inside" with pitch 0 at {_loc}
+	loop 23 times:
+		chance of 50%:
+			play sound "block.iron_door.close" with pitch 0 at {_loc}
+		else:
+			play sound "block.iron_door.open" with pitch 0 at {_loc}
+		wait 0.5 seconds
+	loop all players:
+		if "%regions at loop-player%" contains "914-1":
+			if {914items::items::*} contains 1 of loop-player's tool:
+				set {_item} to SCP914_GetItem(1 of loop-player's tool)
+				set loop-player's tool's item amount to loop-player's tool's item amount - 1
+				give {_item} to loop-player
+			teleport loop-player to location 9 blocks west of loop-player's location
+	loop all item entities:
+		if "%regions at loop-entity%" contains "914-1":
+			if {914items::items::*} contains 1 of loop-entity's item:
+				set {_item} to SCP914_GetItem(1 of loop-entity's item)
+				set loop-entity's item to {_item}
+				teleport loop-entity to location 9 blocks west of loop-entity's location
+	play sound "block.fire.extinguish" with pitch 0 at {_loc}
+	wait 2 seconds
+	play sound "block.note_block.chime" at {_loc}
+	wait 0.5 seconds
+	play sound "block.iron_door.open" with pitch 0.6 at {_loc}
+	open {scp914::doors::*}
+				
 # Commands
+
+command /914activate:
+	permission: op
+	trigger:
+		SCP914_Activate()
 
 command /914adminmenu:
 	permission: op
@@ -239,8 +317,17 @@ on chat:
 				SCP914_YMLValue((metadata tag "914chanceid" of player),"upgrades.%(metadata tag "914chanceup" of player)%.chance","%message parsed as int%")
 				save yaml "item-%(metadata tag "914chanceid" of player)%"
 				SCP914_ItemConfig(player,(metadata tag "914chanceid" of player))
-				broadcast "%(metadata tag "914chanceid" of player)%"
-				broadcast "%(metadata tag "914chanceup" of player)%"
+		cancel event
 		delete (metadata tag "914chance" of player)
 		delete (metadata tag "914chanceid" of player)
 		delete (metadata tag "914chanceup" of player)
+		
+on load:
+	open {scp914::doors::*}
+	set {_id} to 0
+	loop {914items::amount} times:
+		set {_id} to loop-number
+		load yaml "plugins/Skript/yaml/scp914items/item-%{_id}%" as "item-%{_id}%"
+		loop all players:
+			if loop-player is op:
+				send "&7[&aSCP-914&7] | &fLoaded YAML item-%{_id}%" to loop-player
