@@ -1,0 +1,93 @@
+on load:
+	load yaml "plugins/Skript/yaml/items.yml" as "itemlist"
+	if {delete.items} is true: # DO NOT DO THIS!!!!!!!!!!!!!!!!!!!!!!!!!! TESTING PURPOSE ONLY
+		delete yaml "itemlist"
+		delete {delete.items}
+		wait 10 ticks
+		reload skript "core/itemlog.sk"
+
+command /itemlog [<text>] [<number>]:
+	aliases: il, iteml, ilog
+	permission: op
+	trigger:
+		if arg-1 is not set:
+			openGuiItemLog(player,1)
+		else if arg-1 is "save":
+			if player's tool is not air:
+				saveItemlogItem(player's tool)
+				message ""
+				set player's tool to returnItemlogItem(size of yaml node keys "items" from "itemlist")
+			else:
+				message ""
+		else if arg-1 is "edit":
+			if arg-2 is set:
+				if player's tool is not air:
+					editItemlogItem(player's tool,arg-2)
+					message ""
+				else:
+					message ""
+			else:
+				message ""
+		else:
+			message ""
+
+on tab complete of "itemlog", "il", "ilog" or "iteml":
+    set tab completions for position 1 to "save" and "edit"
+    set tab completion for position 2 to "<ID ex: 1>" if tab arg 1 is "edit"
+
+function openGuiItemLog(1: player,2: number):
+	set {_3} to ({_2} - 1)
+	create a gui with virtual chest inventory with 5 rows named "&6%font("Item log")% &8| &9%font("Page")% %{_2}%":
+		format gui slot (numbers from 36 to 45) with black stained glass pane named "&8"
+		format gui slot (numbers from 0 to 35) with stone button named "&f%font("Item not detected.")%"
+		format gui slot 44 with spectral arrow named "&c%font("Next Page")%":
+			openGuiItemLog({_1},({_2} + 1))
+		if {_2} is not 1:
+			format gui slot 36 with spectral arrow named "&c%font("Previous Page")%":
+				openGuiItemLog({_1},({_2} - 1))
+		loop 36 times:
+			set {_a} to loop-value
+			format gui slot (loop-value - 1) with returnItemlogItem(loop-value + (36 * {_3})) with lore (lore of returnItemlogItem(loop-value + (36 * {_3})) ? "") and "%nl%&f%font("Item Information")%%nl%&9 (ID: %(loop-value + (36 * {_3}))%)%nl%&9 %font("click to take item.")%" with all flags hidden:
+				give {_1} returnItemlogItem({_a} + (36 * {_3}))
+				message "you have been given a %(uncolored name of returnItemlogItem({_a} + (36 * {_3}))) ? (returnItemlogItem({_a} + (36 * {_3})))%"
+	open last created gui to {_1}
+
+function returnItemlogItem(id: number) :: item:
+	set {_i} to yaml value "items.%{_id}%" from "itemlist"
+	if {_i} is set:
+		return item from nbt {_i} with all flags hidden
+	else:
+		return {_none}
+
+function returnItemlogID(i: item) :: number:
+	return 0 if {_i} is air
+	return int tag "tag;itemlog" of full nbt compound of {_i}
+
+function checkItemlogItem(i: item) :: boolean:
+	set {_il} to yaml value "items.%returnItemlogID({_i})%" from "itemlist"
+	if full nbt compound of {_i} is full nbt compound of {_il}:
+		return true
+	else:
+		return false
+
+function replaceItemlogItem(i: inventory,s: number):
+	returnItemlogID(slot {_s} of {_i}) is not 0
+	checkItemlogItem(slot {_s} of {_i}) is false
+	set slot {_s} of {_i} to (item amount of slot {_s} of {_i}) of returnItemlogItem(returnItemlogID(slot {_s} of {_i}))
+
+function saveItemlogItem(i: item):
+	set {_s} to (size of yaml node keys "items" from "itemlist" + 1)
+	set {_compound} to full nbt compound of {_i}
+	set tag "tag;itemlog" of {_compound} to {_s}
+	set int tag "Count" of {_compound} to 1
+	set yaml value "items.%{_s}%" from "itemlist" to {_compound}
+	save yaml "itemlist"
+	load yaml "plugins/Skript/yaml/items.yml" as "itemlist"
+
+function editItemlogItem(i: item,id: number):
+	set {_compound} to full nbt compound of {_i}
+	set tag "tag;itemlog" of {_compound} to {_s}
+	set int tag "Count" of {_compound} to 1
+	set yaml value "items.%{_id}%" from "itemlist" to {_compound}
+	save yaml "itemlist"
+	load yaml "plugins/Skript/yaml/items.yml" as "itemlist"
