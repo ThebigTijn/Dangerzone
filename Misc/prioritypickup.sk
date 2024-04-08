@@ -1,0 +1,27 @@
+local function addAttacker(p:player,pl:player):
+    set {_u} to (uuid of {_p})
+    add (uuid of {_pl}) to {-attackers.%{_u}%::*}
+    set {-hits.%uuid of {_pl}%.%{_u}%} to 1
+
+local function removeAttacker(p:player):
+    set {_u} to (uuid of {_p})
+    loop {-attackers.%{_u}%::*}:
+        delete {-hits.%loop-value%.%{_u}%}
+    delete {-attackers.%{_u}%::*}
+
+local function getHits(p:player):
+    set {_u} to (uuid of {_p})
+    loop {-attackers.%{_u}%::*}:
+        add {-hits.%loop-value%.%{_u}%} to {_nums::*}
+
+local function getHighestHits(p:player):
+    getHits({_p})
+    set {_highest} to max({_nums::*})
+    set {_u} to (uuid of {_p})
+    loop {-attackers.%{_u}%::*}:
+        {-hits.%loop-value%.%{_u}%} = {_highest}
+        set {_pl} to loop-value
+        exit loop
+    set (string tag "priority-%uuid of {_p}%" of nbt compound from {_pl}) to "true"
+    removeAttacker({_p})
+
