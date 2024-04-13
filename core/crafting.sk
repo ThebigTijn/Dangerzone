@@ -1,0 +1,32 @@
+on load:
+    load yaml "plugins/Skript/yaml/crafting.yml" as "crafting"
+
+local function returnlist(list:string) :: string:
+    return yaml list "%{_list}%" from "crafting"
+
+function craftingTable(p:player,page:int):
+    set {_minIndex} to (({_page}*28)-28)+1
+    set {_maxIndex} to ({_page}*28)
+    set {_items::*} to (all yaml nodes from "crafting")
+    set {_list::*} to (elements from {_minIndex} to {_maxIndex} of {_items::*})
+    set {_g} to chest inventory with 6 rows named "crafting bench"
+    set (metadata tag "crafting" of {_p}) to {_g}
+    formatGUI({_p},"crafting")
+    set slot 49 of {_g} to green dye named "information"
+    set slot 48 of {_g} to arrow named "previous" if {_page} > 1
+    set slot 50 of {_g} to arrow named "next" if {_list::%{_maxIndex}+1%} is set
+    set {_n} to 10
+    set {_n2} to {_n}
+    loop {_list::*}:
+        if {_n} = ({_n2}+7):
+            add 2 to {_n}
+            set {_n2} to {_n}
+        set slot {_n} of {_g} to loop-value
+        add 1 to {_n}
+    open {_g} to {_p}
+
+local function craftItem(i:item) :: item:
+    set {_name} to (name of {_i})
+    set {_list::*} to returnList({_name})
+    {_list::*} contains (inventory of {_p})
+    return {_i} with name {_name} with lore "", "crafted" and ""

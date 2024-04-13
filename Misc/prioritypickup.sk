@@ -1,7 +1,5 @@
 local function addAttacker(p:player,pl:player):
-    set {_u} to (uuid of {_p})
-    add (uuid of {_pl}) to {-attackers.%{_u}%::*}
-    set {-hits.%uuid of {_pl}%.%{_u}%} to 1
+    add (uuid of {_pl}) to {-attackers.%uuid of {_p}%::*}
 
 local function removeAttacker(p:player):
     set {_u} to (uuid of {_p})
@@ -25,3 +23,13 @@ local function getHighestHits(p:player):
     set (string tag "priority-%uuid of {_p}%" of nbt compound from {_pl}) to "true"
     removeAttacker({_p})
 
+local function priority(p:player):
+    
+
+on damage:
+    if {-attackers.%uuid of victim%::*} does not contain (uuid of attacker):
+        addAttacker(victim,attacker)
+    add 1 to {-hits.%uuid of attacker%.%uuid of victim%}
+
+on death:
+    getHighestHits(victim)
