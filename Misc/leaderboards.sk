@@ -1,0 +1,12 @@
+function getTop():
+    loop all offlineplayers:
+        set {_balance::%uuid of loop-value%} to currencyGet(loop-value,"credits")
+    set {_sortedBalance::*} to sorted indices of {_balance::*} in descending order
+    loop {_sortedBalance::*}:
+        if {_n} >= 10:
+            stop
+        add 1 to {_n}
+        set {_u} to {_sortedBalance::%{_n}%}
+        set {_p} to {_u} parsed as offlineplayer
+        set {_balance} to {_balance::%{_u}%}
+        send "&f##%{_n}% %{_p}%: &a$%{_balance}%" to all players

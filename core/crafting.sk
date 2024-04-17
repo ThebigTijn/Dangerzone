@@ -1,32 +1,41 @@
 on load:
-    load yaml "plugins/Skript/yaml/crafting.yml" as "crafting"
+    load yaml "plugins/Skript/yaml/crafting/crafting.yml" as "crafting"
 
-local function returnlist(list:string) :: string:
-    return yaml list "%{_list}%" from "crafting"
+local function returnData(data:string) :: items:
+    return yaml list "%{_data}%" from "crafting"
+
+local function returnRequired(node:string) :: items:
+    add returnData("%{_node}%.required") to {_items::*}
+    return {_items::*}
+
+local function craftItem(i:item) :: item:
+    add "crafted" to lore of {_i}
+    return {_i}
 
 function craftingTable(p:player,page:int):
     set {_minIndex} to (({_page}*28)-28)+1
     set {_maxIndex} to ({_page}*28)
-    set {_items::*} to (all yaml nodes from "crafting")
+    loop (all yaml nodes from "crafting"):
+        add returnData("%loop-value%.item") to {_items::*}
     set {_list::*} to (elements from {_minIndex} to {_maxIndex} of {_items::*})
-    set {_g} to chest inventory with 6 rows named "crafting bench"
-    set (metadata tag "crafting" of {_p}) to {_g}
-    formatGUI({_p},"crafting")
-    set slot 49 of {_g} to green dye named "information"
-    set slot 48 of {_g} to arrow named "previous" if {_page} > 1
-    set slot 50 of {_g} to arrow named "next" if {_list::%{_maxIndex}+1%} is set
-    set {_n} to 10
-    set {_n2} to {_n}
-    loop {_list::*}:
-        if {_n} = ({_n2}+7):
-            add 2 to {_n}
-            set {_n2} to {_n}
-        set slot {_n} of {_g} to loop-value
-        add 1 to {_n}
-    open {_g} to {_p}
-
-local function craftItem(i:item) :: item:
-    set {_name} to (name of {_i})
-    set {_list::*} to returnList({_name})
-    {_list::*} contains (inventory of {_p})
-    return {_i} with name {_name} with lore "", "crafted" and ""
+    create a gui with virtual chest inventory with 6 rows named "Crafting Table":
+        set {_pane} to black stained glass pane named " "
+        loop 2 times:
+            format gui slot {_n} with {_pane}
+            add 45 to {_n}
+        set {_n} to 9
+        loop 4 times:
+            format gui slot {_n} with {_pane}
+            add 9 to {_n}
+        format gui slot 49 with green dye named "Information"
+        if {_page} > 1:
+            format gui slot 50 with arrow named "Previous":
+                craftingTable({_p},{_page}-1)
+        if {_list::%{_maxIndex}+1%} is set:
+            format gui slot 50 with arrow named "Next":
+                craftingTable({_p},{_page}+1)
+        loop {_list::*}:
+            format next gui slot with loop-value:
+                {_p} has returnRequired(name of gui clicked item)
+                craftItem(gui clicked item)
+        open gui to {_p}
