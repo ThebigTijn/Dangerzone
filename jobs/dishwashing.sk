@@ -1,0 +1,46 @@
+on load:
+    load yaml "plugins/Skript/yaml/jobs/dishwashing.yml" as "dishwashing"
+
+local function rData(data:string) :: object:
+    return yaml value "%{_data}%" from "dishwashing"
+
+local function getItem(s:string) :: item:
+    set {_n} to rData("%{_s}%.item")
+    set {_i} to rData("%{_s}%.name")
+    set {_i1} to {_i} named {_n} with nbt from "{AttributeModifiers:[{AttributeName:""generic.attack_damage"",Name:""generic.attack_damage"",Amount:0,Operation:0,UUID:[I;549828122,1243172269,-1420982898,-1929562899]}]}"
+    set {_i1} to {_i1} with hide all itemflags
+    set (int tag "dish" of nbt compound from {_i1}) to 1
+    return {_i}
+
+local function receiveItem(p:player):
+    loop all items in (inventory of {_p}) where [(string tag "dish" of nbt of input) = 1,2, or 3]:
+        add 1 to {_n}
+        {_n} >= 4
+        send "" to {_p}
+        stop
+    set {_temp} to random element out of (yaml node keys "" from "dishwashing")
+    give {_p} getItem({_temp})
+    play sound "item.armor.equip_generic" with volume 10 and pitch 1 to {_p}
+
+local function washItem(p:player):
+    set {_i} to (1 of tool of {_p})
+    (int tag "dish" of nbt of {_i}) = 1
+    remove {_i} from {_p}
+    loop 4 times:
+        send action bar "" to {_p}
+        play sound "" for {_p}
+        wait a second
+    set (int tag "dish" of nbt of {_i}) to 2
+    set name of {_i} to "&f(Clean) &r%name of {_i}%"
+    give {_p} {_i}
+    send action bar "" to {_p}
+
+on right click:
+    event-block is set
+    receiveItem(player) if (string tag "custom;dw-receive" of nbt of event-block) = "true"
+    washItem(player) if (string tag "custom;dw-wash" of nbt of event-block) = "true"
+    #sell product
+
+on drop:
+    (string tag "dish" of nbt of event-item) = any number
+    remove event-item from player

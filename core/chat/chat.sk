@@ -1,62 +1,19 @@
-function chatReplace(p: player, msg: string, cause: string) :: string:
-	replace all "&" in {_msg} with ""
-	replace all "<" in {_msg} with ""
-	set {_colorB} to "&f" if {_p} has permission "dangerzone.whitechat"
-	if {_msg} contains "[item]":
-		set {_count} to item amount of {_p}'s held item
-		loop lore of {_p}'s held item:
-			set {_lore} to loop-value if {_lore} is not set, else ("%{_lore}%%nl%%loop-value%")
-		if line 1 of lore of {_p}'s tool is set:
-			replace all "[item]" in {_msg} with formatted "&8[<tooltip:&e%name of {_p}'s tool ? type of {_p}'s tool% &8(&f%{_count}%x&8)%nl%%{_lore}%>&f%{_count}%x %name of {_p}'s tool ? type of {_p}'s tool%&8]%{_colorB} ? "&7"%"
-		else:
-			replace all "[item]" in {_msg} with formatted "&8[<tooltip:&e%name of {_p}'s tool ? type of {_p}'s tool% &8(&f%{_count}%x&8)%nl%&7ɴᴏ ʟᴏʀᴇ ғᴏᴜɴᴅ.>&f%{_count}%x %name of {_p}'s tool ? type of {_p}'s tool%&8]%{_colorB} ? "&7"%"
-	set {_online::*} to all players
-	loop {_online::*}:
-		{_msg} contains "%loop-value%"
-		set {_ping} to "%loop-value%" parsed as player
-		set {_u} to uuid of {_ping}
-		(metadata tag "Vanish_Active" of {_p}) = false
-		replace all "%loop-value%" in {_msg} with formatted "<##848dd9>&n@%{_ping}%%{_colorB} ? "&7"%"
-		if {_cause} is not "chat":
-			{_ping} has permission "dangerzone.radio.%{_cause}%"
-			set {_sound} to true
-		if (metadata tag "Chat_Spy" of {_p}) is set:
-			set {_sound} to true
-		else:
-			distance between {_p} and {_ping} < 16
-			set {_sound} to true
-		{_sound} is set
-		play sound "BLOCK_NOTE_BLOCK_PLING" at pitch 0.8 to {_ping}
-	return {_msg}
-
 on chat:
-	event is not canceled
-	cancel event
-	if {~IsDoingFunny261::%player's uuid%::timer} is set:
-		send "test"
-		stop
-	if {-lockchat} = true:
-		player does not have permission "dangerzone.chatbypass"
-		play sound "block.note_block.pling" to player
-		send "&c| &7Chat is currently locked!"
-		stop
-	loop {filter::*}:
-		message partially matches "%loop-value%"
-		log "%time%: %player% said %message%" to "filter.log"
-	set {_msg} to message
-	if metadata tag "toggle" of player is set:
-		set {_radio} to metadata tag "toggle" of player
-		Radio(player, {_radio}, {_msg})
-		stop
-	set {_msg} to chatReplace(player, {_msg}, "chat")
-	set {_color} to "&f" if player has permission "dangerzone.whitechat"
-	if length of player's suffix > 0:
-		set {_format} to "&7 %player's prefix% &8| &f%player's displayname% &8♯ %player's suffix% &8◇ %{_color} ? "&7"%%{_msg}%"
-	else:
-		set {_format} to "&7 %player's prefix% &8| &f%player's displayname% &8◇ %{_color} ? "&7"%%{_msg}%"
-	send formatted "%{_format}%" to all players in radius 20 around player
-	set {_recipients::*} to all players in radius 20 around player
-	loop (all players where [input has permission "skript.chatspy"]):
-		{_recipients::*} does not contain loop-value
-		send formatted "&csᴘʏ &8>> %{_format}%" to loop-player
-	send formatted "%{_format}%" to console
+    cancel event
+    if {-lockchat} = true:
+        send "" to player
+        stop
+    loop {filter::*}:
+        message partially matches "%loop-value%"
+        log "%time%: %player% said %message%" to "filter.log"
+        stop
+    if (string tag "custom;radio" of nbt of player) is set:
+        sendRadioMsg(player,message)
+        stop
+    chatSpy(player,message)
+
+local function chatSpy(p:player,msg:string):
+    set {_recipients::*} to all players in radius 15 around player
+    loop (all players where [input has permission "skript.chatspy"]):
+        {_recipients::*} does not contain loop-value
+        send formatted "%{_msg}%" to loop-value

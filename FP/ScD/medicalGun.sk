@@ -1,11 +1,10 @@
-function medicalGun(p:player):
+local function mGun(p:player):
     set {_i} to (tool of {_p})
-    (string tag "MedicalGun" of nbt compound from {_i}) = "true"
     item cooldown of {_i} for {_p} = 0 seconds
+    set {_t} to (target of {_p})
     loop all players in radius 8 of {_p}:
-        target of {_p} = loop-player
-        set {_pl} to target of {_p}
-        stop if group of {_pl} = "default" or "CI"
+        {_t} = loop-value
+        stop if (group of {_t}) = "default" or "ci"
         set {_v} to vector from {_p} to {_pl}
         set vector length of {_v} to 0.2
         heal loop-player by 0.5 hearts
@@ -18,4 +17,4 @@ function medicalGun(p:player):
 
 on right click:
     target of player is a player
-    medicalGun(player, location of player, target of player)
+    mGun(player)

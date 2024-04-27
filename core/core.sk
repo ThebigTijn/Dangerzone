@@ -1,6 +1,14 @@
 aliases:
 	stations = composter, loom, smoker, blast furnace, furnace, smithing table, stone cutter, cartography table, crafting table, brewing stand, cauldron, anvil, chipped anvil, damaged anvil, beacon, grindstone, end portal frame, enchantment table 
 
+on right click on stations:
+    (gamemode of player) != creative
+    cancel event
+
+on sign change:
+    (gamemode of player) != creative
+    cancel event
+
 on join:
 	set join message to ""
 	send "&8[&a✔&8] &7%player%" to all players
@@ -9,18 +17,6 @@ on join:
 on quit:
 	set quit message to ""
 	send "&8[&c✘&8] &7%player%" to all players where [input has permission "skript.viewleave"]
-	
-on right click on stations:
-	player's gamemode is not creative
-	cancel event
-
-on sign change:
-	player's gamemode != creative
-	cancel event
-
-command /shrug:
-	trigger:
-		make player send message "¯\_(ツ)_/¯"
 
 on join:
 	wait 4 ticks

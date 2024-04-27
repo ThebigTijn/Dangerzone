@@ -15,7 +15,6 @@ function combatSet(p:player):
         set (int tag "custom;combat" of nbt compound from {_p}) to (int tag "custom;combat" of nbt compound from {_p})-1
 
 on damage of player:
-    returnCombat(victim) = false
     event is not cancelled
     attacker is a player
     combatSet(victim)

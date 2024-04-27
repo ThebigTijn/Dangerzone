@@ -1,0 +1,21 @@
+local function chatClear():
+    loop 150 times:
+        send " " to all players
+        send " %nl%%nl% " to all players
+    send "&aChat has been cleared." to all players
+
+local function lockChat():
+    if {-lockchat} is not set:
+        set {-lockchat} to true
+        send "&cChat has been locked." to all players
+        stop
+    set {-lockchat} to false
+    send "&aChat has been unlocked." to all players
+
+local function chatSpy(p:player):
+    if (string tag "custom;chatspy" of nbt of {_p}) is not set:
+        set (string tag "custom;chatspy" of nbt of {_p}) to "true"
+        send "" to {_p}
+        stop
+    delete (string tag "custom;chatspy" of nbt of {_p})
+    send "" to {_p}

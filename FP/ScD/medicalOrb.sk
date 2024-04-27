@@ -1,0 +1,28 @@
+local function spawnOrb(p:player,i:item):
+    remove 1 of {_i} from {_p}
+    spawn item display at {_p}:
+        set display item of entity to {_i}
+        set display name of entity to (name of {_i})
+        set teleportation duration of entity to 15
+        set {_e} to entity
+    set {_l} to location 1 block above (target block of {_p})
+    teleport {_e} to {_l}
+    while {_e} is alive:
+        location of {_e} = {_l}
+        set {_nbt} to (int tag "custom;orbTime" of nbt of {_p})
+        if {_nbt} <= 0:
+            delete (int tag "custom;orbTime" of nbt of {_p})
+            kill {_e}
+        set (int tag "custom;orbTime" of nbt of {_p}) to ({_nbt} ? 10)-1
+        loop all players in radius 4 around {_l}:
+            (group of loop-value) = #get faction
+            add 0.5 to health of loop-value
+        wait a second
+
+on right click:
+    (string tag "medicalOrb" of nbt of event-item) = "true"
+    event-block is set
+    if (int tag "custom;orbTime" of nbt of player) is set:
+        send action bar "" to player
+        stop
+    spawnOrb(player,event-item)
