@@ -1,12 +1,21 @@
-function getTop():
+on load:
+    load yaml "plugins/Skript/yaml/leaderboard.yml" as "top"
+
+function getTop(type:string):
     loop all offlineplayers:
-        set {_balance::%uuid of loop-value%} to currencyGet(loop-value,"credits")
+        set {_balance::%uuid of loop-value%} to currencyGet(loop-value,"%{_type}%")
     set {_sortedBalance::*} to sorted indices of {_balance::*} in descending order
     loop {_sortedBalance::*}:
-        if {_n} >= 10:
-            stop
+        exit loop if {_n} >= 10
         add 1 to {_n}
         set {_u} to {_sortedBalance::%{_n}%}
         set {_p} to {_u} parsed as offlineplayer
         set {_balance} to {_balance::%{_u}%}
-        send "&f##%{_n}% %{_p}%: &a$%{_balance}%" to all players
+        set yaml value "%{_type}%.%{_n}%" from "top" to uuid of {_p}
+    save yaml "top"
+
+local function onLeaderboard(type:string,p:player) :: boolean:
+    set {_yaml::*} to all yaml nodes from "top"
+    return true if {_yaml::*} contains uuid of {_p} else false
+
+

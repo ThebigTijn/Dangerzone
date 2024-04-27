@@ -19,9 +19,9 @@ local function getHighestHits(p:player):
     loop {-attackers.%{_u}%::*}:
         {-hits.%loop-value%.%{_u}%} = {_highest}
         set {_pl} to loop-value
-        exit loop
-    set (string tag "priority-%uuid of {_p}%" of nbt compound from {_pl}) to "true"
-    removeAttacker({_p})
+        set (string tag "priority-%uuid of {_p}%" of nbt compound from {_pl}) to "true"
+        removeAttacker({_p})
+        stop
 
 local function priority(p:player):
     
