@@ -85,7 +85,8 @@ function Kit(p: player, kit: string):
 		send " &eKits &8» &fKit &e%uncolored {_kit} in proper case% &fdoes not exist" to {_p}
 		stop
 	loop indices of {kits::%{_id}%::contents::*}:
-		add {kits::%{_id}%::contents::%loop-value%} to {_items::*}
+		add {kits::%{_id}%::contents::%loop-value%} to {_items::*} if checkItemlogItem({kits::%{_id}%::contents::%loop-value%}) is true
+		add returnItemlogItem(returnItemlogID({kits::%{_id}%::contents::%loop-value%})) to {_items::*} if checkItemlogItem({kits::%{_id}%::contents::%loop-value%}) is false
 	add 0 to {_slots::*} if slot 0 of {_p}'s inventory is air
 	loop 35 times:
 		set {_item} to slot loop-value of {_p}'s inventory

@@ -64,6 +64,7 @@ function returnItemlogID(i: item) :: number:
 	return int tag "tag;itemlog" of full nbt compound of {_i}
 
 function checkItemlogItem(i: item) :: boolean:
+	return true if returnItemlogID({_i}) is not set
 	set {_il} to yaml value "items.%returnItemlogID({_i})%" from "itemlist"
 	if full nbt compound of {_i} is full nbt compound of {_il}:
 		return true
