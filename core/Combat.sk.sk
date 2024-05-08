@@ -1,4 +1,4 @@
-local function returnCombat(p:player) :: boolean:
+function returnCombat(p:player) :: boolean:
     return true if (int tag "custom;combat" of nbt compound from {_p}) is set else false
 
 function combatRemove(p:player):

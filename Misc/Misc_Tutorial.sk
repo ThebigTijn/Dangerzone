@@ -1,5 +1,8 @@
 on load:
 	load yaml "plugins/Skript/yaml/tutorial/lines.yml" as "lines"
+	set {stop} to true
+	wait 10 ticks
+	set {stop} to false
 
 command /tuttool:
 	permission: op
@@ -49,9 +52,10 @@ function linesShow(p: players):
 		set {_l1} to yaml value "%loop-value%.1" from "lines"
 		set {_l2} to yaml value "%loop-value%.2" from "lines"
 		lineShow({_p::*},{_l1},{_l2})
-		wait 10 ticks
-	if {offswitch} = true:
-		stop
+		wait 5 ticks
+		if {stop} = true:
+			stop loop
+			stop
 	linesShow(all players)
 
 function lineShow(p: players,l1: location,l2: location):
@@ -61,8 +65,17 @@ function lineShow(p: players,l1: location,l2: location):
 	loop (distance between {_l} and {_l2}) / 0.1 times:
 		draw 1 dust_color_transition using dustTransition(orange, red, 1) at {_l} with force for {_p::*}
 		set {_l} to {_l} ~ {_v}
+		wait 10 ticks
+		if {stop} = true:
+			stop loop
 
 function rayTraceLoc(p: player, maxRange: number) :: location:
 	set {_ray} to ray trace from {_p} with max distance {_maxRange}
 	set {_hit} to raytrace hit location of {_ray}
 	return {_hit}
+
+#TEMP
+on rightclick on a player:
+	event-entity's name contains "K4relB"
+	message "&9NPC &7» &fgo to the other side!" to player
+	linesShow(all players)
