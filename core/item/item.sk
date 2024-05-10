@@ -3,8 +3,6 @@ on load:
 	if {delete.items} is true: # DO NOT DO THIS!!!!!!!!!!!!!!!!!!!!!!!!!! TESTING PURPOSE ONLY
 		delete yaml "itemlist"
 		delete {delete.items}
-		wait 10 ticks
-		reload skript "core/itemlog.sk"
 
 command /itemlog [<text>] [<number>]:
 	aliases: il, iteml, ilog
