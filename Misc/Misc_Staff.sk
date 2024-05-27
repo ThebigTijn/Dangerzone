@@ -44,12 +44,12 @@ command gmc [<offline player>]:
     trigger:
         if arg 1 is not set:
             set player's gamemode to creative
-            send "" to player
+            send "<##E34234>&lSYSTEM &7» &fYou have set your gamemode to &ccreative&f." to player
             stop
         if arg 1 is set:
             set arg-1's gamemode to creative
-            send "" to player
-            send "" to arg-1
+            send "<##E34234>&lSYSTEM &7» &fYou have set &3%arg-1%'s &fgamemode to &ccreative&f." to player
+            send "<##E34234>&lSYSTEM &7» &3%player% &fhas set your gamemode to &ccreative&f." to arg-1
             stop
 
 command gms [<offline player>]:
@@ -58,12 +58,12 @@ command gms [<offline player>]:
     trigger:
         if arg 1 is not set:
             set player's gamemode to survival
-            send "" to player
+            send "<##E34234>&lSYSTEM &7» &fYou have set your gamemode to &asurvival&f." to player
             stop
         if arg 1 is set:
             set arg-1's gamemode to survival
-            send "" to player
-            send "" to arg-1
+            send "<##E34234>&lSYSTEM &7» &fYou have set &3%arg-1%'s &fgamemode to &asurvival&f." to player
+            send "<##E34234>&lSYSTEM &7» &3%player% &fhas set your gamemode to &asurvival&f." to arg-1
             stop
 
 command gmsp [<offline player>]:
@@ -72,10 +72,10 @@ command gmsp [<offline player>]:
     trigger:
         if arg 1 is not set:
             set player's gamemode to spectator
-            send "" to player
+            send "<##E34234>&lSYSTEM &7» &fYou have set your gamemode to &espectator&f." to player
             stop
         if arg 1 is set:
             set arg-1's gamemode to spectator
-            send "" to player
-            send "" to arg-1
+            send "<##E34234>&lSYSTEM &7» &fYou have set &3%arg-1%'s &fgamemode to &espectator&f." to player
+            send "<##E34234>&lSYSTEM &7» &3%player% &fhas set your gamemode to &espectator&f." to arg-1
             stop
