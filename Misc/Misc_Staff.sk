@@ -36,3 +36,46 @@ on damage:
 
 on pickup:
     cancel event if (metadata tag "Vanish_Active" of player) = true
+
+
+command gmc [<offline player>]:
+    permission: op
+    permission message: error
+    trigger:
+        if arg 1 is not set:
+            set player's gamemode to creative
+            send "" to player
+            stop
+        if arg 1 is set:
+            set arg-1's gamemode to creative
+            send "" to player
+            send "" to arg-1
+            stop
+
+command gms [<offline player>]:
+    permission: op
+    permission message: error
+    trigger:
+        if arg 1 is not set:
+            set player's gamemode to survival
+            send "" to player
+            stop
+        if arg 1 is set:
+            set arg-1's gamemode to survival
+            send "" to player
+            send "" to arg-1
+            stop
+
+command gmsp [<offline player>]:
+    permission: op
+    permission message: error
+    trigger:
+        if arg 1 is not set:
+            set player's gamemode to spectator
+            send "" to player
+            stop
+        if arg 1 is set:
+            set arg-1's gamemode to spectator
+            send "" to player
+            send "" to arg-1
+            stop
