@@ -4,9 +4,9 @@ function dummyscp(p: player, l: location):
     set {_b} to last spawned entity
     while {_b} is alive:
         wait 1 second
-        if the distance between the {_b} and {_target} is smaller than 11:
+        if distance between {_b} and {_target} < 11:
             make {_b} pathfind to {_target}
-        if the distance between the {_b} and {_target} is bigger than 11:
+        if distance between {_b} and {_target} > 11:
             delete {_target}
             loop all players in radius 10 around {_b}:
                 if loop-player is set:
@@ -21,4 +21,4 @@ function dummyscp(p: player, l: location):
 on place:
     if name of player is "Rxpoff_":
         if event-block is soul torch:
-            add event-block's location to {dummy::*}
+            add event-block's location to {escapes::test::*}
