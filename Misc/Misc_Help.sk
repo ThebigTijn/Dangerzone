@@ -1,0 +1,76 @@
+command help [<player>]:
+    trigger:
+        if arg-1 is not set:
+            help(player)
+        if arg-1 is set:
+            player has permission "staff.use"
+            help(arg-1)
+
+
+function help(p: player):
+    if {_p} has permission "staff.use":
+        helpbook({_p}, "staff")
+        stop
+    if {_p}'s group = "default":
+        helpbook({_p}, "default")
+        stop
+    if {_p} has permission "spawn.ci":
+        helpbook({_p}, "ci")
+        stop
+    if {_p} has permission "spawn.goc":
+        helpbook({_p}, "goc")
+        stop
+    if {_p} has permission "spawn.sd":
+        helpbook({_p}, "sd")
+        stop
+    if {_p} has permission "spawn.mtf":
+        helpbook({_p}, "mtf")
+        stop
+    if {_p} has permission "spawn.isd":
+        helpbook({_p}, "isd")
+        stop
+    if {_p} has permission "spawn.scd":
+        helpbook({_p}, "scd")
+        stop
+
+
+function helpbook(p: player, t: text):
+    set {_help} to a written book
+
+    if {_t} = "staff":
+        set {_pg1} to text component of "           &6&lHELP"
+        set {_pg2} to text component of ""
+
+    if {_t} = "default":
+        set {_pg1} to text component of "           &e&lHELP"
+        set {_pg2} to text component of ""
+
+    if {_t} = "ci":
+        set {_pg1} to text component of "           &e&lHELP"
+        set {_pg2} to text component of ""
+
+    if {_t} = "goc":
+        set {_pg1} to text component of "           &e&lHELP"
+        set {_pg2} to text component of ""
+
+    if {_t} = "sd":
+        set {_pg1} to text component of "           &e&lHELP"
+        set {_pg2} to text component of ""
+
+    if {_t} = "mtf":
+        set {_pg1} to text component of "           &e&lHELP"
+        set {_pg2} to text component of ""
+
+    if {_t} = "isd":
+        set {_pg1} to text component of "           &e&lHELP"
+        set {_pg2} to text component of ""
+
+    if {_t} = "scd":
+        set {_pg1} to text component of "           &e&lHELP"
+        set {_pg2} to text component of ""
+    
+    set page 1 of book {_help} to {_pg1}
+    set page 2 of book {_help} to {_pg2}
+    set book author of {_help} to "<##E34234>&lDangerzone"
+    set book title of {_help} to "Help"
+    open book {_help} to {_p}
