@@ -79,3 +79,35 @@ command gmsp [<offline player>]:
             send "<##E34234>&lSYSTEM &7» &fYou have set &3%arg-1%'s &fgamemode to &espectator&f." to player
             send "<##E34234>&lSYSTEM &7» &3%player% &fhas set your gamemode to &espectator&f." to arg-1
             stop
+
+command walkspeed <string>:
+    permission: op
+    trigger:
+        if arg-1 = "reset":
+            reset player's walk speed
+            stop
+        set {_n} to arg-1 parsed as number
+        if {_n} is set:
+            set player's walk speed to {_n}
+            send "<##E34234>&lSYSTEM &7» &fSet your Walk Speed to &e%arg-1%" to player
+            stop
+        if {_n} is not set:
+            send "<##E34234>&lSYSTEM &7» &fYou must put in a &aNumber &for &cReset&f." to player
+
+
+command flyspeed <string>:
+    permission: op
+    trigger:
+        if arg-1 = "reset":
+            reset player's fly speed
+            stop
+        set {_n} to arg-1 parsed as number
+        if {_n} is set:
+            set player's fly speed to {_n}
+            send "<##E34234>&lSYSTEM &7» &fSet your Fly Speed to &e%arg-1%" to player
+            stop
+        if {_n} is not set:
+            send "<##E34234>&lSYSTEM &7» &fYou must put in a &aNumber &for &cReset&f." to player
+
+on tab complete of "/flyspeed" or "/walkspeed":
+    set tab completions for position 1 to "reset" and "<number>"
