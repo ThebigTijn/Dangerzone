@@ -15,9 +15,13 @@ function scp173(l: location):
                     set {_target} to loop-player
             
             if {_target} is not set:
-                if {_escape} is not set:
-                    set {_escape} to a random element of {escape::173::*}
-                make {_173} pathfind to {_escape} at speed 1
+                loop {escape::173::*}:
+                    set {_espdis::%loop-index%} to distance between {_173} and loop-value
+                set {_esp::*} to sorted {_espdis::*}
+                loop {_espdis::*}:
+                    if loop-value = {_esp::1}:
+                        set {_int} to loop-index
+                make {_173} pathfind to {escape::173::%{_int}%} at speed 1
 
 
 command 173:
