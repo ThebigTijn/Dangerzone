@@ -2,23 +2,27 @@ function dummyscp(p: player, l: location):
     spawn iron golem at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b}"
     nbtSet(last spawned entity, "pathfind", 1)
     set {_b} to last spawned entity
+    set {_target} to {_p}
     while {_b} is alive:
         wait 1 second
-        if distance between {_b} and {_target} < 11:
+        if distance between {_b} and {_target} < 10:
             make {_b} pathfind to {_target}
-        if distance between {_b} and {_target} > 11:
+        if distance between {_b} and {_target} ? 12 > 11:
             delete {_target}
             loop all players in radius 10 around {_b}:
                 if loop-player is set:
                     set {_target} to loop-player
-
+            
             if {_target} is not set:
-                if {_escape} is not set:
-                    set {_escape} to a random element of {escapes::test::*}
-                make {_b} pathfind to {_escape} at speed 1
+                loop {escapes::test::*}:
+                    set {_escapesize::%loop-index%} to distance between {_b} and {escapes::test::%loop-index%}
+                set {_escape::*} to sorted {_escapesize::*}
+                make {_b} pathfind to {_escape::1} at speed 1
 
 
-on place:
-    if name of player is "Rxpoff_":
-        if event-block is soul torch:
-            add event-block's location to {escapes::test::*}
+
+command test:
+    trigger:
+        loop all entities in radius 20 around player:
+            loop-entity is not a player
+            teleport loop-entity to player

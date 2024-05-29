@@ -1,0 +1,28 @@
+function scp173(l: location):
+    spawn iron golem at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b}"
+    apply invisibility without particles to last spawned entity for 1 year
+    nbtSet(last spawned entity, "173", 1)
+    set {_173} to last spawned entity
+    while {_173} is alive:
+        wait 1 tick
+        teleport {scp173vis::*} 1.65 blocks above {_173}
+        if distance between {_173} and {_target} < 10:
+            make {_173} pathfind to {_target}
+        if distance between {_173} and {_target} ? 12 > 11:
+            delete {_target}
+            loop all players in radius 10 around {_173}:
+                if loop-player is set:
+                    set {_target} to loop-player
+            
+            if {_target} is not set:
+                if {_escape} is not set:
+                    set {_escape} to a random element of {escape::173::*}
+                make {_173} pathfind to {_escape} at speed 1
+
+
+command 173:
+    trigger:
+        name of player is "Rxpoff_"
+        loop all entities in radius 10 of player:
+            loop-entity is not a player
+            add loop-entity to {scp173vis::*}
