@@ -8,7 +8,7 @@ function scoreboard(p: player):
     set line 14 of {_p}'s scoreboard to ""
     set line 13 of {_p}'s scoreboard to " &fYou &7&o(%{_p}%)"
     set line 12 of {_p}'s scoreboard to " <##B2BEB5>│ &f%font("rank")%: %prefix of {_p}%"
-    set line 11 of {_p}'s scoreboard to " <##B2BEB5>│ &f%font("level")%: &b%currencyGet({_p},"level")% &8[%textB({_xp},100,"┃┃┃┃┃┃┃┃┃┃","&a","&c")% &f%round({_xp}) ? 0%%%&8] "
+    set line 11 of {_p}'s scoreboard to " <##B2BEB5>│ &f%font("level")%: &b%currencyGet({_p},"level")% &8[%textB(10,{_xp},100)% &f%round({_xp}) ? 0%%%&8] "
     set line 10 of {_p}'s scoreboard to " <##B2BEB5>│ &f%font("credits")%: <##F5F5DC>¢%format(currencyGet({_p},"credits"))%"
     set line 9 of {_p}'s scoreboard to " <##B2BEB5>│ &fᴋɪʟʟѕ: &c%player kills stat of {_p}%"
     set line 7 of {_p}'s scoreboard to " <##B2BEB5>│ &fᴅᴇᴀᴛʜѕ: &4%deaths stat of {_p}%"
@@ -24,7 +24,7 @@ function updateScoreboard(p: player):
     set {_xp} to ({_xp} / {_n}) * 100
     set {_xp} to "&cᴍᴀx" if {_xp} > 100
     set line 12 of {_p}'s scoreboard to " <##B2BEB5>│ &f%font("rank")%: %prefix of {_p}%"
-    set line 11 of {_p}'s scoreboard to " <##B2BEB5>│ &f%font("level")%: &b%currencyGet({_p},"level")% &8[%textB({_xp},100,"┃┃┃┃┃┃┃┃┃┃","&a","&c")% &f%round({_xp}) ? 0%%%&8] "
+    set line 11 of {_p}'s scoreboard to " <##B2BEB5>│ &f%font("level")%: &b%currencyGet({_p},"level")% &8[%textB(10,{_xp},100)% &f%round({_xp}) ? 0%%%&8] "
     set line 10 of {_p}'s scoreboard to " <##B2BEB5>│ &f%font("credits")%: <##F5F5DC>¢%format(currencyGet({_p},"credits"))%"
     set line 9 of {_p}'s scoreboard to " <##B2BEB5>│ &fᴋɪʟʟѕ: &c%player kills stat of {_p}%"
     set line 7 of {_p}'s scoreboard to " <##B2BEB5>│ &fᴅᴇᴀᴛʜѕ: &4%deaths stat of {_p}%"
