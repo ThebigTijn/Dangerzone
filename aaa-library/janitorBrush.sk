@@ -20,7 +20,7 @@ local function StartBrush(p: player, b: block):
     set {_v::player} to {_p}
     set {_v::block} to {_b}
     call custom event "brushStart" with values {_v::*}
-    set {-brushevent.brushing::%uuid of {_p}%} to {_b}
+    set (metadata tag "brushEvent" of {_p}) to {_b}
 
     while (tool of {_p}) is a brush:
         wait 1 tick
@@ -36,4 +36,4 @@ local function StartBrush(p: player, b: block):
         call custom event "brush" with values {_v::*}
 
     call custom event "brushStop" with values {_v::*}
-    delete {-brushevent.brushing::%uuid of {_p}%}
+    delete (metadata tag "brushEvent" of {_p})

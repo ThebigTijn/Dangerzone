@@ -32,9 +32,6 @@ function chatReplace(p: player, msg: string, cause: string) :: string:
 on chat:
 	event is not canceled
 	cancel event
-	if {~IsDoingFunny261::%player's uuid%::timer} is set:
-		send "test"
-		stop
 	if {-lockchat} = true:
 		player does not have permission "dangerzone.chatbypass"
 		play sound "block.note_block.pling" to player
@@ -44,10 +41,7 @@ on chat:
 		message partially matches "%loop-value%"
 		log "%time%: %player% said %message%" to "filter.log"
 	set {_msg} to message
-	if metadata tag "toggle" of player is set:
-		set {_radio} to metadata tag "toggle" of player
-		Radio(player, {_radio}, {_msg})
-		stop
+	#radio
 	set {_msg} to chatReplace(player, {_msg}, "chat")
 	set {_color} to "&f" if player has permission "dangerzone.whitechat"
 	if length of player's suffix > 0:

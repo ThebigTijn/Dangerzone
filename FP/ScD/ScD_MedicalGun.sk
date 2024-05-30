@@ -1,6 +1,5 @@
 function medicalGun(p:player):
     set {_i} to (tool of {_p})
-    (string tag "MedicalGun" of nbt compound from {_i}) = "true"
     item cooldown of {_i} for {_p} = 0 seconds
     loop all players in radius 8 of {_p}:
         target of {_p} = loop-player
@@ -18,4 +17,5 @@ function medicalGun(p:player):
 
 on right click:
     target of player is a player
+    (string tag "MedicalGun" of nbt compound from event-item) = "true"
     medicalGun(player, location of player, target of player)

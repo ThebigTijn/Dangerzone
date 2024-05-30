@@ -99,5 +99,5 @@ on right click on armor stand:
 on place of a button:
 	player's gamemode is creative
 	name of player's tool is "keyreader"
-	set tag "custom;IsReader" of nbt compound of event-block to 1
+	set int tag "custom;IsReader" of nbt compound of event-block to 1
 	message "<##E34234>&lSYSTEM &7»&f Placed Keyreader"

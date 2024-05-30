@@ -1,36 +1,16 @@
-function commanderGet(p: player):
+local function open(p:player):
+    create a gui with virtual furnace inventory named " &8&l%font("the big decision")%":
+        format gui slot 0 with player head with nbt from "{display:{Name:'{""text"":""&a&lACCEPT""}'},SkullOwner:{Id:[I;1865133732,-1019457749,-1650216397,1032141214],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDEyMDdmZmU2OWYwNmY3YjgxNzNiZjViOTI0YzRkOGY3OTc2MzgzYzdlNTlkY2U1MzhmZmE2M2FmODRkNzU5NSJ9fX0=""}]}}}" with lore "&8%font("decision")%", "", "&7This is the best option,", "&7why would you be here if you did not want to accept.", "":
+            accept({_p})
+        format gui slot 1 with player head with nbt from "{display:{Name:'{""text"":""&c&lDECLINE""}'},SkullOwner:{Id:[I;657690590,-1564915963,-2080225727,263292440],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDEyZTc0YTExOTRlNzMxZmZjZDRkZmYwMjU3MDAwOWY1YjRhOTQ3ZGUzMGRmNWNkMjIwYzA0ZDMyNmYwZWI4NyJ9fX0=""}]}}}" with lore "&8%font("decision")%", "", "&7This is a terrible option", "&7why are you even here?", ""
+            close (inventory of {_p})
+        format gui slot 2 with player head with nbt from "{display:{Name:'{""text"":""<##ACB6B3>&lCHAOS INSURGENCY""}'},SkullOwner:{Id:[I;2042056884,-638760872,-1110934539,-241416115],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWVhMTI4NTJlMjY0YmI4ODA2Njc1MjhlNjdlZjc5NzFkN2IyM2IyZWZiNWE5ZTYzMDYzYzk1NTM3NGI0NzBlNSJ9fX0=""}]}}}" with lore "&8%font("role")%", "", "&7Join the Chaos Insurgency to eliminate FP", "&7and take control of the moon", "", "<##FFD700>&l%font("BENEFITS")%", "<##BFCAC7>You Receive", "&8- &fChaos Insurgency Kit,", "&8- &7Payment of &a$25!", ""
+        open gui to {_p}
 
-    set {_commander} to virtual furnace inventory named " &8&l%font("the big decision")%"
-
-    set slot 0 of {_commander} to player head with nbt from "{display:{Name:'{""text"":""&a&lACCEPT""}'},SkullOwner:{Id:[I;1865133732,-1019457749,-1650216397,1032141214],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDEyMDdmZmU2OWYwNmY3YjgxNzNiZjViOTI0YzRkOGY3OTc2MzgzYzdlNTlkY2U1MzhmZmE2M2FmODRkNzU5NSJ9fX0=""}]}}}" with lore "&8%font("decision")%", "", "&7This is the best option,", "&7why would you be here if you did not want to accept.", ""
-    set slot 1 of {_commander} to player head with nbt from "{display:{Name:'{""text"":""&c&lDECLINE""}'},SkullOwner:{Id:[I;657690590,-1564915963,-2080225727,263292440],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDEyZTc0YTExOTRlNzMxZmZjZDRkZmYwMjU3MDAwOWY1YjRhOTQ3ZGUzMGRmNWNkMjIwYzA0ZDMyNmYwZWI4NyJ9fX0=""}]}}}" with lore "&8%font("decision")%", "", "&7This is a terrible option", "&7why are you even here?", ""
-    set slot 2 of {_commander} to player head with nbt from "{display:{Name:'{""text"":""<##ACB6B3>&lCHAOS INSURGENCY""}'},SkullOwner:{Id:[I;2042056884,-638760872,-1110934539,-241416115],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWVhMTI4NTJlMjY0YmI4ODA2Njc1MjhlNjdlZjc5NzFkN2IyM2IyZWZiNWE5ZTYzMDYzYzk1NTM3NGI0NzBlNSJ9fX0=""}]}}}" with lore "&8%font("role")%", "", "&7Join the Chaos Insurgency to eliminate FP", "&7and take control of the moon", "", "<##FFD700>&l%font("BENEFITS")%", "<##BFCAC7>You Receive", "&8- &fChaos Insurgency Kit,", "&8- &7Payment of &a$25!", ""
-
-    set (metadata tag "Commander_Decision" of {_p}) to {_commander}
-    open {_commander} to {_p}
-
-function commanderAccept(p: player):
-
-    #check if player's role = class-d
-    close {_p}'s inventory
-    send "&8[&fCommander&8] &7Good decision, payment and kit have been supplied" to {_p}
-    moneyAdd({_p}, 25)
-    #give player kit
-    #give player role
-
-
-on inventory click:
-
-    event-inventory = (metadata tag "Commander_Decision" of player)
-    cancel event
-
-    if event-slot = 0:
-        commanderAccept(player)
-    
-    if event-slot = 1:
-        close player's inventory
-        #send "&8[&fCommander&8] &7I hope you can reconsider your decision! Have a nice day"
-        send title "&b&l%font("what is wrong with you")%" to player
+local function accept(p:player):
+    close (inventory of {_p})
+    currencyAdd({_p},"credits",25)
+    send "" to {_p}
 
 on right click:
-    commanderGet(player) if event-entity = "Commander"
+    open(player) if event-entity = "Commander"

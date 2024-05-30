@@ -14,9 +14,9 @@ command lockchat:
         if {-lockchat} is not set:
             set {-lockchat} to true
             send "&c&LCHAT LOCKED &7By &r%prefix of player% &r%player%&7!" to all players
-        else:
-            delete {-lockchat}
-            send "&c&LCHAT UNLOCKED &7By &r%prefix of player% &r%player%&7!" to all players
+            stop
+        delete {-lockchat}
+        send "&c&LCHAT UNLOCKED &7By &r%prefix of player% &r%player%&7!" to all players
 
 
 command store:
