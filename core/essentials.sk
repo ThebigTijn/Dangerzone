@@ -1,0 +1,80 @@
+local function gm(p:player,g:gamemode):
+    set (gamemode of {_p}) to {_g}
+
+command gamemode [<string>] [<string>]:
+    permission: op
+    trigger:
+        if arg-2 isn't set:
+            arg-1 is set
+            gm(player,arg-1 parsed as gamemode)
+            send "" to player
+            stop
+        set {_p} to arg-1 parsed as player
+        gm({_p},arg-2 parsed as gamemode)
+        send "Gamemode updated to %arg-2%" to player
+        send "Gamemode updated to %arg-2%" to {_p} if player != {_p}
+
+command gmc:
+    permission: op
+    trigger:
+        gm(player,creative)
+
+command gms:
+    permission: op
+    trigger:
+        gm(player,survival)
+
+command gma:
+    permission: op
+    trigger:
+        gm(player,adventure)
+
+command gmsp:
+    permission: op
+    trigger:
+        gm(player,spectator)
+
+command heal [<player>]:
+    permission: op
+    trigger:
+        if arg-1 is not set:
+            heal player
+            send "Healed" to player
+        heal arg-1
+        send "Healed" to arg-1
+
+command repair:
+    permission: op
+    trigger:
+        set durability of tool of player to max durability of tool of player
+        send "Fixed Tool" to player
+
+local function returnFly(p:player) :: string:
+    if (fly state of {_p}) = false:
+        return "true"
+    else if (fly state of {_p}) = true:
+        return "false"
+
+command fly <player>:
+    permission: op
+    trigger:
+        if arg-1 is set:
+            set (fly state of arg-1) to returnFly(arg-1)
+            send "" to arg-1
+            if arg-1 != player:
+                send "Flight Updated" to player
+            stop
+        set (fly state of player) to returnFly(player)
+
+command teleport [<string>] [<string>]:
+    permission: op
+    aliases: tp 
+    trigger:
+        if arg-2 is set:
+            teleport arg-1 to arg-2
+            send "%arg-1% tp'd to you" to arg-1
+            stop
+        teleport player to arg-1
+        if player != arg-1:
+            send "" to player
+        send "%player% tp'd to you" to arg-1
