@@ -1,11 +1,12 @@
 function scp173(l: location):
     spawn iron golem at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b}"
     apply invisibility without particles to last spawned entity for 1 year
-    nbtSet(last spawned entity, "173", 1)
     set {_173} to last spawned entity
     while {_173} is alive:
         wait 1 tick
-        teleport {scp173vis::*} 1.65 blocks above {_173}
+        set {_tp} to {_173}'s location
+        set pitch of {_tp} to 0
+        teleport {scp173vis::*} 1.65 blocks above {_tp}
         if distance between {_173} and {_target} < 10:
             make {_173} pathfind to {_target}
         if distance between {_173} and {_target} ? 12 > 11:
@@ -15,18 +16,30 @@ function scp173(l: location):
                     set {_target} to loop-player
             
             if {_target} is not set:
-                loop {escape::173::*}:
+                loop {fescape173::*}:
                     set {_espdis::%loop-index%} to distance between {_173} and loop-value
                 set {_esp::*} to sorted {_espdis::*}
                 loop {_espdis::*}:
                     if loop-value = {_esp::1}:
-                        set {_int} to loop-index
-                make {_173} pathfind to {escape::173::%{_int}%} at speed 1
+                        set {_fint} to loop-index
+                #
+                
 
 
-command 173:
-    trigger:
-        name of player is "Rxpoff_"
+function(t: text):
+    if {_t} is "a":
         loop all entities in radius 10 of player:
             loop-entity is not a player
             add loop-entity to {scp173vis::*}
+
+
+
+            loop {escape::173::*}:
+                set {_espdis::%loop-index%} to distance between {_173} and loop-value
+            set {_esp::*} to sorted {_espdis::*}
+            loop {_espdis::*}:
+                if loop-value = {_esp::1}:
+                    set {_int} to loop-index
+            make {_173} pathfind to {escape::173::%{_int}%} at speed 1
+
+
