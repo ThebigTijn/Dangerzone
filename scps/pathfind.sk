@@ -5,24 +5,27 @@ function dummyscp(p: player, l: location):
     set {_target} to {_p}
     while {_b} is alive:
         wait 1 second
-        if distance between {_b} and {_target} < 10:
-            make {_b} pathfind to {_target}
-        if distance between {_b} and {_target} ? 12 > 11:
+        if distance between {_173} and {_target} < 10:
+            make {_173} pathfind to {_target}
+        if distance between {_173} and {_target} ? 12 > 11:
             delete {_target}
-            loop all players in radius 10 around {_b}:
+            loop all players in radius 10 around {_173}:
                 if loop-player is set:
                     set {_target} to loop-player
             
             if {_target} is not set:
-                loop {escapes::test::*}:
-                    set {_escapesize::%loop-index%} to distance between {_b} and {escapes::test::%loop-index%}
-                set {_escape::*} to sorted {_escapesize::*}
-                make {_b} pathfind to {_escape::1} at speed 1
+                loop {fescape173::*}:
+                    set {_espdis::%loop-index%} to distance between {_173} and loop-value
+                set {_esp::*} to sorted {_espdis::*}
+                loop {_espdis::*}:
+                    if loop-value = {_esp::1}:
+                        set {_fint} to loop-index
+                #
 
-
-
-command test:
-    trigger:
-        loop all entities in radius 20 around player:
-            loop-entity is not a player
-            teleport loop-entity to player
+            loop {escape::173::*}:
+                set {_espdis::%loop-index%} to distance between {_173} and loop-value
+            set {_esp::*} to sorted {_espdis::*}
+            loop {_espdis::*}:
+                if loop-value = {_esp::1}:
+                    set {_int} to loop-index
+            make {_173} pathfind to {escape::173::%{_int}%} at speed 1
