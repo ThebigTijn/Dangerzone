@@ -1,0 +1,46 @@
+function scp096(l: location):
+    spawn enderman at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,NoAI:1b,Silent:1b,Tags:[""096""]}"
+    set name of last spawned entity to "096"
+    set {_096} to last spawned entity
+    apply invisibility without particles to {_096} for 1 year
+    while {_096} is alive:
+        wait 1 tick
+        if {_w} is not set:
+            #walking animations
+        if {agro::*} is set:
+            if {agro::*} does not contain {_target}:
+                delete {_target}
+            if {_target} is not set:
+                set {_target} to a random element of {argo::*}
+            if {_target} is set:
+                set {_w} to true
+                teleport {model::096cry::*} 1 block above {_tp}
+                loop 5 times:
+                    play sound "minecraft:entity.ghast.scream" to all players in radius 20 of {_096}
+                    wait 0.2 seconds
+                delete {_w}
+                make {_096} pathfind to {_target}
+            if distance between {_096} and {_target} < 2:
+                set {_w} to true
+                teleport {model::096grab::*} 1 block above {_tp}
+                set {_grab} to {_096}'s location
+                set yaw of {_grab} to yaw of {_096} x -1
+                set pitch of {_grab} to 0
+                teleport {_target} behind {_grab}
+                wait 0.25 seconds
+                kill {_target}
+                remove {_target} from {agro::*}
+                delete {_w}
+
+on enderman teleport:
+    cancel event
+
+
+on quit:
+    if {agro::*} contains player:
+        remove player from {agro::*}
+
+
+
+#   set {_tp} to {_096}'s location
+#   set pitch of {_tp} to 0

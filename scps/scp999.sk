@@ -1,5 +1,5 @@
 function scp999(l: location):
-    spawn rabbit at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""999""]}"
+    spawn pig at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""999""]}"
     set name of last spawned entity to "999"
     set {_999} to last spawned entity
     apply invisibility without particles to {_999} for 1 year
