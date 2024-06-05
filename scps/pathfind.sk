@@ -4,7 +4,7 @@ function dummyscp(p: player, l: location):
     set {_b} to last spawned entity
     set {_target} to {_p}
     while {_b} is alive:
-        wait 1 second
+        wait 1 tick
         if distance between {_173} and {_target} < 10:
             make {_173} pathfind to {_target}
         if distance between {_173} and {_target} ? 12 > 11:

@@ -1,0 +1,13 @@
+function scp999(l: location):
+    spawn rabbit at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""999""]}"
+    set name of last spawned entity to "999"
+    set {_999} to last spawned entity
+    apply invisibility without particles to {_999} for 1 year
+    while {_999} is alive:
+        wait 1 tick
+        set {_tp} to {_999}'s location
+        set pitch of {_tp} to 0
+        teleport {model::999::*} 1 blocks above {_tp}
+        loop all players in radius 3 around {_999}:
+            apply regeneration 2 to loop-player for 2 ticks
+            make 1 of heart at all blocks in radius 2 around loop-player
