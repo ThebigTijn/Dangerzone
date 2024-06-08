@@ -5,8 +5,12 @@ function scp096(l: location):
     apply invisibility without particles to {_096} for 1 year
     while {_096} is alive:
         wait 1 tick
+        set {_tp} to {_096}'s location
+        set pitch of {_tp} to 0
         if {_w} is not set:
-            #walking animations
+            walk({_tp})
+        if {argo::*} is not set:
+            set {_path} to a random element of 
         if {agro::*} is set:
             if {agro::*} does not contain {_target}:
                 delete {_target}
@@ -24,7 +28,7 @@ function scp096(l: location):
                 set {_w} to true
                 teleport {model::096grab::*} 1 block above {_tp}
                 set {_grab} to {_096}'s location
-                set yaw of {_grab} to yaw of {_096} x -1
+                set yaw of {_grab} to yaw of {_096} * -1
                 set pitch of {_grab} to 0
                 teleport {_target} behind {_grab}
                 wait 0.25 seconds
@@ -32,15 +36,29 @@ function scp096(l: location):
                 remove {_target} from {agro::*}
                 delete {_w}
 
-on enderman teleport:
-    cancel event
-
-
 on quit:
     if {agro::*} contains player:
         remove player from {agro::*}
 
 
+function walk(l: location):
+    if {w} is not set:
+        set {w} to true
+        teleport {model::096FLFR::*} 1 block above {_l}
+        wait 0.2 seconds
+        teleport {model::096HFHR::*} 1 block above {_l}
+        wait 0.2 seconds
+        teleport {model::096BASE::*} 1 block above {_l}
+        wait 0.2 seconds
+        teleport {model::096HRHL::*} 1 block above {_l}
+        wait 0.2 seconds
+        teleport {model::096FRFL::*} 1 block above {_l}
+        wait 0.2 seconds
+        delete {w}
+
 
 #   set {_tp} to {_096}'s location
 #   set pitch of {_tp} to 0
+
+
+#FLFR | HFHR | BASE | HRHL | FRFL
