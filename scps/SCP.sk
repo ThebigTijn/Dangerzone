@@ -3,7 +3,7 @@ command scp <text> <text>:
     trigger:
         if arg-2 is "model":
             delete {model::%arg-1%::*}
-            loop all entities in radius 10 of player:
+            loop all entities in radius 4 of player:
                 loop-entity is not a player
                 add loop-entity to {model::%arg-1%::*}
         if arg-2 is "spawn":

@@ -1,5 +1,5 @@
 function scp096(l: location):
-    spawn enderman at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,NoAI:1b,Silent:1b,Tags:[""096""]}"
+    spawn iron golem at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,NoAI:1b,Silent:1b,Tags:[""096""]}"
     set name of last spawned entity to "096"
     set {_096} to last spawned entity
     apply invisibility without particles to {_096} for 1 year
