@@ -1,0 +1,4 @@
+on right click on brick named "&6SCP-500":
+    remove 1 brick named "&6SCP-500" from player's inventory
+    apply regeneration 2 to player for 5 seconds
+    apply speed to player for 30 seconds

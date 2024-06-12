@@ -46,6 +46,12 @@ on quit:
     if {agro::*} contains player:
         remove player from {agro::*}
 
+on entity target:
+    if target is a silverfish named "096":
+        if {argo::*} does not contain "INSERT PLAYER":
+            add "INSERT PLAYER" to {argo::*}
+
+
 
 function walk(l: location):
     if {w} is not set:

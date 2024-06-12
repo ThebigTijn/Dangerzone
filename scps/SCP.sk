@@ -2,6 +2,9 @@ command scp <text> <text>:
     permission: op
     trigger:
         if arg-2 is "model":
+            if arg-1 is "500":
+                send "&c&lERROR &8|&f You can't model this &cSCP" to player
+                stop
             delete {model::%arg-1%::*}
             loop all entities in radius 4 of player:
                 loop-entity is not a player
@@ -11,10 +14,15 @@ command scp <text> <text>:
                 scp173(player)
             if arg-1 is "999":
                 scp999(player)
+            if arg-1 is "500":
+                give player brick named "&6SCP-500" with lore "&fINPUT LORE"
         if arg-2 is "kill":
+            if arg-1 is "500":
+                send "&c&lERROR &8|&f You can't kill this &cSCP" to player
+                stop
             make console execute command "kill @e[tag=%arg-1%]"
 
 
 on tab complete of "/scp":
-    set tab completion for position 1 to "173" and "096" and "999"
+    set tab completion for position 1 to "173" and "096" and "999" and "500"
     set tab completion for position 2 to "model" and "spawn" and "kill"
