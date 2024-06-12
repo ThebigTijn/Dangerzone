@@ -13,3 +13,8 @@ command scp <text> <text>:
                 scp999(player)
         if arg-2 is "kill":
             make console execute command "kill @e[tag=%arg-1%]"
+
+
+on tab complete of "/scp":
+    set tab completion for position 1 to "173" and "096" and "999"
+    set tab completion for position 2 to "model" and "spawn" and "kill"

@@ -10,19 +10,25 @@ function scp096(l: location):
         if {_w} is not set:
             walk({_tp})
         if {argo::*} is not set:
-            set {_path} to a random element of 
+            if {_p} ? 0 < 40:
+                add 1 to {_p}
+            else:
+                make {_096} pathfind to a random element of 
+                set {_p} to 0
         if {agro::*} is set:
             if {agro::*} does not contain {_target}:
                 delete {_target}
             if {_target} is not set:
                 set {_target} to a random element of {argo::*}
-            if {_target} is set:
+                set {_cry} to true
+            if {_cry} is set:
                 set {_w} to true
                 teleport {model::096cry::*} 1 block above {_tp}
                 loop 5 times:
                     play sound "minecraft:entity.ghast.scream" to all players in radius 20 of {_096}
-                    wait 0.2 seconds
+                    wait 0.4 seconds
                 delete {_w}
+                delete {_cry}
                 make {_096} pathfind to {_target}
             if distance between {_096} and {_target} < 2:
                 set {_w} to true
