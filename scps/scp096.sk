@@ -1,5 +1,5 @@
 function scp096(l: location):
-    spawn iron golem at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,NoAI:1b,Silent:1b,Tags:[""096""]}"
+    spawn iron golem at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""096""]}"
     set name of last spawned entity to "096"
     set {_096} to last spawned entity
     apply invisibility without particles to {_096} for 1 year
@@ -13,7 +13,7 @@ function scp096(l: location):
             if {_p} ? 0 < 40:
                 add 1 to {_p}
             else:
-                make {_096} pathfind to a random element of 
+                make {_096} pathfind to a random element of all blocks in radius 5 of {_096}
                 set {_p} to 0
         if {agro::*} is set:
             if {agro::*} does not contain {_target}:
@@ -47,7 +47,7 @@ on quit:
         remove player from {agro::*}
 
 on entity target:
-    if target is a silverfish named "096":
+    if event-entity is a silverfish:
         if {argo::*} does not contain "INSERT PLAYER":
             add "INSERT PLAYER" to {argo::*}
 

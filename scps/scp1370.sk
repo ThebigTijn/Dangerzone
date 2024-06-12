@@ -1,0 +1,15 @@
+function scp1370(l: location):
+    spawn pig at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""1370""]}"
+    set name of last spawned entity to "1370"
+    set {_1370} to last spawned entity
+    apply invisibility without particles to {_1370} for 1 year
+    while {_1370} is alive:
+        wait 1 tick
+        set {_tp} to {_1370}'s location
+        set pitch of {_tp} to 0
+        teleport {_1370} 1 block above {_tp}
+        if {_p} ? 0 < 40:
+            add 1 to {_p}
+        else:
+            make {_096} pathfind to a random element of all blocks in radius 5 of {_1370}
+            set {_p} to 0
