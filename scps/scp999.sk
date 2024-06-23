@@ -7,7 +7,7 @@ function scp999(l: location):
         wait 1 tick
         set {_tp} to {_999}'s location
         set pitch of {_tp} to 0
-        teleport {model::999::*} to {_tp}
+        teleport {model::999::*} above {_tp}
         loop all players in radius 3 around {_999}:
             apply regeneration 2 to loop-player for 2 ticks
             if {_p} ? 0 < 40:

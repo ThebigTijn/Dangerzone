@@ -2,8 +2,12 @@ function scp173(l: location):
     spawn husk at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1,Tags:[""173""]}"
     set name of last spawned entity to "<##C4A484>&lSCP-173 &6(Euclid)"
     set {_173} to last spawned entity
+    spawn silverfish at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1,NoAI:1b,Tags:[""173""]}"
+    make last spawned entity ride {_173}
+    apply invisibility without particles to last spawned entity for 1 year
     equip {_173} with {173}
     apply speed 5 without particles to {_173} for 1 year
+    apply strength 255 without particles to {_173} for 1 year
     while {_173} is alive:
         wait 1 tick
         if {_target}'s gamemode is not survival:
@@ -13,9 +17,8 @@ function scp173(l: location):
             if loop-player's targeted entity is {_173}:
                 set {_b} to true
         if {_b} is not set:
-            if distance between {_173} and {_target} < 1:
-                if {_target}'s gamemode is survival:
-                    kill {_target}
+            if distance between {_173} and {_target} < 2:
+                kill {_target}
             if distance between {_173} and {_target} < 10:
                 make {_173} pathfind to {_target}
             if distance between {_173} and {_target} ? 12 > 11:
