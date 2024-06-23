@@ -1,76 +1,27 @@
 function scp096(l: location):
-    spawn iron golem at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""096""]}"
-    set name of last spawned entity to "096"
+    spawn enderman at {_l} with nbt nbt compound of "{DeathLootTable:"/",PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""096""]}"
+    set name of last spawned entity to "&f&lSCP-096 &6(Euclid)"
     set {_096} to last spawned entity
-    apply invisibility without particles to {_096} for 1 year
+    apply strength 255 without particles to {_096} for 1 year
     while {_096} is alive:
         wait 1 tick
-        set {_tp} to {_096}'s location
-        set pitch of {_tp} to 0
-        if {_w} is not set:
-            walk({_tp})
-        if {argo::*} is not set:
-            if {_p} ? 0 < 40:
-                add 1 to {_p}
-            else:
-                make {_096} pathfind to a random element of all blocks in radius 5 of {_096}
-                set {_p} to 0
-        if {agro::*} is set:
-            if {agro::*} does not contain {_target}:
-                delete {_target}
-            if {_target} is not set:
-                set {_target} to a random element of {argo::*}
-                set {_cry} to true
-            if {_cry} is set:
-                set {_w} to true
-                teleport {model::096cry::*} 1 block above {_tp}
-                loop 5 times:
-                    play sound "minecraft:entity.ghast.scream" to all players in radius 20 of {_096}
-                    wait 0.4 seconds
-                delete {_w}
-                delete {_cry}
-                make {_096} pathfind to {_target}
-            if distance between {_096} and {_target} < 2:
-                set {_w} to true
-                teleport {model::096grab::*} 1 block above {_tp}
-                set {_grab} to {_096}'s location
-                set yaw of {_grab} to yaw of {_096} * -1
-                set pitch of {_grab} to 0
-                teleport {_target} behind {_grab}
-                wait 0.25 seconds
-                kill {_target}
-                remove {_target} from {agro::*}
-                delete {_w}
-
-on quit:
-    if {agro::*} contains player:
-        remove player from {agro::*}
+        if {agro} is set:
+            play sound "minecraft:block.sculk_shrieker.shriek" with volume 10 at {_096}
+            wait 1.2 seconds
 
 on entity target:
-    if event-entity is a silverfish:
-        if {argo::*} does not contain "INSERT PLAYER":
-            add "INSERT PLAYER" to {argo::*}
+    if entity is a enderman:
+        set {agro} to target of entity
 
 
+on death of player:
+    if victim = {agro}:
+        delete {agro}
 
-function walk(l: location):
-    if {w} is not set:
-        set {w} to true
-        teleport {model::096FLFR::*} 1 block above {_l}
-        wait 0.2 seconds
-        teleport {model::096HFHR::*} 1 block above {_l}
-        wait 0.2 seconds
-        teleport {model::096BASE::*} 1 block above {_l}
-        wait 0.2 seconds
-        teleport {model::096HRHL::*} 1 block above {_l}
-        wait 0.2 seconds
-        teleport {model::096FRFL::*} 1 block above {_l}
-        wait 0.2 seconds
-        delete {w}
+on quit:
+    if player = {agro}:
+        delete {agro}
 
-
-#   set {_tp} to {_096}'s location
-#   set pitch of {_tp} to 0
-
-
-#FLFR | HFHR | BASE | HRHL | FRFL
+on entity teleport:
+    if event-entity is an enderman:
+        cancel event

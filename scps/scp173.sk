@@ -1,20 +1,15 @@
 function scp173(l: location):
-    spawn iron golem at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1,Tags:[""173""]}"
-    set name of last spawned entity to "173"
+    spawn husk at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1,Tags:[""173""]}"
+    set name of last spawned entity to "<##C4A484>&lSCP-173 &6(Euclid)"
     set {_173} to last spawned entity
-    apply invisibility without particles to {_173} for 1 year
+    equip {_173} with {173}
     apply speed 5 without particles to {_173} for 1 year
     while {_173} is alive:
         wait 1 tick
         if {_target}'s gamemode is not survival:
             delete {_target}
-        set {_tp} to {_173}'s location
-        set pitch of {_tp} to 0
-        teleport {model::173::*} 1.65 blocks above {_tp}
         delete {_b}
         loop all players:
-            if {model::173::*} contains loop-player's targeted entity:
-                set {_b} to true 
             if loop-player's targeted entity is {_173}:
                 set {_b} to true
         if {_b} is not set:

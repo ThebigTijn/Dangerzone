@@ -1,5 +1,5 @@
 function scp1370(l: location):
-    spawn pig at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""1370""]}"
+    spawn sheep at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""1370""]}"
     set name of last spawned entity to "1370"
     set {_1370} to last spawned entity
     apply invisibility without particles to {_1370} for 1 year

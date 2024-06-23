@@ -1,57 +1,7 @@
-function scp096(l: location):
-    spawn cow at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""096""]}"
-    set name of last spawned entity to "096"
+function scp682(l: location):
+    spawn ravager at {_l} with nbt nbt compound of "{Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""682""]}"
     set {_682} to last spawned entity
-    apply invisibility without particles to {_682} for 1 year
-    while {_682} is alive:
-        wait 1 tick
-        set {_tp} to {_682}'s location
-        set pitch of {_tp} to 0
-        if {_w} is not set:
-            walk682({_tp})
-        loop all players:
-            if distance between {_682} and {_target} < 2:
-                if {_target}'s gamemode is survival:
-                    set {_w} to true
-                    kill {_target}
-                    delete {_w}
-            if distance between {_682} and {_target} < 20:
-                make {_682} pathfind to {_target}
-            if distance between {_682} and {_target} ? 21 > 20:
-                delete {_target}
-                loop all players in radius 10 around {_682}:
-                    if loop-player is set:
-                        loop-player's gamemode is survival
-                        set {_target} to loop-player
-on quit:
-    if {agro::*} contains player:
-        remove player from {agro::*}
-
-on entity target:
-    if event-entity is a silverfish:
-        if {argo::*} does not contain "INSERT PLAYER":
-            add "INSERT PLAYER" to {argo::*}
-
-
-
-function walk(l: location):
-    if {w} is not set:
-        set {w} to true
-        teleport {model::682FLFR::*} 1 block above {_l}
-        wait 0.2 seconds
-        teleport {model::682HFHR::*} 1 block above {_l}
-        wait 0.2 seconds
-        teleport {model::682BASE::*} 1 block above {_l}
-        wait 0.2 seconds
-        teleport {model::682HRHL::*} 1 block above {_l}
-        wait 0.2 seconds
-        teleport {model::682FRFL::*} 1 block above {_l}
-        wait 0.2 seconds
-        delete {w}
-
-
-#   set {_tp} to {_682}'s location
-#   set pitch of {_tp} to 0
-
-
-#FLFR | HFHR | BASE | HRHL | FRFL
+    set name of {_682} to "&2&lSCP-682 &r&c(KETER)"
+    apply strength 1 without particles to {_682} for 1 year
+    apply speed 3 without particles to {_682} for 1 year
+    apply resistance 255 without particles to {_682} for 1 year

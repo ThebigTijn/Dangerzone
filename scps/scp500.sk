@@ -1,5 +1,11 @@
-on right click on brick:
+on right click:
     if name of 1 of player's tool contains "&6SCP-500":
-        remove 1 brick named "&6SCP-500" from player's inventory
-        apply regeneration 2 to player for 5 seconds
-        apply speed to player for 30 seconds
+        remove 1 record relic named "&6SCP-500" from player's inventory
+        clear player's potion effects
+        apply regeneration 4 to player for 7 seconds
+
+
+
+every 10 seconds:
+    if {500c}'s inventory does not contain a record relic:
+        add 1 record relic named "&6SCP-500" to {500c}'s inventory
