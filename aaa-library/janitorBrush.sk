@@ -23,7 +23,7 @@ local function StartBrush(p: player, b: block):
     set (metadata tag "brushEvent" of {_p}) to {_b}
 
     while (tool of {_p}) is a brush:
-        wait 1 tick
+        wait 5 tick
         set {_target} to hit block of (raytrace from {_p} with max distance 5)
         if any:
             (block at {_b}) != {_target}

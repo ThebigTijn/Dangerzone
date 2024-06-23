@@ -1,41 +1,63 @@
 on load:
     load yaml "plugins/Skript/yaml/jobs/dishwashing.yml" as "dishwashing"
 
-function getDishwashingItem(n: text) :: item:
-    set {_name} to yaml value "%{_n}%.name" from "dishwashing"
-    set {_item} to yaml value "%{_n}%.item" from "dishwashing"
-    set {_i} to {_item} named {_name} with nbt compound from "{AttributeModifiers:[{AttributeName:""generic.attack_damage"",Name:""generic.attack_damage"",Amount:0,Operation:0,UUID:[I;549828122,1243172269,-1420982898,-1929562899]}]}" with all flags hidden
-    set tag "IsDishes" of nbt compound from {_i} to 1
+local function rData(data:string) :: object:
+    return yaml value "%{_data}%" from "dishwashing"
+
+local function getItem(s:string) :: item:
+    set {_dish} to rData("%{_s}%.item")
+    set {_name} to rData("%{_s}%.name")
+    set {_i} to {_dish} named {_name} with nbt from "{AttributeModifiers:[{AttributeName:""generic.attack_damage"",Name:""generic.attack_damage"",Amount:0,Operation:0,UUID:[I;549828122,1243172269,-1420982898,-1929562899]}]}"
+    set (int tag "dish" of nbt compound from {_i}) to 1
+    add hide enchants and hide attributes to {_i}
+    if {_s} != "Knife" or "Spoon":
+        set lore of {_i} to "&0&k%unix timestamp of now%"
     return {_i}
 
-function dishwashingItemReceive(p: player):
-    loop all items in {_p}'s inventory:
-        tag "IsDishes" of nbt compound from loop-value = 1 or 2
+local function receiveItem(p:player):
+    loop all items in (inventory of {_p}) where [(int tag "dish" of nbt of input) = 1 or 2]:
         add 1 to {_n}
         {_n} >= 4
         send "<##E34234>&lSYSTEM &7» Cannot carry anymore dishes" to {_p}
         stop
     set {_temp} to random element out of (yaml node keys "" from "dishwashing")
-    give {_p} getDishwashingItem({_temp})
+    give {_p} getItem({_temp})
     play sound "item.armor.equip_generic" with volume 10 and pitch 1 to {_p}
 
-function dishwashingEvent(p: player):
-    tag "IsDishes" of nbt compound from {_p}'s tool = 1
-    set {_item} to {_p}'s held item
-    remove {_item} from {_p}'s inventory
+local function washItem(p:player):
+    set {_i} to (1 of tool of {_p})
+    (int tag "dish" of nbt of {_i}) = 1
+    remove {_i} from {_p}
     loop 4 times:
-        send action bar "&fWashing %name of {_item}%&f... &8[&c%textB({_t},3,"▉▉▉▉▉▉▉▉▉▉","&a","&7")%&8]" to {_p}
-        play sound "block.water.ambient" at volume 0.5 for {_p}
-        add 1 to {_t}
+        send action bar "&fWashing %name of {_i}%&f... &8[&c%textB(10,loop-number,4)%&8]" to {_p}
+        play sound "block.water.ambient" for {_p}
         wait a second
-    set tag "IsDishes" of nbt compound from {_item} to 2
-    give {_p} {_item} named "&f(Clean) %name of {_item}%"
-    send action bar "&aSucessfully Washed &r%name of {_item}%" to {_p}
+    set (int tag "dish" of nbt of {_i}) to 2
+    set name of {_i} to "&f(Clean) &r%name of {_i}%"
+    give {_p} {_i}
+    send action bar "&aSucessfully Washed &r%name of {_i}%" to {_p}
+
+local function sellDish(p:player):
+    loop all items in (inventory of {_p}) where [(int tag "dish" of nbt of input = 2)]:
+        add loop-value to {_items::*}
+        add 1 to {_n}
+    set {_r} to round(random number from 0 to 1,2)
+    set {_total} to ({_n}*{_r})
+    sellItem({_p},(tool of {_p}),{_total})
+    remove {_items::*} from {_p}
 
 on right click:
-    dishwashingItemReceive(player) if (metadata tag "Dishwashing_Receive_Block" of event-block) = true
-    dishwashingEvent(player) if (metadata tag "Dishwashing_Sink_Block" of event-block) = true
-    jobProductSell(player, "IsDishes", 2, "&fChef", 2, 4) if (metadata tag "Dishwashing_Sell_Block" of event-block) = true
-
+    if name of event-entity = "Dishwasher@":
+        receiveItem(player)
+    else if event-block is set:
+        if (string tag "custom;dw-sink" of nbt of event-block) = "true":
+            cancel event
+            (int tag "dish" of nbt of tool of player) = 1
+            washItem(player)
+        else if (string tag "custom;dw-shelf" of nbt of event-block) = "true":
+            (int tag "dish" of nbt of tool of player) = 2
+            sellDish(player)
+        
 on drop:
-    remove event-item from player's inventory if tag "IsDishes" of nbt compound from event-item = 1 or 2
+    (int tag "dish" of nbt of event-item) = 1 or 2
+    remove event-item from player

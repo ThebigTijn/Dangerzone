@@ -20,7 +20,7 @@ function chatReplace(p: player, msg: string, cause: string) :: string:
 		if {_cause} is not "chat":
 			{_ping} has permission "dangerzone.radio.%{_cause}%"
 			set {_sound} to true
-		if (metadata tag "Chat_Spy" of {_p}) is set:
+		if (string tag "custom;chatspy" of {_p}) = "true":
 			set {_sound} to true
 		else:
 			distance between {_p} and {_ping} < 16
@@ -45,9 +45,9 @@ on chat:
 	set {_msg} to chatReplace(player, {_msg}, "chat")
 	set {_color} to "&f" if player has permission "dangerzone.whitechat"
 	if length of player's suffix > 0:
-		set {_format} to "&7 %player's prefix% &8| &f%player's displayname% &8♯ %player's suffix% &8◇ %{_color} ? "&7"%%{_msg}%"
+		set {_format} to "&7 %player's prefix% &8| &f%player's displayname% %player's suffix% &7» %{_color} ? "&7"%%{_msg}%"
 	else:
-		set {_format} to "&7 %player's prefix% &8| &f%player's displayname% &8◇ %{_color} ? "&7"%%{_msg}%"
+		set {_format} to "&7 %player's prefix% &8| &f%player's displayname% &7» %{_color} ? "&7"%%{_msg}%"
 	send formatted "%{_format}%" to all players in radius 20 around player
 	set {_recipients::*} to all players in radius 20 around player
 	loop (all players where [input has permission "skript.chatspy"]):

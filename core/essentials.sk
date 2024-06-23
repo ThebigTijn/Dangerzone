@@ -1,18 +1,12 @@
 local function gm(p:player,g:gamemode):
     set (gamemode of {_p}) to {_g}
+    send "<##E34234>&lSYSTEM &7» Gamemode of &f%{_p}% &7updated to &c%{_g}%&7." to {_p}
 
-command gamemode [<string>] [<string>]:
-    permission: op
+command gamemode <player> <gamemode>:
+    permission: op 
     trigger:
-        if arg-2 isn't set:
-            arg-1 is set
-            gm(player,arg-1 parsed as gamemode)
-            send "" to player
-            stop
-        set {_p} to arg-1 parsed as player
-        gm({_p},arg-2 parsed as gamemode)
-        send "Gamemode updated to %arg-2%" to player
-        send "Gamemode updated to %arg-2%" to {_p} if player != {_p}
+        arg-1 and arg-2 is set
+        gm(arg-1,arg-2)
 
 command gmc:
     permission: op
@@ -37,44 +31,43 @@ command gmsp:
 command heal [<player>]:
     permission: op
     trigger:
-        if arg-1 is not set:
-            heal player
-            send "Healed" to player
-        heal arg-1
-        send "Healed" to arg-1
-
-command repair:
-    permission: op
-    trigger:
-        set durability of tool of player to max durability of tool of player
-        send "Fixed Tool" to player
-
-local function returnFly(p:player) :: string:
-    if (fly state of {_p}) = false:
-        return "true"
-    else if (fly state of {_p}) = true:
-        return "false"
-
-command fly <player>:
-    permission: op
-    trigger:
+        send "<##E34234>&lSYSTEM &7» Health Updated" to player
         if arg-1 is set:
-            set (fly state of arg-1) to returnFly(arg-1)
-            send "" to arg-1
-            if arg-1 != player:
-                send "Flight Updated" to player
+            heal arg-1
             stop
-        set (fly state of player) to returnFly(player)
+        heal player
 
-command teleport [<string>] [<string>]:
+command feed [<player>]:
     permission: op
-    aliases: tp 
     trigger:
-        if arg-2 is set:
-            teleport arg-1 to arg-2
-            send "%arg-1% tp'd to you" to arg-1
+        send "<##E34234>&lSYSTEM &7» Hunger Updated" to player
+        if arg-1 is set:
+            feed arg-1
             stop
-        teleport player to arg-1
-        if player != arg-1:
-            send "" to player
-        send "%player% tp'd to you" to arg-1
+        feed player
+
+local function returnFly(p:player) :: boolean:
+    return false if fly state of {_p} = true
+    return true if fly state of {_p} = false
+
+local function setFly(p:player):
+    set fly state of {_p} to returnFly({_p})
+
+command fly [<player>]:
+    permission: op
+    trigger:
+        send "<##E34234>&lSYSTEM &7» Fly State Updated" to player
+        if arg-1 is set:
+            setFly(arg-1)
+            stop
+        setFly(player)
+
+command repair [<string>]:
+    permission: op
+    trigger:
+        send "<##E34234>&lSYSTEM &7» Repaired" to player
+        if arg-1 = "all":
+            loop all items in inventory of player:
+                set durability of loop-value to max durability of loop-value
+            stop
+        set durability of (tool of player) to max durability of (tool of player)

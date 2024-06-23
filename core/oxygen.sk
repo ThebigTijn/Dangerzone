@@ -1,0 +1,38 @@
+local function getOxygen(p:player) :: int:
+    return (int tag "custom;oxygen" of nbt of {_p}) ? 99
+
+local function isOxygenValid(p:player) :: boolean:
+    return true if getOxygen({_p}) is between 1 and 100 else false
+
+local function updateOxygen(p:player,change:int):
+    set {_oxygen} to (int tag "custom;oxygen" of nbt of {_p})
+    set (int tag "custom;oxygen" of nbt of {_p}) to {_oxygen}+({_change})
+    send action bar "&7%font("oxygen tank")% &8[&r%textB(10,{_oxygen},100)%&8]" to {_p}
+
+local function gainOxygen(p:player):
+    while (metadata tag "oxygen" of {_p}) = true:
+        set {_gainedOxygen} to getOxygen({_p})+5
+        updateOxygen({_p},5) if {_gainedOxygen} < 100
+        if getOxygen({_p}) > 100:
+            set (int tag "custom;oxygen" of nbt of {_p}) to 100
+            stop
+        wait a second
+
+local function loseOxygen(p:player):
+    while (metadata tag "oxygen" of {_p}) != true:
+        isOxygenValid({_p}) = false
+        set {_lostOxygen} to getOxygen({_p})-5
+        updateOxygen({_p},-5) if {_lostOxygen} > 0
+        set (int tag "custom;oxygen" of nbt of {_p}) to 0 if {_lostOxygen} < 0
+        damage {_p} by 0.1
+        wait a second
+
+on bound enter:
+    id of event-bound contains "oxygen"
+    set (metadata tag "oxygen" of player) to true
+    gainOxygen(player)
+
+on bound exit:
+    id of event-bound contains "oxygen"
+    delete (metadata tag "oxygen" of player)
+    loseOxygen(player)

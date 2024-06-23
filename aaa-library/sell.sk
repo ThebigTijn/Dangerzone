@@ -1,0 +1,5 @@
+function sellItem(p:player,i:item,n:num):
+    currencyAdd({_p},"credits",{_n})
+    remove {_i} from {_p}
+    send "<##E34234>&lSYSTEM &7» Sold &a%uncolored name of {_i}% &7for <##F5F5DC>¢%format({_n})%&7." to {_p}
+    play sound "entity.villager.trade" for {_p}

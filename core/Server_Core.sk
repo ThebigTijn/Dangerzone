@@ -61,3 +61,7 @@ on death:
 			warpPlayer(victim,"class-d")
 	else:
 		warpPlayer(victim,"staff-spawn")
+
+on break:
+	player is not op
+	cancel event
