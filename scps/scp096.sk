@@ -18,6 +18,8 @@ function scp096(l: location):
                 set artificial intelligence of {_096} to true
             play sound "minecraft:block.sculk_shrieker.shriek" with volume 5 at {_096}
             wait 1.2 seconds
+        if target of {_096} is not set:
+            nbtDelete({_096}, "targetagro")
 
 on entity teleport:
     if event-entity is an enderman:
