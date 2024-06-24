@@ -13,3 +13,6 @@ function scp1370(l: location):
         else:
             make {_096} pathfind to a random element of all blocks in radius 5 of {_1370}
             set {_p} to 0
+
+
+#STARTED BUT NEVER FINISHED BECAUSE MATAN TOLD ME TO

@@ -1,13 +1,16 @@
 function scp173(l: location):
-    spawn husk at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1,Tags:[""173""]}"
+    spawn husk at {_l} with nbt nbt compound of "{PersistenceRequired:1,Silent:1,Tags:[""173""]}"
     set name of last spawned entity to "<##C4A484>&lSCP-173 &6(Euclid)"
     set {_173} to last spawned entity
     spawn silverfish at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1,NoAI:1b,Tags:[""173""]}"
     make last spawned entity ride {_173}
     apply invisibility without particles to last spawned entity for 1 year
-    equip {_173} with {173}
+    set {_nbt} to nbt compound of "{SkullOwner:{Id:[I;1856353646,-1068737322,-1270716841,1649385879],Properties:{textures:[{Value:""e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmUyMDliZWUwZGE4ZmE1OWEyYWVlOTliNmYwNjdiY2JjZmZhMzZiNjVlOTQzMzZhMDE3MzVkNWJjMGE3ZTQ1YiJ9fX0=""}]}}}"
+    set {_head} to player head with nbt {_nbt}
+    equip {_173} with {_head}
     apply speed 5 without particles to {_173} for 1 year
     apply strength 255 without particles to {_173} for 1 year
+    apply resistance 5 without particles to {_173} for 1 year
     while {_173} is alive:
         wait 1 tick
         if {_target}'s gamemode is not survival:
@@ -27,3 +30,7 @@ function scp173(l: location):
                     if loop-player is set:
                         loop-player's gamemode is survival
                         set {_target} to loop-player
+
+
+#Hibers the reasoning for the silverfish on its head, is that defaultly it has NoAI until the my custom AI is used
+#and i cant set the husk to have no ai because then the custom ai doesnt work

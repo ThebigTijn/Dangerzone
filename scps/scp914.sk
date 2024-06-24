@@ -1,0 +1,55 @@
+function scp914():
+    set {_l} to block at location(190.5, -34.5, 40.5, world "world")
+    loop all entities in radius 2 around {_l}:
+        "%loop-entity%" contains "dropped"
+        set {_i} to loop-entity
+    if {_i} is not set:
+        stop
+    play sound "minecraft:entity.minecart.riding" with volume 10 at location(192.5, -34.5, 42.5, world "world")
+    set {_t::*} to "%{_i}%" split at " "
+    set {_amt} to {_t::2} parsed as integer
+    loop {_amt} times:
+        if "%line 3 of block at location(192, -35, 42, world "world")%" contains "ROUGH":
+            kill {_i}
+            drop raw copper named "&7Pile of Scraps" with lore "&8Pile of Scraps, wonder what this was before.." at location(194.5, -34.5, 41.5, world "world")
+        if "%line 3 of block at location(192, -35, 42, world "world")%" contains "&2VERY FINE":
+            if "%{_i}%" contains "L1" or "L2" or "L3" or "L4":
+                kill {_i}
+                chance of 2%:
+                    drop purple stained glass pane named "&8L5-card" at location(194.5, -34.5, 41.5, world "world")
+                else:
+                    drop raw copper named "&7Pile of Scraps" with lore "&8Pile of Scraps, wonder what this was before.." at location(194.5, -34.5, 41.5, world "world")
+    stop
+
+
+on right click on lever:
+    if block behind event-block is blackstone:
+        scp914()
+
+on right click on dark oak sign:
+    if block behind event-block is blackstone:
+        cancel event
+        scp914selection(player)
+
+
+function scp914selection(p:player):
+    create a gui with virtual hopper inventory named "           &8SCP-914 &a(Safe)":
+        format gui slot 0 with black stained glass pane named "&8ROUGH":
+            set line 3 of block at location(192.5, -34.5, 42.5, world "world") to "&8ROUGH"
+            close {_p}'s inventory
+        format gui slot 1 with red stained glass pane named "&cCOARSE":
+            set line 3 of block at location(192.5, -34.5, 42.5, world "world") to "&cCOARSE"
+            close {_p}'s inventory
+        format gui slot 2 with white stained glass pane named "&f1:1":
+            set line 3 of block at location(192.5, -34.5, 42.5, world "world") to "&f1:1"
+            close {_p}'s inventory
+        format gui slot 3 with lime stained glass pane named "&aFINE":
+            set line 3 of block at location(192.5, -34.5, 42.5, world "world") to "&aFINE"
+            close {_p}'s inventory
+        format gui slot 4 with green stained glass pane named "&2VERY FINE":
+            set line 3 of block at location(192.5, -34.5, 42.5, world "world") to "&2VERY FINE"
+            close {_p}'s inventory
+        open gui to {_p}
+
+
+# THIS IS STILL BEING DONE!

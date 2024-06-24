@@ -13,5 +13,8 @@ function scp999(l: location):
             if {_p} ? 0 < 40:
                 add 1 to {_p}
             else:
-                make 1 of heart at all blocks in radius 1.5 around loop-player 
+                make 1 of heart 2 meters above loop-player 
                 set {_p} to 0
+
+
+#the reason i dont use wait is because then it will stall the entire while event which stops the model from teleporting

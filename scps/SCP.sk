@@ -17,7 +17,9 @@ command scp <text> <text>:
             if arg-1 is "682":
                 scp682(player)
             if arg-1 is "1370":
-                scp1370(player)
+                #scp1370(player)
+            if arg-1 is "939":
+                scp939(player)
             if arg-1 is "500":
                 give player record relic named "&6SCP-500" with lore "&fINPUT LORE"
         if arg-2 is "kill":
@@ -28,5 +30,17 @@ command scp <text> <text>:
 
 
 on tab complete of "/scp":
-    set tab completion for position 1 to "173" and "096" and "999" and "500" and "682" and "1370"
+    set tab completion for position 1 to "173" and "096" and "999" and "500" and "682" and "1370" and "939"
     set tab completion for position 2 to "spawn" and "kill"
+
+
+on death:
+    attacker is set
+    victim is not a player
+    if victim's name contains "SCP":
+        cancel event
+
+
+command cool:
+    trigger:
+        teleport player to location(202.5, -36, 58.5, world "world")
