@@ -7,5 +7,5 @@ on right click:
 
 
 every 10 seconds:
-    if {500c}'s inventory does not contain a record relic:
-        set slot 13 of block at location(183.5, -35.5, 50.5, world "world")'s inventory to record relic named "&6SCP-500"
+    if block at location(183, -36, 50, world "world")'s inventory does not contain a record relic:
+        set slot 13 of block at location(183, -36, 50, world "world")'s inventory to record relic named "&6SCP-500"
