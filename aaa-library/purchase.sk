@@ -1,0 +1,8 @@
+function purchaseItem(p:player,i:item,price:num):
+    currencyGet({_p},"credits") < {_price}:
+        send "<##E34234>&lSYSTEM &7» Insufficient Funds" to {_p}
+        stop
+    currencyRemove({_p},"credits",{_price})
+    send "<##E34234>&lSYSTEM &7» Purchased &a%uncolored name of {_i}% &7for <##F5F5DC>¢%format({_price})%&7." to {_p}
+    play sound "entity.villager.trade" for {_p}
+    give {_p} {_i}

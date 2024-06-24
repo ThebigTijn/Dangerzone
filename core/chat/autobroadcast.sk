@@ -3,9 +3,21 @@ every 3 minutes:
 
 function autoBroadcast():
     add 1 to {-broadcast}
-    send "", " <##B82031>&lDANGERZONE", "", " <##B2BEB5>&l🔰 &fJoin our <link:https://discord.gg/dangerzone-688720684297617468/>&3&l[DISCORD]<reset>", "" to all players if {-broadcast} = 1
-    send "", " <##B82031>&lDANGERZONE", "", " <##B2BEB5>&l🔰 &fSupport us by purchasing something off our <link:http://dangerzonemc.buycraft.net/>&e&l[STORE]<reset>", "" to all players if {-broadcast} = 2
-    send "", " <##B82031>&lDANGERZONE", "", " <##B2BEB5>&l🔰 &fBecome a guard through joining our <link:https://discord.gg/dangerzone-688720684297617468/>&3&l[DISCORD]<reset> and applying!", "" to all players if {-broadcast} = 3
-    send "", " <##B82031>&lDANGERZONE", "", " <##B2BEB5>&l🔰 &6&lNEW! &eGold shop! <link:https://dangerzonemc.buycraft.net/category/goldshop>&e&l[STORE]<reset>", "" to all players if {-broadcast} = 4
-    send "", " <##B82031>&lDANGERZONE", "", " <##B2BEB5>&l🔰 &fSupport us by doing /ad in the minehut lobby!", "" to all players if {-broadcast} = 5
+    send "", "&7┌ &a&lINFORMATION", "&7│ &fJoin our <link:https://discord.gg/dangerzone-688720684297617468/>&3&l[DISCORD]<reset> for critical updates!", "" to all players if {-broadcast} = 1
+    send "", "&7┌ &a&lINFORMATION", "&7│ &fSupport us by purchasing from our <link:http://dangerzonemc.buycraft.net/>&e&l[STORE]<reset>", "" to all players if {-broadcast} = 2
+    send "", "&7┌ &a&lINFORMATION", "&7│ &fBecome a guard by joining our <link:https://discord.gg/dangerzone-688720684297617468/>&3&l[DISCORD]<reset> and applying!", "" to all players if {-broadcast} = 3
+    send "", "&7┌ &a&lINFORMATION", "&7│ &6&lNEW! &eCheck out our Gold Shop! <link:https://dangerzonemc.buycraft.net/category/goldshop>&e&l[STORE]<reset>", "" to all players if {-broadcast} = 4
+    send "", "&7┌ &a&lINFORMATION", "&7│ &fSupport us by typing /ad in the Minehut lobby!", "" to all players if {-broadcast} = 5
+    set {-broadcast} to 0 if {-broadcast} = 5
+
+every 3 minutes:
+    autoBroadcast()
+
+function autoBroadcast():
+    add 1 to {-broadcast}
+    send "", "&7┌ &a&lINFORMATION", "&7│ &fJoin our <link:https://discord.gg/dangerzone-688720684297617468/>&3&l[DISCORD]<reset> for important information!", "" to all players if {-broadcast} = 1
+    send "", "&7┌ &a&lINFORMATION", "&7│ &fSupport us by purchasing something off our <link:http://dangerzonemc.buycraft.net/>&e&l[STORE]<reset>", "" to all players if {-broadcast} = 2
+    send "", "&7┌ &a&lINFORMATION", "&7│ &fBecome a guard through joining our <link:https://discord.gg/dangerzone-688720684297617468/>&3&l[DISCORD]<reset> and applying!", "" to all players if {-broadcast} = 3
+    send "", "&7┌ &a&lINFORMATION", "&7│ &6&lNEW! &eGold shop! <link:https://dangerzonemc.buycraft.net/category/goldshop>&e&l[STORE]<reset>", "" to all players if {-broadcast} = 4
+    send "", "&7┌ &a&lINFORMATION", "&7│ &fSupport us by doing /ad in the minehut lobby!", "" to all players if {-broadcast} = 5
     set {-broadcast} to 0 if {-broadcast} = 5

@@ -1,0 +1,73 @@
+local function gm(p:player,g:gamemode):
+    set (gamemode of {_p}) to {_g}
+    send "<##E34234>&lSYSTEM &7» Gamemode of &f%{_p}% &7updated to &c%{_g}%&7." to {_p}
+
+command gamemode <player> <gamemode>:
+    permission: op 
+    trigger:
+        arg-1 and arg-2 is set
+        gm(arg-1,arg-2)
+
+command gmc:
+    permission: op
+    trigger:
+        gm(player,creative)
+
+command gms:
+    permission: op
+    trigger:
+        gm(player,survival)
+
+command gma:
+    permission: op
+    trigger:
+        gm(player,adventure)
+
+command gmsp:
+    permission: op
+    trigger:
+        gm(player,spectator)
+
+command heal [<player>]:
+    permission: op
+    trigger:
+        send "<##E34234>&lSYSTEM &7» Health Updated" to player
+        if arg-1 is set:
+            heal arg-1
+            stop
+        heal player
+
+command feed [<player>]:
+    permission: op
+    trigger:
+        send "<##E34234>&lSYSTEM &7» Hunger Updated" to player
+        if arg-1 is set:
+            feed arg-1
+            stop
+        feed player
+
+local function returnFly(p:player) :: boolean:
+    return false if fly state of {_p} = true
+    return true if fly state of {_p} = false
+
+local function setFly(p:player):
+    set fly state of {_p} to returnFly({_p})
+
+command fly [<player>]:
+    permission: op
+    trigger:
+        send "<##E34234>&lSYSTEM &7» Fly State Updated" to player
+        if arg-1 is set:
+            setFly(arg-1)
+            stop
+        setFly(player)
+
+command repair [<string>]:
+    permission: op
+    trigger:
+        send "<##E34234>&lSYSTEM &7» Repaired" to player
+        if arg-1 = "all":
+            loop all items in inventory of player:
+                set durability of loop-value to max durability of loop-value
+            stop
+        set durability of (tool of player) to max durability of (tool of player)

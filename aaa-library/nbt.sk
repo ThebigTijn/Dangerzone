@@ -1,16 +1,8 @@
-function nbtSet(p: object, key: string, obj: object):
-    set {_nbt} to nbt compound of {_p}
-    set {_c} to tag "custom" of {_nbt}
-    set tag {_key} of {_c} to {_obj}
-    set tag "custom" of {_nbt} to {_c}
+function nbtSet(p:object,key:string,obj:object):
+    set (string tag "custom;%{_key}%" of nbt of {_p}) to {_obj}
 
-function nbtGet(p: object, key: string) :: object:
-    set {_nbt} to nbt compound of {_p}
-    set {_c} to tag "custom" of {_nbt}
-    return tag {_key} of {_c}
+function nbtGet(p:object,key:string) :: object:
+    return (string tag "custom;%{_key}%" of nbt of {_p})
  
-function nbtDelete(p: object, key: string):
-    set {_nbt} to nbt compound of {_p}
-    set {_c} to tag "custom" of {_nbt}
-    delete tag {_key} of {_c}
-    set tag "custom" of {_nbt} to {_c}
+function nbtDelete(p:object,key:string):
+    delete (string tag "custom;%{_key}%" of nbt of {_p})

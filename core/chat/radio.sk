@@ -1,49 +1,55 @@
-function radioChannel(p: player, radio: text, message: text):
-    {_p} has permission "radio.%{_radio}%"
-    {_message} is set
-    send "<##E34234>&lSYSTEM &7» Enter a message" to {_p} if {_message} is not set
-    set {_color} to "&b" if {_radio} is "mtf"
-    set {_color} to "&e" if {_radio} is "scd"
-    set {_color} to "&7" if {_radio} is "sd"
-    set {_color} to "<##2D843B>" if {_radio} is "ci"
-    set {_color} to "&5" if {_radio} is "isd"
-    set {_color} to "<##FBA2EF>" if {_radio} is "radio"
-    send formatted "&8[%{_color}%%{_radio} in uppercase%&8] &f%{_p}%: <##B2BEB5>%{_message}%" to all players where [input has permission "radio.%{_radio}%"]
+function Radio(p: player, radio: string, msg: string):
+	if {_msg} is not set:
+		send "<##E34234>&lSYSTEM &7» Enter a message" to {_p}
+	if {_p} has permission "dangerzone.radio.%{_radio}%":
+		set {_color} to "&b" if {_radio} is "mtf"
+		set {_color} to "&e" if {_radio} is "scd"
+		set {_color} to "&7" if {_radio} is "sd"
+		set {_color} to "<##2D843B>" if {_radio} is "ci"
+		set {_color} to "&5" if {_radio} is "isd"
+		set {_color} to "<##FBA2EF>" if {_radio} is "radio"
+		set {_color} to "<##e84d65>" if {_radio} is "sc"
+		set {_msg} to chatReplace({_p}, {_msg}, {_radio})
+		loop all players:
+			loop-player has permission "dangerzone.radio.%{_radio}%"
+			send formatted "%{_color}%[%{_radio} in uppercase%] &f%{_p}%&f: &7%{_msg}%" to loop-player
+	else:
+		send "<##E34234>&lSYSTEM &7» Insufficient Permissions" to {_p}
 
-function radioToggle(p: player, radio: text):
-    {_p} has permission "radio.%{_radio}%"
-    if (metadata tag "Radio_Toggle" of {_p}) is set:
-        delete (metadata tag "Radio_Toggle" of {_p})
-        send "<##E34234>&lSYSTEM &7» Radio Untoggled" to {_p}
-    else:
-        set (metadata tag "Radio_Toggle" of {_p}) to {_radio}
-        send "<##E34234>&lSYSTEM &7» Radio Toggled" to {_p}
-
-command radio-toggle <text>:
-    trigger:
-        send "<##E34234>&lSYSTEM &7» Properly use the command out of the list -> &8[&fRADIO, MTF, SCD, SD, CI, ISD or OFF]" to player if arg is not "RADIO", "MTF", "SCD", "SD", "CI" or "ISD"
-        radioToggle(player, arg) if arg = "RADIO", "MTF", "SCD", "SD", "CI", or "ISD"
+command toggle [<text>]:
+	trigger:
+		if arg-1 is not "radio" or "mtf" or "scd" or "sd" or "ci" or "isd" or "off" or "sc":
+			send "<##E34234>&lSYSTEM &7» &7Use /toggle &f[radio/mtf/scd/sd/isd/ci/off]&7." 
+		if player has permission "dangerzone.radio.%arg-1%":
+			set metadata tag "toggle" of player to arg-1
+		else:
+			delete metadata tag "toggle" of player
+			send "<##E34234>&lSYSTEM &7» Insufficient Permissions"
+		if arg-1 is "off":
+			delete metadata tag "toggle" of player
+			send "<##E34234>&lSYSTEM &7» Radio Untoggled" to player
 
 command radio <text>:
-    trigger:
-        radioChannel(player, "radio", arg)
+	trigger:
+		Radio(player, "radio", arg-1)
 
 command mtf <text>:
 	trigger:
-		radioChannel(player, "mtf", arg)
+		Radio(player, "mtf", arg-1)
 
 command sd <text>:
 	trigger:
-		radioChannel(player, "sd", arg)
+
+		Radio(player, "sd", arg-1)
 
 command scd <text>:
 	trigger:
-		radioChannel(player, "scd", arg)
+		Radio(player, "scd", arg-1)
 
 command ci <text>:
 	trigger:
-		radioChannel(player, "ci", arg)
+		Radio(player, "ci", arg-1)
 
 command isd <text>:
 	trigger:
-		radioChannel(player, "isd", arg)
+		Radio(player, "isd", arg-1)

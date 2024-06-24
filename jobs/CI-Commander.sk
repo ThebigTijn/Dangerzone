@@ -1,20 +1,16 @@
-function commanderMenu(p:player):
-    add player head with nbt from "{display:{Name:'{""text"":""&a&lACCEPT""}'},SkullOwner:{Id:[I;1865133732,-1019457749,-1650216397,1032141214],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDEyMDdmZmU2OWYwNmY3YjgxNzNiZjViOTI0YzRkOGY3OTc2MzgzYzdlNTlkY2U1MzhmZmE2M2FmODRkNzU5NSJ9fX0=""}]}}}" with lore "&8%font("decision")%", "", "&7This is the best option,", "&7why would you be here if you did not want to accept.", "" to {_list::*}
-    add player head with nbt from "{display:{Name:'{""text"":""&c&lDECLINE""}'},SkullOwner:{Id:[I;657690590,-1564915963,-2080225727,263292440],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDEyZTc0YTExOTRlNzMxZmZjZDRkZmYwMjU3MDAwOWY1YjRhOTQ3ZGUzMGRmNWNkMjIwYzA0ZDMyNmYwZWI4NyJ9fX0=""}]}}}" with lore "&8%font("decision")%", "", "&7This is a terrible option", "&7why are you even here?", "" to {_list::*}
-    add player head with nbt from "{display:{Name:'{""text"":""<##ACB6B3>&lCHAOS INSURGENCY""}'},SkullOwner:{Id:[I;2042056884,-638760872,-1110934539,-241416115],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWVhMTI4NTJlMjY0YmI4ODA2Njc1MjhlNjdlZjc5NzFkN2IyM2IyZWZiNWE5ZTYzMDYzYzk1NTM3NGI0NzBlNSJ9fX0=""}]}}}" with lore "&8%font("role")%", "", "&7Join the Chaos Insurgency to eliminate FP", "&7and take control of the moon", "", "<##FFD700>&l%font("BENEFITS")%", "<##BFCAC7>You Receive", "&8- &fChaos Insurgency Kit,", "&8- &7Payment of &a$25!", "" to {_list::*}
+local function open(p:player):
     create a gui with virtual furnace inventory named " &8&l%font("the big decision")%":
-        loop {_list::*}:
-            format next gui slot with loop-value:
-                commanderAccept({_p}) if clicked slot = 0
-                close inventory of {_p} if clicked slot = 1
+        format gui slot 0 with player head with nbt from "{display:{Name:'{""text"":""&a&lACCEPT""}'},SkullOwner:{Id:[I;1865133732,-1019457749,-1650216397,1032141214],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDEyMDdmZmU2OWYwNmY3YjgxNzNiZjViOTI0YzRkOGY3OTc2MzgzYzdlNTlkY2U1MzhmZmE2M2FmODRkNzU5NSJ9fX0=""}]}}}" with lore "&8%font("decision")%", "", "&7This is the best option,", "&7why would you be here if you did not want to accept.", "":
+            accept({_p})
+        format gui slot 1 with player head with nbt from "{display:{Name:'{""text"":""&c&lDECLINE""}'},SkullOwner:{Id:[I;657690590,-1564915963,-2080225727,263292440],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDEyZTc0YTExOTRlNzMxZmZjZDRkZmYwMjU3MDAwOWY1YjRhOTQ3ZGUzMGRmNWNkMjIwYzA0ZDMyNmYwZWI4NyJ9fX0=""}]}}}" with lore "&8%font("decision")%", "", "&7This is a terrible option", "&7why are you even here?", ""
+            close (inventory of {_p})
+        format gui slot 2 with player head with nbt from "{display:{Name:'{""text"":""<##ACB6B3>&lCHAOS INSURGENCY""}'},SkullOwner:{Id:[I;2042056884,-638760872,-1110934539,-241416115],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWVhMTI4NTJlMjY0YmI4ODA2Njc1MjhlNjdlZjc5NzFkN2IyM2IyZWZiNWE5ZTYzMDYzYzk1NTM3NGI0NzBlNSJ9fX0=""}]}}}" with lore "&8%font("role")%", "", "&7Join the Chaos Insurgency to eliminate FP", "&7and take control of the moon", "", "<##FFD700>&l%font("BENEFITS")%", "<##BFCAC7>You Receive", "&8- &fChaos Insurgency Kit,", "&8- &7Payment of &a$25!", ""
         open gui to {_p}
 
-function commanderAccept(p:player):
-    close inventory of {_p}
-    if group of {_p} != "class-d":
-        send "&8[&fCommander&8] &7Must be Class-D to perform this action." to {_p}
-        stop
-    send "&8[&fCommander&8] &7Good decision, payment and kit have been supplied" to {_p}
+local function accept(p:player):
+    close (inventory of {_p})
     currencyAdd({_p},"credits",25)
-    set group of {_p} to "ci"
-    #give kit
+    send "" to {_p}
+
+on right click:
+    open(player) if event-entity = "Commander"

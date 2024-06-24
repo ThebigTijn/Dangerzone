@@ -1,6 +1,19 @@
+command /reloadyaml <text> <text>:
+    permission: op
+    trigger:
+        loop all currently loaded yaml files:
+            add loop-value to {_list::*}
+        stop if {_list::*} does not contain arg-1
+        load yaml "plugins/Skript/yaml/utilities/%arg-1%.yml" as arg-1
+        message "<##E34234>&lSYSTEM &7» &fReloaded yaml, <##E34234>%arg-1%&f."
+    
+on tab complete of "reloadyaml":
+    set tab completions for position 1 to "folder"
+    set tab completions for position 2 to all currently loaded yaml files
+
 command /reloadyaml <text>:
 	permission: op
-	trigger:
+	trigger:t
 		if arg-1 = "dishwashing":
 			load yaml "plugins/Skript/yaml/jobs/dishwashing.yml" as "dishwashing"
 		else if arg-1 = "warps"

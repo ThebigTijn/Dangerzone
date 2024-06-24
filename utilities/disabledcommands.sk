@@ -1,6 +1,6 @@
 on load:
-	set {disabledcommands::*} to "?", "help", "ver", "version", "pl", "plugins", "about", "bukkit:?", "bukkit:help", "bukkit:ver", "bukkit:version", "bukkit:pl", "bukkit:plugins" and "bukkit:about" 
-	set {disabledslashcommands::*} to "/?", "/help", "/ver", "/version", "/pl", "/plugins", "/about", "/bukkit:?", "/bukkit:help", "/bukkit:ver", "/bukkit:version", "/bukkit:pl", "/bukkit:plugins" and "/bukkit:about" 
+	set {disabledcommands::*} to "?", "help", "ver", "version", "pl", "plugins", "about", "bukkit:?", "bukkit:help", "bukkit:ver", "bukkit:version", "bukkit:pl", "bukkit:plugins", "bukkit:about", "minecraft:help", "minecraft:me", "minecraft:msg", "minecraft:teammsg", "minecraft:tell", "minecraft:tm", "minecraft:trigger", "minecraft:w"
+	set {disabledslashcommands::*} to "/?", "/help", "/ver", "/version", "/pl", "/plugins", "/about", "/bukkit:?", "/bukkit:help", "/bukkit:ver", "/bukkit:version", "/bukkit:pl", "/bukkit:plugins" and "/bukkit:about"
 
 on command:
 	player does not have permission "op"
