@@ -5,7 +5,7 @@ command clearchat:
         loop 250 times:
             send " " to all players
             send " %nl%%nl%" to all players
-        send "&a&LCHAT CLEARED &7By &r%prefix of player% &r%player%&7!" to all players
+        send "&a&LCHAT CLEARED &7By &r%player%&7!" to all players
 
 command lockchat:
     permission: staff.use
@@ -13,16 +13,16 @@ command lockchat:
     trigger:
         if {-lockchat} is not set:
             set {-lockchat} to true
-            send "&c&LCHAT LOCKED &7By &r%prefix of player% &r%player%&7!" to all players
-        else:
-            delete {-lockchat}
-            send "&c&LCHAT UNLOCKED &7By &r%prefix of player% &r%player%&7!" to all players
+            send "&c&LCHAT LOCKED &7By &r%player%&7!" to all players
+            stop
+        delete {-lockchat}
+        send "&c&LCHAT UNLOCKED &7By &r%player%&7!" to all players
 
 
 command store:
     trigger:
-        send "<##E34234>&lSYSTEM &7» &fPurchase something off our <link:http://dangerzonemc.buycraft.net/>&e&l[STORE]<reset>" to player
+        send "", "&7┌ &a&lINFORMATION", "&7│ &fPurchase something off our <link:http://dangerzonemc.buycraft.net/>&e&l[STORE]!<reset>", "" to player
 
 command discord:
     trigger:
-        send "<##E34234>&lSYSTEM &7» &fJoin our discord! <link:https://discord.gg/dangerzone-688720684297617468>&3&lCLICK ME!<reset>" to player
+        send "", "&7┌ &a&lINFORMATION", "&7│ &fJoin our discord! <link:https://discord.gg/dangerzone-688720684297617468>&3&lCLICK ME!<reset>", "" to player

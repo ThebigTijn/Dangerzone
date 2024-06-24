@@ -1,0 +1,9 @@
+local function spawnDisplay(l:location,t:string):
+    spawn text display at {_l}:
+        set display text of entity to {_t}
+        set display scale of entity to vector(2,2,2)
+
+command spawn-display <string>:
+    permission: op
+    trigger:
+        spawnDisplay(location of player,font(colored arg-1))

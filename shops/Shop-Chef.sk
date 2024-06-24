@@ -1,13 +1,18 @@
-function chefShop(p:player):
-    create a gui with virtual hopper inventory named "              &8%font("food shop")%":
+local function server(p:player):
+    play sound "entity.player.burp" for {_p}
+    create a gui with virtual hopper inventory named "         &8%font("food shop")%":
         format gui slot (numbers from 0 to 4) with black stained glass pane named " "
         format gui slot 1 with 5 carrot named "&7Carrot &8[<##F5F5DC>¢5&8]":
-            purchaseItem({_p},5,5 carrot named "&7Carrot")
-        format gui slot 2 with 5 baked potato named "&7Baked Potato &8[<##F5F5DC>¢15&8]":
-            purchaseItem({_p},15,5 baked potato named "&7Baked Potato")
-        format gui slot 3 with 5 steak named "&7Steak &8[<##F5F5DC>¢30&8]":
-            purchaseItem({_p},30,5 steak named "&7Steak")
+            set {_i} to gui clicked item named "&7Carrot"
+            purchaseItem({_p},{_i},5)
+        format gui slot 2 with 5 baked potato named "&7Baked Potato &8[<##F5F5DC>¢10&8]":
+            set {_i} to gui clicked item named "&7Baked Potato"
+            purchaseItem({_p},{_i},10)
+        format gui slot 3 with 5 steak named "&7Steak &8[<##F5F5DC>¢20&8]":
+            set {_i} to gui clicked item named "&7Steak"
+            purchaseItem({_p},{_i},20)
         open gui to {_p}
 
 on right click:
-    chefShop(player) if entity id of event-entity = ""
+    name of event-entity = "Server@"
+    server(player)

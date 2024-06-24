@@ -1,0 +1,27 @@
+on right click:
+    event-entity is set
+    if name of event-entity = "Sophia Light@":
+        set {_s} to "foundation personnel"
+    else if name of event-entity = "Aaron Siegel@":
+        set {_s} to "chaos insurgency"
+    {_s} is set
+    joinMenu(player,{_s})
+
+local function joinMenu(p:player,s:string):
+    play sound "ui.button.click" for {_p}
+    create a gui with virtual chest inventory with 2 rows named "&8%font({_s})%":
+        format gui slot (numbers from 9 to 17), 4 and 12 with white stained glass pane named " "
+        format gui slot (numbers from 0 to 3) with lime stained glass pane named "&a%font("confirm")%":
+            confirm({_p},{_s})
+        format gui slot (numbers from 5 to 8) with red stained glass pane named "&c%font("decline")%"
+        open gui to {_p}
+
+local function confirm(p:player,s:string):
+    if {_s} = "foundation personnel":
+        set (group of {_p}) to "SD"
+        Kits({_p},"give","SD")
+    else if {_s} = "chaos insurgency":
+        set (group of {_p}) to "CI"
+        Kits({_p},"give","CI")
+    send "<##E34234>&lSYSTEM &7» Welcome to &f%{_s} in proper case%&7." to {_p}
+    play sound "ui.toast.challenge_complete" for {_p}
