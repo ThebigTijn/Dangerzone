@@ -1,35 +1,44 @@
-local function addAttacker(p:player,pl:player):
-    add (uuid of {_pl}) to {-attackers.%uuid of {_p}%::*}
+local function addAtt(p:player,pl:player):
+    add (uuid of {_pl}) to {-att.%uuid of {_p}%::*}
 
-local function removeAttacker(p:player):
+local function removeAtt(p:player):
     set {_u} to (uuid of {_p})
-    loop {-attackers.%{_u}%::*}:
+    loop {-att.%{_u}%::*}:
         delete {-hits.%loop-value%.%{_u}%}
-    delete {-attackers.%{_u}%::*}
+    delete {-att.%{_u}%::*}
 
-local function getHits(p:player):
+local function returnHits(p:player) :: numbers:
     set {_u} to (uuid of {_p})
-    loop {-attackers.%{_u}%::*}:
+    loop {-att.%{_u}%::*}:
         add {-hits.%loop-value%.%{_u}%} to {_nums::*}
+    return {_nums::*}
 
-local function getHighestHits(p:player):
-    getHits({_p})
-    set {_highest} to max({_nums::*})
+local function ...(p:player):
+    set {_nums::*} to returnHit({_p})
+    set {_high} to max({_nums::*})
     set {_u} to (uuid of {_p})
-    loop {-attackers.%{_u}%::*}:
-        {-hits.%loop-value%.%{_u}%} = {_highest}
-        set {_pl} to loop-value
-        set (string tag "priority-%uuid of {_p}%" of nbt compound from {_pl}) to "true"
-        removeAttacker({_p})
-        stop
+    loop {-att.%{_u}%::*}:
+        {-hits.%loop-value%.%{_u}%} = {_high}
+        ...({_p},loop-value)
 
-local function priority(p:player):
-    
+local function ...(p:player,uuid:string) :: items:
+    loop all items in (inventory of {_p}):
+        set (string tag "custom;priority" of nbt of loop-value) to {_uuid}
+        add loop-value to {_items::*}
+    ...({_items::*})
+    return {_items::*}
+
+local function ...(items:items):
+    drop {_items::*}
+    wait 10 seconds
+    loop {_items::*}:
+        delete (string tag "custom;priority" of nbt of loop-value)
+
+on pickup:
+    (string tag "custom;priority" of nbt of event-item) is set
+    (string tag "custom;priority" of nbt of event-item) != uuid of player
+    stop
 
 on damage:
-    if {-attackers.%uuid of victim%::*} does not contain (uuid of attacker):
-        addAttacker(victim,attacker)
+    addAtt(victim,attacker) if {-att.%uuid of victim%::*} does not contain (uuid of attacker)
     add 1 to {-hits.%uuid of attacker%.%uuid of victim%}
-
-on death:
-    getHighestHits(victim)
