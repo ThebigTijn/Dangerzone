@@ -1,0 +1,55 @@
+# Dangerzone Mastery Script | Made by Almosst or https://github.com/Almosst-DEV
+# Only authorized for use by Dangerzone.
+# For any issues/complaints please reach out to myself via Discord (almosst.)
+
+function masteryGUI(p: player):
+	create a gui with virtual chest inventory with 3 rows named "<##fc03d3>ᴍᴀѕᴛᴇʀʏ &8|":
+		loop (3*9) times:
+			make gui slot (loop-number - 1) with black stained glass pane named "&7"
+		make gui slot 11 with magenta stained glass pane named "<##9003fc>Tactics" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴠɪᴇᴡ ᴛᴇᴄʜ ᴛʀᴇᴇ"
+		make gui slot 13 with red stained glass pane named "<##bf1919>Combat" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴠɪᴇᴡ ᴛᴇᴄʜ ᴛʀᴇᴇ"
+		make gui slot 15 with orange stained glass pane named "<##ff8000>Passive" with lore "&7ᴄʟɪᴄᴋ ᴛᴏ ᴠɪᴇᴡ ᴛᴇᴄʜ ᴛʀᴇᴇ"
+	open the last gui for {_p}
+	
+function scramble(p: player):
+	send title "&4&lѕᴄʀᴀᴍʙʟᴇs" with subtitle "&8ᴄᴏɢɴɪᴛᴏʜᴀᴢᴀʀᴅ ᴅᴇᴛᴇᴄᴛᴇᴅ" to {_p} for 1 second with fadein 0.2 seconds and fadeout 0.1 seconds
+	apply infinite blindness of tier 2 without any particles to {_p}
+	loop 20 times:
+		play sound "entity.player.breath" with volume 10 and pitch 2 to {_p}
+		wait 1 tick
+	remove blindness from {_p}
+	
+function skillGUI(p:player,t:int):
+	create a gui with virtual chest inventory with 6 rows named "<##fc03d3>ᴍᴀѕᴛᴇʀʏ &8|":
+		loop (6*9) times:
+			make gui slot (loop-number - 1) with black stained glass pane named "&7"
+	open the last gui for {_p}
+	
+on load:
+	set {_id} to 0
+	loop 3 times:
+		set {_t} to loop-number
+		loop {mastery::%{_t}%::amount} times:
+			set {_id} to loop-number-2
+			load yaml "plugins/Skript/yaml/mastery/techtree-%{_id}%" as "techtree-%{_id}%"
+			loop all players:
+				if loop-player is op:
+					send "&7[&bMastery Debug&7] | &fLoaded YAML techtree-%{_id}%" to loop-player
+				
+local function Mastery_TechTreeCreate(n:string,i:itemtype):
+	add 1 to {mastery::amount}
+	set {_id} to {mastery::amount}
+	set {mastery::%{_id}%::amount} to 0
+	load yaml "plugins/Skript/yaml/mastery/techtree-%{_id}%" as "techtree-%{_id}%"
+	Mastery_YMLValue({_id},"name",{_n})
+	Mastery_YMLValue({_id},"itemtype","%{_i}%")
+	save yaml "techtree-%{_id}%"
+				
+local function Mastery_YMLValue(id:int,dataid:string,data:string):
+    set yaml value "%{_dataid}%" from "techtree-%{_id}%" to "%{_data}%"
+    
+local function Mastery_YMLGetValue(id:int,dataid:string) :: string:
+	if yaml value "%{_dataid}%" from "techtree-%{_id}%" exists:
+		set {_r} to yaml value "%{_dataid}%" from "techtree-%{_id}%"
+		return "%{_r}%"
+	return "&cData not found!"

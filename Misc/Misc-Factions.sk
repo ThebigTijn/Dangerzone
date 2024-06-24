@@ -5,6 +5,9 @@ local function factionYMLGetValue(id:int,dataid:string) :: string:
     return yaml value "%{_dataid}%" from "faction-%{_id}%" if yaml value "%{_dataid}%" from "faction-%{_id}%" is set
     return "&cData not found!"
 
+local function loadYML(id:int):
+    load yaml "plugins/Skript/yaml/factions/faction-%{_id}%" as "faction-%{_id}%"
+
 function inFaction(p:player) :: boolean:
     return true if (int tag "custom;Faction_ID" of nbt compound from {_p}) is set
     return false
@@ -99,6 +102,9 @@ command faction <string> [<string>]:
         if arg-1 is set:
             set {_name} to factionYMLGetValue((int tag "custom;Faction_ID" of nbt compound from player),"name")
             set {_id} to (int tag "custom;Faction_ID" of nbt compound from player)
+        if (int tag "custom;Faction_ID" of nbt compound from player) is set:
+            yaml "plugins/Skript/yaml/factions/faction-%{_id}%" is not loaded
+            loadYML({_id})
         if arg-1 = "create":
             arg-2 is set
             if length of arg-2 > 16:

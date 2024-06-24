@@ -7,18 +7,31 @@ on right click:
         stop
     give player {_i}
 
-on block place:
-    (string tag "cargo" of nbt compound from event-item) = "true"
-    "%region at event-block%" contains "Cargo"
-    set event-block to air
-    set {_rewardValue} to (random number between 6 and 8)
-    moneyAdd(player,{_rewardValue})
-    xpAdd(player,5)
-
 on inventory click:
-    cancel event if (string tag "cargo" of nbt compound from event-item) = "true"
-
-on drop:
     (string tag "cargo" of nbt compound from event-item) = "true"
     cancel event
-    set (tool of player) to air
+
+local function getReward(p:player):
+    set {_r} to round(random number between 1 and 3,2)
+    currencyAdd({_p},"credits",{_r})
+    currencyAdd({_p},"xp",{_r})
+    send "" to {_p}
+
+on bound enter:
+    id of event-bound contains "cargo"
+    set (metadata tag "cargoBound" of player) to true
+
+on bound exit:
+    id of event-bound contains "cargo"
+    delete (metadata tag "cargoBound" of player)
+
+on block place:
+    (string tag "cargo" of nbt of event-item) = "true"
+    (metadata tag "cargoBound" of player) = true
+    set event-block to air
+    getReward(player)
+
+on drop:
+    (string tag "cargo" of nbt of event-item) = "true"
+    cancel event
+    set event-item to air

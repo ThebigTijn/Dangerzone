@@ -1,0 +1,26 @@
+#cc: hibers
+
+options:
+    prefix: discord
+    no-perms: no perms
+
+    name: Lilypad #replace with custom name
+    token: MTIyMzA3NTIzMTk3MTY3MjA3NA.G_JjiY.0Q6NenNXYKubYTFGiz3SKhMlgHiM8NZFZaGOiA #replace with bot's token
+
+    server: 1221254994838294538 #server id
+    verify-role: 1225446402587623424 #role id
+    verify-channelname: ##commands #name of channel
+
+    server-ip: yourserver.minehut.gg #minecraft ip
+    discord-ip: discord.gg/yourserver #discord ip
+
+define new bot named "{@name}":
+    token: "{@token}"
+    intents: default intents
+    policy: all
+    auto reconnect: true
+    compression: none
+
+on ready:
+    send "&a%event-bot% &2has been loaded!" to console
+    set presence of bot "{@name}" to watching "%size of discord members of guild with id "{@server}"% Members"

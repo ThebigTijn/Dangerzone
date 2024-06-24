@@ -1,20 +1,20 @@
-function weaponryGet(p: player):
-
-    set {_weaponry} to virtual chest inventory with 6 rows named "&8&l%font("ci")% &8| <##436cfb>&l%font("WEAPONRY")%"
-    set (metadata tag "Weaponry_Shop" of {_p}) to {_weaponry}
-
-    set slot (integers between 0 and 9) of {_weaponry} to black stained glass pane named " "
-    set slot (integers between 45 and 53) of {_weaponry} to black stained glass pane named " "
-    set slot 9,17,18,26,27,35,36, and 44 of {_weaponry} to black stained glass pane named " "
-
-    set slot (integers between 20 and 24) of {_weaponry} to gray dye named " "
-    set slot (integers between 29 and 33) of {_weaponry} to gray dye named " "
-
-    open {_weaponry} to {_p}
-
-on inventory click:
-    event-inventory = (metadata tag "Weaponry_Shop" of player)
-    cancel event
+function weaponryShop(p:player,page:int):
+    set {_minIndex} to (({_page}*28)-28)+1
+    set {_maxIndex} to ({_page}*28)
+    set {_list::*} to (elements from {_minIndex} to {_maxIndex} from #weapon list)
+    create a gui with virtual chest inventory with 6 rows named "            &8%font("weaponry")%":
+        set {_b} to black stained glass pane named " "
+        set {_n} to 0
+        loop 2 times:
+            format gui slot (numbers from {_n} to {_n}+8) with {_b}
+            add 45 to {_n}
+        loop 4 times:
+            format gui slot ({_n} and {_n}+8) with {_b}
+            add 9 to {_n}
+        loop {_list::*}:
+            format next gui slot with loop-value:
+                purchaseItem({_p},(int tag "price" of nbt compound from clicked item),clicked item))
+        open gui to {_p}
 
 on right click:
-    weaponryGet(player) if event-entity = "Weaponry"
+    weaponryShop(player,1) if entity id of event-entity = ""

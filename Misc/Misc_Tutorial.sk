@@ -1,0 +1,81 @@
+on load:
+	load yaml "plugins/Skript/yaml/tutorial/lines.yml" as "lines"
+	set {stop} to true
+	wait 10 ticks
+	set {stop} to false
+
+command /tuttool:
+	permission: op
+	trigger:
+		give player netherite hoe named "&7(*Drumroll*) TutTool (""yeeeah!"")" with lore "%nl%&7Right and left click to make a line%nl%&7gl making lines!%nl%%nl%&8%font("Made by ThebigTijn")%" with nbt compound from "{tuttool:1}" with all flags hidden
+	
+on right click with netherite hoe:
+	int tag "tuttool" of nbt compound of player's held item = 1
+	gamemode of player = creative
+	cancel event
+	set {_l} to rayTraceLoc(event-player,50)
+	if {_l} is not set:
+		message "<##E34234>&lSYSTEM &7» &cInvalid Location!" to event-player
+		stop
+	set {-%player's uuid%.loc1} to {_l}
+	message "<##E34234>&lSYSTEM &7» &9%rayTraceLoc(event-player,50)%" to event-player
+
+on left click with netherite hoe:
+	int tag "tuttool" of nbt compound of player's held item = 1
+	cancel event
+	set {_l} to rayTraceLoc(event-player,50)
+	if {-%player's uuid%.loc1} is not set:
+		message "<##E34234>&lSYSTEM &7» &cNot able to find first location." to event-player
+		stop
+	if {_l} is not set:
+		message "<##E34234>&lSYSTEM &7» &cInvalid Location!" to event-player
+		stop
+	set {-%player's uuid%.loc2} to {_l}
+	message "<##E34234>&lSYSTEM &7» &9%rayTraceLoc(event-player,50)%" to event-player
+	lineCreate(event-player)
+	
+
+function lineCreate(p: player):
+	set {lines} to {lines} + 1
+	set {_id} to {lines}
+	set {_l1} to {-%{_p}'s uuid%.loc1}
+	set {_l2} to {-%{_p}'s uuid%.loc2}
+	delete {-%{_p}'s uuid%.loc1} and {-%{_p}'s uuid%.loc2}
+	set yaml value "%{_id}%.1" from "lines" to {_l1}
+	set yaml value "%{_id}%.2" from "lines" to {_l2}
+	save yaml "lines"
+	message "<##E34234>&lSYSTEM &7» &7Created new line with id %{_id}%" to {_p}
+
+
+function linesShow(p: players):
+	loop {lines} times:
+		set {_l1} to yaml value "%loop-value%.1" from "lines"
+		set {_l2} to yaml value "%loop-value%.2" from "lines"
+		lineShow({_p::*},{_l1},{_l2})
+		wait 5 ticks
+		if {stop} = true:
+			stop loop
+			stop
+	linesShow(all players)
+
+function lineShow(p: players,l1: location,l2: location):
+	set {_v} to vector from {_l1} and {_l2}
+	set vector length of {_v} to 0.1
+	set {_l} to {_l1}
+	loop (distance between {_l} and {_l2}) / 0.1 times:
+		draw 1 dust_color_transition using dustTransition(orange, red, 1) at {_l} with force for {_p::*}
+		set {_l} to {_l} ~ {_v}
+		wait 10 ticks
+		if {stop} = true:
+			stop loop
+
+function rayTraceLoc(p: player, maxRange: number) :: location:
+	set {_ray} to ray trace from {_p} with max distance {_maxRange}
+	set {_hit} to raytrace hit location of {_ray}
+	return {_hit}
+
+#TEMP
+on rightclick on a player:
+	event-entity's name contains "K4relB"
+	message "&9NPC &7» &fgo to the other side!" to player
+	linesShow(all players)

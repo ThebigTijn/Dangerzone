@@ -1,20 +1,38 @@
+on load:
+	load yaml "plugins/Skript/yaml/kits.yml" as "kits"
+	if {delete.items} is true: # DO NOT DO THIS!!!!!!!!!!!!!!!!!!!!!!!!!! TESTING PURPOSE ONLY
+		delete yaml "kits"
+		delete {delete.items}
+
+function createKit(p: player, name: text, id: number = 0):
+	if {_id} = 0:
+		set {_id} to 1 if {_id} = 0
+		while {kits::%{_id}%::*} is set:
+			add 1 to {_id}
+	loop {_p}'s inventory:
+		loop-value is not air
+		set {kits::%{_id}%::contents::%index of loop-slot%} to loop-value
+	set {kits::%{_id}%::name} to {_name} 
+
+function deleteKit(p: player, id: number):
+	delete {kits::%{_id}%::*}
+
+function editKit(p: player, id: number):
+	delete {kits::%{_id}%::contents::*}
+	set {_name} to {kits::%{_id}%::name}
+	createKit({_p},{_name},{_id})
+
 function Kits(p: player, arg1: string, arg2: string):
 	if {_arg1} is "create":
 		if {_arg2} is not set:
 			send " &eKits &8» &fYou must enter a kit name /kits create <name>" to {_p}
 			stop
-		set {_id} to 1
-		while {kits::%{_id}%::*} is set:
-			add 1 to {_id}
 		loop indices of {kits::*}:
 			uncolored {kits::%loop-value%::name} is uncolored {_arg2}
 			send " &eKits &8» &fA kit named &e%uncolored {_arg2}% &falready exists" to {_p}
 			stop
-		loop {_p}'s inventory:
-			loop-value is not air
-			set {kits::%{_id}%::contents::%index of loop-slot%} to loop-value
-		set {kits::%{_id}%::name} to {_arg2} in proper case
-		send " &eKits &8» &fCreated kit &e%uncolored {_arg2} in proper case%" to {_p}
+		createKit({_p},{_arg2})
+		send " &eKits &8» &fCreated kit &e%uncolored {_arg2}%" to {_p}
 	if {_arg1} is "delete":
 		if {_arg2} is not set:
 			send " &eKits &8» &fYou must enter a kit name /kits delete <name>" to {_p}
@@ -24,21 +42,19 @@ function Kits(p: player, arg1: string, arg2: string):
 			set {_id} to loop-value
 			stop loop
 		if {_id} is not set:
-			send " &eKits &8» &fKit &e%uncolored {_arg1} in proper case% &fdoes not exist" to {_p}
+			send " &eKits &8» &fKit &e%uncolored {_arg1}% &fdoes not exist" to {_p}
 			stop
-		delete {kits::%{_id}%::*}
-		send " &eKits &8» &cKit &e%uncolored {_arg2} in proper case% &cDeleted" to {_p}
+		deleteKit({_p},{_arg2})
+		send " &eKits &8» &cKit &e%uncolored {_arg2}% &cDeleted" to {_p}
 	if {_arg1} is "edit":
 		loop indices of {kits::*}:
 			uncolored {kits::%loop-value%::name} is uncolored {_arg2}
 			set {_id} to loop-value
 			stop loop
 		if {_id} is not set:
-			send " &eKits &8» &fKit &e%uncolored {_arg1} in proper case% &fdoes not exist" to {_p}
+			send " &eKits &8» &fKit &e%uncolored {_arg1}% &fdoes not exist" to {_p}
 			stop
-		delete {kits::%{_id}%::contents::*}
-		loop {_p}'s inventory:
-			set {kits::%{_id}%::contents::%index of loop-slot%} to loop-value
+		editKit({_p},{_id})
 		send " &eKits &8» &fEdited kit &e%uncolored {_arg2} in proper case%" to {_p}
 	if {_arg1} is "list":
 		loop indices of {kits::*}:
@@ -46,17 +62,17 @@ function Kits(p: player, arg1: string, arg2: string):
 		send " &eKits &8» &a%join {_names::*} ? "N/A" with "&7, &a"%" to {_p}
 	if {_arg1} is "give":
 		if {_p} does not have permission "dangerzone.kits.%{_arg2} in lowercase%":
-			send " &eKits &8» &cYou do not have access to kit &e%uncolored {_arg2} in proper case%" to {_p}
+			send " &eKits &8» &cYou do not have access to kit &e%uncolored {_arg2}%" to {_p}
 			stop
 		loop indices of {kits::*}:
 			uncolored {kits::%loop-value%::name} is uncolored {_arg2}
 			set {_id} to loop-value
 			stop loop
 		if {_id} is not set:
-			send " &eKits &8» &fKit &e%uncolored {_arg2} in proper case% &fdoes not exist" to {_p}
+			send " &eKits &8» &fKit &e%uncolored {_arg2}% &fdoes not exist" to {_p}
 			stop
 		Kit({_p}, {_arg2})
-		send " &eKits &8» &fReceived Kit &e%uncolored {_arg2} in proper case%" to {_p}
+		send " &eKits &8» &fReceived Kit &e%uncolored {_arg2}%" to {_p}
 
 command kits [<string>] [<string>]:
 	permission: dangerzone.kits.admin
@@ -85,7 +101,8 @@ function Kit(p: player, kit: string):
 		send " &eKits &8» &fKit &e%uncolored {_kit} in proper case% &fdoes not exist" to {_p}
 		stop
 	loop indices of {kits::%{_id}%::contents::*}:
-		add {kits::%{_id}%::contents::%loop-value%} to {_items::*}
+		add {kits::%{_id}%::contents::%loop-value%} to {_items::*} if checkItemlogItem({kits::%{_id}%::contents::%loop-value%}) is true
+		add returnItemlogItem(returnItemlogID({kits::%{_id}%::contents::%loop-value%})) to {_items::*} if checkItemlogItem({kits::%{_id}%::contents::%loop-value%}) is false
 	add 0 to {_slots::*} if slot 0 of {_p}'s inventory is air
 	loop 35 times:
 		set {_item} to slot loop-value of {_p}'s inventory

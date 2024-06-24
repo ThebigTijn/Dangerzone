@@ -1,0 +1,28 @@
+function scp096(l: location):
+    spawn enderman at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""096""]}"
+    set name of last spawned entity to "&f&lSCP-096 &6(Euclid)"
+    set {_096} to last spawned entity
+    apply strength 255 without particles to {_096} for 1 year
+    apply speed 2 without particles to {_096} for 1 year
+    while {_096} is alive:
+        wait 1 tick
+        if {agro} is set:
+            play sound "minecraft:block.sculk_shrieker.shriek" with volume 10 at {_096}
+            wait 1.2 seconds
+
+on entity target:
+    if entity is a enderman:
+        set {agro} to target of entity
+
+
+on death of player:
+    if victim = {agro}:
+        delete {agro}
+
+on quit:
+    if player = {agro}:
+        delete {agro}
+
+on entity teleport:
+    if event-entity is an enderman:
+        cancel event

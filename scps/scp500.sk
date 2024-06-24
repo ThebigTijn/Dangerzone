@@ -1,0 +1,12 @@
+on right click:
+    if name of 1 of player's tool contains "&6SCP-500":
+        remove 1 record relic from player's inventory
+        clear player's potion effects
+        apply regeneration 4 to player for 7 seconds
+
+
+
+every 10 seconds:
+    if {500c}'s inventory does not contain a record relic:
+        set slot 13 of {500c}'s inventory to record relic named "&6SCP-500"
+        #add 1 record relic named "&6SCP-500" to {500c}'s inventory

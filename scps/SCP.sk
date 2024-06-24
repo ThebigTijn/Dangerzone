@@ -1,0 +1,32 @@
+command scp <text> <text>:
+    permission: op
+    trigger:
+        if arg-2 is "model":
+            delete {model::%arg-1%::*}
+            loop all entities in radius 2 around player:
+                loop-entity is not a player
+                if {model::%arg-1%::*} does not contain loop-entity:
+                    add loop-entity to {model::%arg-1%::*}
+        if arg-2 is "spawn":
+            if arg-1 is "173":
+                scp173(player)
+            if arg-1 is "999":
+                scp999(player)
+            if arg-1 is "096":
+                scp096(player)
+            if arg-1 is "682":
+                scp682(player)
+            if arg-1 is "1370":
+                scp1370(player)
+            if arg-1 is "500":
+                give player record relic named "&6SCP-500" with lore "&fINPUT LORE"
+        if arg-2 is "kill":
+            if arg-1 is "500":
+                send "&c&lERROR &8|&f You can't kill this &cSCP" to player
+                stop
+            make console execute command "kill @e[tag=%arg-1%]"
+
+
+on tab complete of "/scp":
+    set tab completion for position 1 to "173" and "096" and "999" and "500" and "682" and "1370"
+    set tab completion for position 2 to "spawn" and "kill"
