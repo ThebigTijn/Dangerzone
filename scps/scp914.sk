@@ -9,12 +9,29 @@ function scp914():
     set {_t::*} to "%{_i}%" split at " "
     set {_amt} to {_t::2} parsed as integer
     loop {_amt} times:
+        kill {_i}
         if "%line 3 of block at location(192, -35, 42, world "world")%" contains "ROUGH":
-            kill {_i}
             drop raw copper named "&7Pile of Scraps" with lore "&8Pile of Scraps, wonder what this was before.." at location(194.5, -34.5, 41.5, world "world")
+        if "%line 3 of block at location(192, -35, 42, world "world")%" contains "COARSE":
+            #
+        if "%line 3 of block at location(192, -35, 42, world "world")%" contains "1:1":
+            #
+        if "%line 3 of block at location(192, -35, 42, world "world")%" contains "FINE":
+            if "%{_i}%" contains "L1":
+                chance of 75%:
+                    drop yellow stained glass pane named "&8L2-card" at location(194.5, -34.5, 41.5, world "world")
+            if "%{_i}%" contains "L2":
+                chance of 75%:
+                    drop orange stained glass pane named "&8L3-card" at location(194.5, -34.5, 41.5, world "world")
+            if "%{_i}%" contains "L3":
+                chance of 75%:
+                    drop red stained glass pane named "&8L4-card" at location(194.5, -34.5, 41.5, world "world")
+            if "%{_i}%" contains "L4":
+                chance of 75%:
+                    drop purple stained glass pane named "&8L5-card" at location(194.5, -34.5, 41.5, world "world")
+
         if "%line 3 of block at location(192, -35, 42, world "world")%" contains "&2VERY FINE":
             if "%{_i}%" contains "L1" or "L2" or "L3" or "L4":
-                kill {_i}
                 chance of 2%:
                     drop purple stained glass pane named "&8L5-card" at location(194.5, -34.5, 41.5, world "world")
                 else:
