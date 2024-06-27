@@ -18,16 +18,23 @@ function scp131A(l: location):
             loop-entity is a husk
             set {_b} to loop-entity
         if {_b} is set:
-            force {_131A} to face {_b}'s location at head rotation speed 99999
+            set artificial intelligence of {_131A} to false
+            spawn silverfish at {_131A} with nbt nbt compound of {PersistenceRequired:1,Silent:1b,Tags:[""131"",""131-A""]}
+            set {_ai} to last spawned entity
+            apply invisibility without particles to {_ai} for 1 year
+            force {_ai} to face {_b}'s location at head rotation speed 99999
+            wait 3 seconds
         set {_tp} to {_131A}'s location
         set pitch of {_tp} to 0
-        set yaw of {_tp} to yaw of {_131A}
-        #teleport {model::999::*} above {_tp}
+        set yaw of {_tp} to yaw of {_ai} ? {_131A}
         if {_b} is set:
-            force {model::999::*} to face {_b}'s location at head rotation speed 99999
+            teleport {_131A} to {_tp}
+        #teleport {model::999::*} above {_tp}
+        set artificial intelligence of {_131A} to true
+        kill {_ai}
+        delete {_ai}
+            
+#force {model::999::*} to face {_b}'s location at head rotation speed 99999
 
-
-
-#REASON BY THE NoAI function is so i dont have to put a wait in the while loop so it doesnt delay the model _tp
 
 #Reason for loop instead of just checking if a husk is nearby, is because i need to set the 173 to a variable

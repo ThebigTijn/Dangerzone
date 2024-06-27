@@ -19,18 +19,17 @@ function scp173(l: location):
         loop all players:
             if loop-player's targeted entity is {_173}:
                 set {_b} to true
-        loop all entities in radius 10 around {_173}:
-            if loop-entity is chicken:
-                if loop-entity's name contains "SCP":
-                    set {_b} to true
+        loop all entities in radius 15 around {_173}:
+            loop-entity is a chicken
+            set {_b} to true
         if {_b} is not set:
             if distance between {_173} and {_target} < 2:
                 kill {_target}
-            if distance between {_173} and {_target} < 10:
+            if distance between {_173} and {_target} < 15:
                 make {_173} pathfind to {_target}
-            if distance between {_173} and {_target} ? 12 > 11:
+            if distance between {_173} and {_target} ? 15 > 14:
                 delete {_target}
-                loop all players in radius 10 around {_173}:
+                loop all players in radius 15 around {_173}:
                     if loop-player is set:
                         loop-player's gamemode is survival
                         set {_target} to loop-player
@@ -38,3 +37,20 @@ function scp173(l: location):
 
 #Hibers the reasoning for the silverfish on its head, is that defaultly it has NoAI until the my custom AI is used
 #and i cant set the husk to have no ai because then the custom ai doesnt work
+
+#also the old system had something like this, but it kept like deleteing the scp in game when it got it
+
+#while {_173} is alive:
+#    wait 1 tick
+#    delete {_b}
+#    loop all players:
+#        if loop-player's targeted entity is {_173}:
+#            set {_b} to true
+#    loop all entities in radius 10 around {_173}:
+#        if loop-entity is chicken:
+#            if loop-entity's name contains "SCP":
+#                set {_b} to true
+#    if {_b} is set:
+#        set artificial intelligence of {_173} to false
+#    if {_b} is not set:
+#        set artificial intelligence of {_173} to true
