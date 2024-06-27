@@ -19,6 +19,10 @@ function scp173(l: location):
         loop all players:
             if loop-player's targeted entity is {_173}:
                 set {_b} to true
+        loop all entities in radius 10 around {_173}:
+            if loop-entity is chicken:
+                if loop-entity's name contains "SCP":
+                    set {_b} to true
         if {_b} is not set:
             if distance between {_173} and {_target} < 2:
                 kill {_target}

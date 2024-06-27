@@ -8,6 +8,8 @@ command scp <text> <text>:
                 if {model::%arg-1%::*} does not contain loop-entity:
                     add loop-entity to {model::%arg-1%::*}
         if arg-2 is "spawn":
+            if arg-1 is "131":
+                scp131(player)
             if arg-1 is "173":
                 scp173(player)
             if arg-1 is "999":
