@@ -1,4 +1,4 @@
-function scp1370(l: location):
+local function scp1370(l: location):
     spawn sheep at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""1370""]}"
     set name of last spawned entity to "1370"
     set {_1370} to last spawned entity

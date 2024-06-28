@@ -1,11 +1,18 @@
-function scp682(l: location):
-    spawn ravager at {_l} with nbt nbt compound of "{Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""682""]}"
-    set {_682} to last spawned entity
-    set name of {_682} to "&2&lSCP-682 &r&4(KETER)"
-    apply strength 1 without particles to {_682} for 1 year
-    apply speed 3 without particles to {_682} for 1 year
-    apply resistance 5 without particles to {_682} for 1 year
-    while {_682} is alive:
+command spawn-scp682:
+    permission: op
+    trigger:
+        scp682(location of player)
+
+
+local function scp682(l: location):
+    spawn ravager at {_l}:
+        add nbt from "{Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""682""]}" to nbt of entity
+        set {682} to entity
+        set name of {682} to "&2&lSCP-682 &r&4(KETER)"
+        apply strength 1 without particles to {682} for 1 year
+        apply speed 3 without particles to {682} for 1 year
+        apply resistance 5 without particles to {682} for 1 year
+    while {682} is alive:
         set {_i} to a random integer between 20 and 30
         wait "%{_i}% seconds" parsed as timespan
         set {_v} to a random integer between 1 and 5
@@ -19,3 +26,7 @@ function scp682(l: location):
             send "&2&lSCP-682 &r&4(KETER) &8◇&f I look forwards to hearing you scream while I crush you!" to all players in radius 20 around {_682}
         if {_v} is 5:
             send "&2&lSCP-682 &r&4(KETER) &8◇&f Your time of living running short." to all players in radius 20 around {_682}
+
+
+#ik you can do it without a while look but the while loop only runs every 20-30 seconds
+#so its better for it to be a while loop

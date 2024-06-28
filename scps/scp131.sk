@@ -1,52 +1,60 @@
-function scp131(l: location):
-    scp131A({_l})
-    scp131B({_l})
-
-
-function scp131A(l: location):
-    spawn chicken at {_l} with nbt nbt compound of "{PersistenceRequired:1,Silent:1b,Tags:[""131"",""131-A""]}"
-    set name of last spawned entity to "&6&lSCP-131-A &r&a(SAFE)"
-    apply speed without particles to last spawned entity for 1 year
-    apply resistance 5 without particles to last spawned entity for 1 year
-    set {_131A} to last spawned entity
-    while {_131A} is alive:
-        wait 1 tick
-        delete {_b}
-        set {_b} to a random element of all husks in radius 10 of {_131A}
-        if {_b} is set:
-            set {_131A}'s movement speed attribute to 0
-            force {_131A} to face {_b} at head rotation speed 99999
-        if {_b} is not set:
-            reset {_131A}'s movement speed attribute
-        set {_tp} to {_131A}'s location
-        set pitch of {_tp} to 0
-        set yaw of {_tp} to yaw of {_131A}
-        #teleport {model::131A::*} above {_tp}
-
-
-function scp131B(l: location):
-    spawn chicken at {_l} with nbt nbt compound of "{PersistenceRequired:1,Silent:1b,Tags:[""131"",""131-B""]}"
-    set name of last spawned entity to "&c&lSCP-131-B &r&a(SAFE)"
-    apply speed without particles to last spawned entity for 1 year
-    apply resistance 5 without particles to last spawned entity for 1 year
-    set {_131B} to last spawned entity
-    while {_131B} is alive:
-        wait 1 tick
-        delete {_b}
-        set {_b} to a random element of all husks in radius 15 of {_131B}
-        if {_b} is set:
-            set {_131B}'s movement speed attribute to 0
-            force {_131B} to face {_b} at head rotation speed 99999
-        if {_b} is not set:
-            reset {_131B}'s movement speed attribute
-        set {_tp} to {_131B}'s location
-        set pitch of {_tp} to 0
-        set yaw of {_tp} to yaw of {_131B}
-        #teleport {model::131B::*} above {_tp}
-
-
 #I set 131's movement speed to 0 instead of setting its AI off because if its AI is off then it cant
 #be knocked back and it cant turn its head using with skript
 
 #Reason i use {_b} and not add it to the nbt is because NBT is a text and it wont let me parse the text
 #as an entity so i used {_b} instead
+
+#need while event to keep tping the model
+
+command spawn-scp131:
+    permission: op
+    trigger:
+        scp131(location of player)
+
+local function scp131(l: location):
+    scp131A({_l})
+    scp131B({_l})
+
+
+local function scp131A(l: location):
+    spawn chicken at {_l}:
+        add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""131"",""131-A""]}" to nbt of entity
+        set name of entity to "&6&lSCP-131-A &r&a(SAFE)"
+        apply speed without particles to entity for 1 year
+        apply resistance 5 without particles to entity for 1 year
+        set {131A} to entity
+    while {131A} is alive:
+        wait 1 tick
+        delete {_b}
+        set {_b} to a random element of all husks in radius 10 of {_131A}
+        if {_b} is set:
+            set {131A}'s movement speed attribute to 0
+            force {131A} to face {_b} at head rotation speed 99999
+        if {_b} is not set:
+            reset {131A}'s movement speed attribute
+        set {_tp} to {131A}'s location
+        set pitch of {_tp} to 0
+        set yaw of {_tp} to yaw of {131A}
+        #teleport {model::131A::*} above {_tp}
+
+
+local function scp131B(l: location):
+    spawn chicken at {_l}:
+        add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""131"",""131-B""]}" to nbt of entity
+        set name of entity to "&c&lSCP-131-B &r&a(SAFE)"
+        apply speed without particles to entity for 1 year
+        apply resistance 5 without particles to entity for 1 year
+        set {131B} to entity
+    while {131B} is alive:
+        wait 1 tick
+        delete {_b}
+        set {_b} to a random element of all husks in radius 15 of {_131B}
+        if {_b} is set:
+            set {131B}'s movement speed attribute to 0
+            force {131B} to face {_b} at head rotation speed 99999
+        if {_b} is not set:
+            reset {131B}'s movement speed attribute
+        set {_tp} to {131B}'s location
+        set pitch of {_tp} to 0
+        set yaw of {_tp} to yaw of {131B}
+        #teleport {model::131B::*} above {_tp}
