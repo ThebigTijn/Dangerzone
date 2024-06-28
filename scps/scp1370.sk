@@ -8,11 +8,19 @@ function scp1370(l: location):
         set {_tp} to {_1370}'s location
         set pitch of {_tp} to 0
         teleport {_1370} 1 block above {_tp}
-        if {_p} ? 0 < 40:
-            add 1 to {_p}
-        else:
-            make {_096} pathfind to a random element of all blocks in radius 5 of {_1370}
-            set {_p} to 0
+        set {_i} to a random integer between 20 and 30
+        wait "%{_i}% seconds" parsed as timespan
+        set {_v} to a random integer between 1 and 5
+        if {_v} is 1:
+            send "&7&lSCP-1370 &r&a(SAFE) &8◇&f" to all players in radius 20 around {_682}
+        if {_v} is 2:
+            send "&7&lSCP-1370 &r&a(SAFE) &8◇&f" to all players in radius 20 around {_682}
+        if {_v} is 3:
+            send "&7&lSCP-1370 &r&a(SAFE) &8◇&f" to all players in radius 20 around {_682}
+        if {_v} is 4:
+            send "&7&lSCP-1370 &r&a(SAFE) &8◇&f" to all players in radius 20 around {_682}
+        if {_v} is 5:
+            send "&7&lSCP-1370 &r&a(SAFE) &8◇&f" to all players in radius 20 around {_682}
 
 
 #STARTED BUT NEVER FINISHED BECAUSE MATAN TOLD ME TO

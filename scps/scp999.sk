@@ -19,3 +19,4 @@ function scp999(l: location):
 
 
 #the reason i dont use wait is because then it will stall the entire while event which stops the model from teleporting
+#and every second has 20 ticks so, by adding 1 to {_p} every tick, 40 ticks is 2 seconds
