@@ -12,9 +12,11 @@ on entity target:
     (metadata tag "target" of {096}) is not set
     set (metadata tag "target" of {096}) to player
     set artificial intelligence of {096} to false
+
     loop 10 times:
         play sound "minecraft:entity.ghast.hurt" with volume 5 and pitch 0.9 at {096}
         wait 0.4 seconds
+        
     set artificial intelligence of {096} to true
     play sound "minecraft:block.sculk_shrieker.shriek" with volume 5 at {096}
 

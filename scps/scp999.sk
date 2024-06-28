@@ -7,24 +7,27 @@ local function scp999(l: location):
     spawn pig at {_l}:
         add nbt from "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""999""]}" to nbt of entity
         set name of last spawned entity to "&e&lSCP-999 &r&a(SAFE)"
-        set {999} to last spawned entity
-        apply invisibility without particles to {999} for 1 year
-    while {999} is alive:
+        set {_999} to last spawned entity
+        apply invisibility without particles to {_999} for 1 year
+
+    while {_999} is alive:
         wait 1 tick
-        set {_tp} to {999}'s location
+        set {_tp} to {_999}'s location
         set pitch of {_tp} to 0
-        set yaw of {_tp} to yaw of {999}
+        set yaw of {_tp} to yaw of {_999}
         teleport {model::999::*} above {_tp}
-        loop all players in radius 3 around {999}:
-            apply regeneration 2 to loop-player for 2 ticks
-            if {_p} ? 0 < 40:
-                add 1 to {_p}
-            else:
-                make 1 of heart 2 meters above loop-player 
-                set {_p} to 0
+
+        apply regeneration 2 to all players in radius 3 around {_999} where ["%input's potion effects%" does not contain "regeneration"] for 3 seconds
+        if {_p} ? 0 < 40:
+            add 1 to {_p}
+        else:
+            make 1 of heart 2 meters above all players in radius 3 around {_999}
+            set {_p} to 0
 
 
 #the reason i dont use wait is because then it will stall the entire while event which stops the model from teleporting
 #and every second has 20 ticks so, by adding 1 to {_p} every tick, 40 ticks is 2 seconds
 
 #need while event to keep tping the model
+
+#couldnt give regeneration for 1 tick every tick cus it just would give it and if i did 2 ticks u could infinitly get regeneration

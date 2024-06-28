@@ -3,6 +3,7 @@ local function scp1370(l: location):
     set name of last spawned entity to "1370"
     set {_1370} to last spawned entity
     apply invisibility without particles to {_1370} for 1 year
+    
     while {_1370} is alive:
         wait 1 tick
         set {_tp} to {_1370}'s location

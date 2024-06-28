@@ -18,13 +18,18 @@ local function scp939(l: location):
 on death:
     victim is a player
     if attacker's name contains "&c&lSCP-939":
-        set {_i} to a random integer between 1 and 3
+        set {_i} to a random integer between 1 and 5
         if {_i} is 1:
             set {_msg} to "can someone please help me"
         if {_i} is 2:
             set {_msg} to "hello is anyone there?"
         if {_i} is 3:
             set {_msg} to "please come save me i need help"
+        if {_i} is 4:
+            set {_msg} to "i found something cool, come here"
+        if {_i} is 5:
+            set {_msg} to "yoo someone come here"
+            
         set {_color} to "&f" if victim has permission "dangerzone.whitechat"
         if length of victim's suffix > 0:
             send "&7 %victim's prefix% &8| &f%victim's displayname% &8♯ %victim's suffix% &8◇ %{_color} ? "&7"%%{_msg}%" to all players in radius 20 around attacker
