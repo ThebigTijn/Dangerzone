@@ -1,35 +1,7 @@
-function scp096(l: location):
-    spawn enderman at {_l} with nbt nbt compound of "{PersistenceRequired:1,Silent:1b,Tags:[""096""]}"
-    set name of last spawned entity to "&f&lSCP-096 &6(Euclid)"
-    set {_096} to last spawned entity
-    apply strength 255 without particles to {_096} for 1 year
-    apply speed 2 without particles to {_096} for 1 year
-    apply resistance 5 without particles to {_096} for 1 year
-    while {_096} is alive:
-        wait 1 tick
-        if target of {_096} is set:
-            if nbtGet({_096}, "targetagro") is not target of {_096}:
-                nbtSet({_096}, "targetagro", "%target of {_096}%")
-                set artificial intelligence of {_096} to false
-                apply invisibility without particles to {_096ai} for 1 year
-                loop 10 times:
-                    play sound "minecraft:entity.ghast.hurt" with volume 5 and pitch 0.9 at {_096}
-                    wait 0.4 seconds
-                set artificial intelligence of {_096} to true
-            play sound "minecraft:block.sculk_shrieker.shriek" with volume 5 at {_096}
-            wait 1.2 seconds
-        if target of {_096} is not set:
-            nbtDelete({_096}, "targetagro")
-
-on entity teleport:
-    if event-entity is an enderman:
-        cancel event
-    
-
 local function SCP096(l:location):
     spawn enderman at {_l}:
         set name of entity to "&f&lSCP-096 &6(Euclid)"
-        add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""096""]}" to entity
+        add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""096""]}" to nbt of entity
         apply strength 255 without particles to entity for 1 year
         apply speed 2 without particles to entity for 1 year
         apply resistance 5 without particles to entity for 1 year
@@ -39,11 +11,21 @@ on entity target:
     event-entity = {scp096}
     (metadata tag "target" of {scp096}) is not set
     set (metadata tag "target" of {scp096}) to player
+    broadcast player
+    set artificial intelligence of {scp096} to false
     loop 10 times:
         play sound "minecraft:entity.ghast.hurt" with volume 5 and pitch 0.9 at {scp096}
         wait 0.4 seconds
+    set artificial intelligence of {scp096} to true
     play sound "minecraft:block.sculk_shrieker.shriek" with volume 5 at {scp096}
-    kill player
+
+
+on death of player:
+    (metadata tag "target" of {scp096}) is victim
+    delete (metadata tag "target" of {scp096})
+
+on quit:
+    (metadata tag "target" of {scp096}) is player
     delete (metadata tag "target" of {scp096})
 
 on entity teleport:

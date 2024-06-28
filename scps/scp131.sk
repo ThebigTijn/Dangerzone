@@ -1,5 +1,3 @@
-#JUST STARTED!!!!
-
 function scp131(l: location):
     scp131A({_l})
     scp131B({_l})
