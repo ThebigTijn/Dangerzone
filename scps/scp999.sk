@@ -7,29 +7,35 @@ local function scp999(l: location):
     spawn pig at {_l}:
         add nbt from "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""999""]}" to nbt of entity
         set name of last spawned entity to "&e&lSCP-999 &r&a(SAFE)"
-        set {_999} to last spawned entity
-        apply invisibility without particles to {_999} for 1 year
+        set {999} to last spawned entity
+        apply invisibility without particles to {999} for 1 year
+        set (metadata tag "ogturnrotation" of {999}) to 0
 
-    make {model::999::*} ride {_999}
+    make {model::999::*} ride {999}
 
-    while {_999} is alive:
+    while {999} is alive:
         wait 1 second
         turn()
-        apply regeneration 2 to all players in radius 3 around {_999} where ["%input's potion effects%" does not contain "regeneration"] for 3 seconds
+        apply regeneration 2 to all players in radius 3 around {999} where ["%input's potion effects%" does not contain "regeneration"] for 3 seconds
         if {_p} ? 0 < 40:
             add 1 to {_p}
         else:
-            make 1 of heart 2 meters above all players in radius 3 around {_999}
+            make 1 of heart 2 meters above all players in radius 3 around {999}
             set {_p} to 0
 
 local function turn():
-    if {turn} is not set:
-        set {turn} to a random integer between 1 and 360
-        loop {turn} - {ogturn} ? 0 times:
-            add nbt from "{Rotation:[%loop-number + {ogturn}%f,0f,0f]}" to nbt of {model::999::*}
+    (metadata tag "turnrotation" of {999}) is not set
+    set (metadata tag "turnrotation" of {999}) to a random integer between 1 and 360
+    if (metadata tag "turnrotation" of {999}) > (metadata tag "ogturnrotation" of {999}):
+        loop (metadata tag "turnrotation" of {999}) - (metadata tag "ogturnrotation" of {999}) ? 0 times:
+            add nbt from "{Rotation:[%loop-number + (metadata tag "ogturnrotation" of {999})%f,0f,0f]}" to nbt of {model::999::*}
             wait 1 tick
-        set {ogturn} to {turn}
-        delete {turn}
+    else:
+        loop (metadata tag "ogturnrotation" of {999}) - (metadata tag "turnrotation" of {999}) times:
+            add nbt from "{Rotation:[%(metadata tag "ogturnrotation" of {999}) - loop-number%f,0f,0f]}" to nbt of {model::999::*}
+            wait 1 tick  
+    set (metadata tag "ogturnrotation" of {999}) to (metadata tag "turnrotation" of {999})
+    delete (metadata tag "turnrotation" of {999})
 
 #the reason i dont use wait is because then it will stall the entire while event which stops the model from teleporting
 #and every second has 20 ticks so, by adding 1 to {_p} every tick, 40 ticks is 2 seconds
