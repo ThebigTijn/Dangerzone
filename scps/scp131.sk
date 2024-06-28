@@ -26,7 +26,7 @@ local function scp131A(l: location):
     while {131A} is alive:
         wait 1 tick
         delete {_b}
-        set {_b} to a random element of all husks in radius 10 of {_131A}
+        set {_b} to a random element of all husks in radius 10 of {131A}
         if {_b} is set:
             set {131A}'s movement speed attribute to 0
             force {131A} to face {_b} at head rotation speed 99999
@@ -48,7 +48,7 @@ local function scp131B(l: location):
     while {131B} is alive:
         wait 1 tick
         delete {_b}
-        set {_b} to a random element of all husks in radius 15 of {_131B}
+        set {_b} to a random element of all husks in radius 15 of {131B}
         if {_b} is set:
             set {131B}'s movement speed attribute to 0
             force {131B} to face {_b} at head rotation speed 99999

@@ -12,59 +12,16 @@ function scp914():
     set {_amt} to {_t::2} parsed as integer
     loop {_amt} ? 1 times:
         kill {_i}
-        if "%line 3 of block at location(192, -35, 42, world "world")%" contains "ROUGH":
-            if "%{_i}%" contains "L1" or "L2" or "L3" or "L4" or "L5":
-                drop 4 of record fragment named "&7Keycard shard" with lore "&8Keycard shard, wonder what this was before.." at location(194.5, -34.5, 41.5, world "world")
-            else:
-                drop raw copper named "&7Pile of Scraps" with lore "&8Pile of Scraps, wonder what this was before.." at location(194.5, -34.5, 41.5, world "world")
-        if "%line 3 of block at location(192, -35, 42, world "world")%" contains "COARSE":
-            if "%{_i}%" contains "L1":
-                drop 4 of record fragment named "&7Keycard shard" with lore "&8Keycard shard, wonder what this was before.." at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L2":
-                drop lime stained glass pane named "&8L1-card" at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L3":
-                drop yellow stained glass pane named "&8L2-card" at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L4":
-                drop orange stained glass pane named "&8L3-card" at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L5":
-                drop red stained glass pane named "&8L4-card" at location(194.5, -34.5, 41.5, world "world")
-        if "%line 3 of block at location(192, -35, 42, world "world")%" contains "1:1":
-            if "%{_i}%" contains "&7Keycard shard":
-                if {_amt} >= 8:
-                    add 1 to {_t}
-                    if {_t} = 8:
-                        drop lime stained glass pane named "&8L1-card" at location(194.5, -34.5, 41.5, world "world")
-                        delete {_t}
-            if "%{_i}%" contains "L1":
-                drop lime stained glass pane named "&8L1-card" at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L2":
-                drop 2 of lime stained glass pane named "&8L1-card" at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L3":
-                drop 2 of yellow stained glass pane named "&8L2-card" at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L4":
-                drop 2 of orange stained glass pane named "&8L3-card" at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L5":
-                drop 2 of red stained glass pane named "&8L4-card" at location(194.5, -34.5, 41.5, world "world")
-        if "%line 3 of block at location(192, -35, 42, world "world")%" contains "&aFINE":
-            if "%{_i}%" contains "L1":
-                chance of 50%:
-                    drop yellow stained glass pane named "&8L2-card" at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L2":
-                chance of 50%:
-                    drop orange stained glass pane named "&8L3-card" at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L3":
-                chance of 50%:
-                    drop red stained glass pane named "&8L4-card" at location(194.5, -34.5, 41.5, world "world")
-            if "%{_i}%" contains "L4":
-                chance of 50%:
-                    drop purple stained glass pane named "&8L5-card" at location(194.5, -34.5, 41.5, world "world")
-
-        if "%line 3 of block at location(192, -35, 42, world "world")%" contains "&2VERY FINE":
-            if "%{_i}%" contains "L1" or "L2" or "L3" or "L4":
-                chance of 5%:
-                    drop purple stained glass pane named "&8L5-card" at location(194.5, -34.5, 41.5, world "world")
-                else:
-                    drop raw copper named "&7Pile of Scraps" with lore "&8Pile of Scraps, wonder what this was before.." at location(194.5, -34.5, 41.5, world "world")
+        if line 3 of block at location(192, -35, 42, world "world") contains "ROUGH":
+            scp914ROUGH({_i})
+        if line 3 of block at location(192, -35, 42, world "world") contains "COARSE":
+            scp914COARSE({_i})
+        if line 3 of block at location(192, -35, 42, world "world") contains "1:1":
+            scp914ONE({_i})
+        if line 3 of block at location(192, -35, 42, world "world") contains "&aFINE":
+            scp914FINE({_i})
+        if line 3 of block at location(192, -35, 42, world "world") contains "&2VERY FINE":
+            scp914VERYFINE({_i})
     stop
 
 
@@ -96,3 +53,77 @@ function scp914selection(p:player):
             set line 3 of block at location(192.5, -34.5, 42.5, world "world") to "&2VERY FINE"
             close {_p}'s inventory
         open gui to {_p}
+
+
+
+local function scp914ROUGH(i: item):
+    if "%{_i}%" contains "L1" or "L2" or "L3" or "L4" or "L5":
+        drop 4 of record fragment named "&7Keycard shard" with lore "&8Keycard shard, wonder what this was before.." at location(194, -35, 41, world "world")
+    else:
+        drop raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194, -35, 41, world "world")
+
+
+
+local function scp914COARSE(i: item):
+    if "%{_i}%" contains "L1":
+        drop 4 of record fragment named "&7Keycard shard" with lore "&8Keycard shard, wonder what this was before.." at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L2":
+        drop lime stained glass pane named "&8L1-card" at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L3":
+        drop yellow stained glass pane named "&8L2-card" at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L4":
+        drop orange stained glass pane named "&8L3-card" at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L5":
+        drop red stained glass pane named "&8L4-card" at location(194, -35, 41, world "world")
+    else:
+        drop {_i} at location(194, -35, 41, world "world")
+
+
+
+local function scp914ONE(i: item):
+    if "%{_i}%" contains "&7Keycard shard":
+        if {_amt} >= 8:
+            add 1 to {_t}
+            if {_t} = 8:
+                drop lime stained glass pane named "&8L1-card" at location(194, -35, 41, world "world")
+                delete {_t}
+    if "%{_i}%" contains "L1":
+        drop lime stained glass pane named "&8L1-card" at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L2":
+        drop 2 of lime stained glass pane named "&8L1-card" at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L3":
+        drop 2 of yellow stained glass pane named "&8L2-card" at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L4":
+        drop 2 of orange stained glass pane named "&8L3-card" at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L5":
+        drop 2 of red stained glass pane named "&8L4-card" at location(194, -35, 41, world "world")
+    else:
+        drop {_i} at location(194, -35, 41, world "world")
+
+
+local function scp914FINE(i: item):
+    if "%{_i}%" contains "L1":
+        chance of 50%:
+            drop yellow stained glass pane named "&8L2-card" at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L2":
+        chance of 50%:
+            drop orange stained glass pane named "&8L3-card" at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L3":
+        chance of 50%:
+            drop red stained glass pane named "&8L4-card" at location(194, -35, 41, world "world")
+    if "%{_i}%" contains "L4":
+        chance of 50%:
+            drop purple stained glass pane named "&8L5-card" at location(194, -35, 41, world "world")
+    else:
+        drop {_i} at location(194, -35, 41, world "world")
+
+
+
+local function scp914VERYFINE(i: item):
+    if "%{_i}%" contains "L1" or "L2" or "L3" or "L4":
+        chance of 5%:
+            drop purple stained glass pane named "&8L5-card" at location(194, -35, 41, world "world")
+        else:
+            drop raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194, -35, 41, world "world")
+    else:
+        drop {_i} at location(194, -35, 41, world "world")
