@@ -10,11 +10,7 @@ local function returnValidGroup(t:string) :: boolean:
     return false
 
 function setGroup(p:player,g:string):
-    if {_p} does not have permission "staff.use":
-        set group of {_p} to {_g}
-        stop
-    if (string tag "custom;Group.PreviousRank" of nbt compound from {_p}) is set:
-        remove (string tag "custom;Group.PreviousRank" of nbt compound from {_p}) from group of {_p}
+    remove (string tag "custom;Group.PreviousRank" of nbt compound from {_p}) from group of {_p} if (string tag "custom;Group.PreviousRank" of nbt compound from {_p}) is set
     add {_g} to group of {_p}
     set (string tag "custom;Group.PreviousRank" of nbt compound from {_p}) to {_g}
 
@@ -22,10 +18,10 @@ command setgroup <offlineplayer> <string>:
     permission: setgroup.use
     trigger:
         if returnValidGroup(arg-2) = false:
-            send "Invalid Group" to player
+            send "<##E34234>&lSYSTEM &7» Invalid Group" to player
             stop
         if returnGroup(player) != returnGroup(arg-1):
-            send "Insufficient Permissions" to player
+            send "<##E34234>&lSYSTEM &7» Insufficient Permissions" to player
             stop
         if arg-1 is online:
             send "<##E34234>&lSYSTEM &7» Your group has been set to &f%arg-2% &7by &f%player%&7." to arg-1
@@ -36,6 +32,9 @@ command setgroup <offlineplayer> <string>:
 on tab complete of "/setgroup":
     set tab completions for position 1 to all players
     loop all groups:
+        if player is op:
+            set tab completions for position 2 to all groups
+            stop
         set {_firstChar} to first 3 characters of loop-value
         returnGroup(player) = {_firstChar}
         add loop-value to tab completions for position 2
