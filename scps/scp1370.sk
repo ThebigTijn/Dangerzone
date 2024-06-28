@@ -1,9 +1,16 @@
 local function scp1370(l: location):
-    spawn sheep at {_l} with nbt nbt compound of "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""1370""]}"
-    set name of last spawned entity to "1370"
-    set {_1370} to last spawned entity
-    apply invisibility without particles to {_1370} for 1 year
+    spawn sheep at {_l}:
+        add nbt from "{PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""1370""]}" to nbt of entity
+        set name of entity to "&f&lSCP-1370 &r&a(SAFE)"
+        set {_1370} to entity
+        apply invisibility without particles to {_1370} for 1 year
     
+    spawn armor stand at {_l}:
+        add nbt from "{ShowArms:1b,NoBasePlate:1b,Small:1b,DisabledSlots:4144959,Invulnerable:1b,PersistenceRequired:1b,Silent:1b,HandItems:[{id:iron_shovel,count:1},{id:spyglass,count:1}],HandDropChances:[0f,0f],ArmorDropChances:[0f,0f,0f],ArmorItems:[{id:iron_boots,count:1},{id:iron_leggings,count:1},{id:iron_chestplate,count:1}],Tags:[""1370""]}" to nbt of entity
+        set name of entity to "&f&lSCP-1370 &r&a(SAFE)"
+        set {_1370::model} to entity
+        set {_nbt}
+
     while {_1370} is alive:
         wait 1 tick
         set {_tp} to {_1370}'s location

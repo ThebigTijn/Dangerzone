@@ -10,20 +10,23 @@ function scp914():
     play sound "minecraft:entity.minecart.riding" with volume 10 at location(194.5, -35, 41, world "world")
     open block at location(194, -35, 41, world "world")
     open block at location(190, -35, 41, world "world")
-    set {_t::*} to "%{_i}%" split at " "
-    set {_amt} to {_t::2} parsed as integer
-    loop {_amt} ? 1 times:
-        kill {_i}
-        if line 3 of block at location(192, -35, 42, world "world") contains "ROUGH":
-            scp914ROUGH({_i})
-        if line 3 of block at location(192, -35, 42, world "world") contains "COARSE":
-            scp914COARSE({_i})
-        if line 3 of block at location(192, -35, 42, world "world") contains "1:1":
-            scp914ONE({_i})
-        if line 3 of block at location(192, -35, 42, world "world") contains "&aFINE":
-            scp914FINE({_i})
-        if line 3 of block at location(192, -35, 42, world "world") contains "&2VERY FINE":
-            scp914VERYFINE({_i})
+    if "%{_i}%" contains "L1" or "L2" or "L3" or "L4" or "L5":
+        set {_t::*} to "%{_i}%" split at " "
+        set {_amt} to {_t::2} parsed as integer
+        loop {_amt} ? 1 times:
+            if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH":
+                scp914ROUGH({_i})
+            if line 3 of block at location(192, -35, 42, world "world") is "&cCOARSE":
+                scp914COARSE({_i})
+            if line 3 of block at location(192, -35, 42, world "world") contains "1:1":
+                scp914ONE({_i})
+            if line 3 of block at location(192, -35, 42, world "world") is "&aFINE":
+                scp914FINE({_i})
+            if line 3 of block at location(192, -35, 42, world "world") is "&2VERY FINE":
+                scp914VERYFINE({_i})
+            kill {_i}
+    else:
+        teleport {_i} to location(194.5, -35, 41.5, world "world")
     stop
 
 
@@ -40,35 +43,35 @@ on right click on dark oak sign:
 function scp914selection(p:player):
     create a gui with virtual hopper inventory named "           &8SCP-914 &a(Safe)":
         format gui slot 0 with black stained glass pane named "&8ROUGH":
-            set line 3 of block at location(194.5, -35, 41, world "world") to "&8ROUGH"
+            set line 3 of block at location(192, -35, 42, world "world") to "&8ROUGH"
             close {_p}'s inventory
         format gui slot 1 with red stained glass pane named "&cCOARSE":
-            set line 3 of block at location(194.5, -35, 41, world "world") to "&cCOARSE"
+            set line 3 of block at location(192, -35, 42, world "world") to "&cCOARSE"
             close {_p}'s inventory
         format gui slot 2 with white stained glass pane named "&f1:1":
-            set line 3 of block at location(194.5, -35, 41, world "world") to "&f1:1"
+            set line 3 of block at location(192, -35, 42, world "world") to "&f1:1"
             close {_p}'s inventory
         format gui slot 3 with lime stained glass pane named "&aFINE":
-            set line 3 of block at location(194.5, -35, 41, world "world") to "&aFINE"
+            set line 3 of block at location(192, -35, 42, world "world") to "&aFINE"
             close {_p}'s inventory
         format gui slot 4 with green stained glass pane named "&2VERY FINE":
-            set line 3 of block at location(194.5, -35, 41, world "world") to "&2VERY FINE"
+            set line 3 of block at location(192, -35, 42, world "world") to "&2VERY FINE"
             close {_p}'s inventory
         open gui to {_p}
 
 
 
-local function scp914ROUGH(i: item):
+local function scp914ROUGH(i: entity):
     if "%{_i}%" contains "L1" or "L2" or "L3" or "L4" or "L5":
-        drop 4 of record fragment named "&7Keycard shard" with lore "&8Keycard shard, wonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+        drop 4 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
     else:
         drop raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194.5, -35, 41.5, world "world") without velocity
 
 
 
-local function scp914COARSE(i: item):
+local function scp914COARSE(i: entity):
     if "%{_i}%" contains "L1":
-        drop 4 of record fragment named "&7Keycard shard" with lore "&8Keycard shard, wonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+        drop 4 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
     if "%{_i}%" contains "L2":
         drop lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
     if "%{_i}%" contains "L3":
@@ -77,18 +80,10 @@ local function scp914COARSE(i: item):
         drop orange stained glass pane named "&8L3-card" at location(194.5, -35, 41.5, world "world") without velocity
     if "%{_i}%" contains "L5":
         drop red stained glass pane named "&8L4-card" at location(194.5, -35, 41.5, world "world") without velocity
-    else:
-        drop {_i} at location(194.5, -35, 41.5, world "world") without velocity
 
 
 
-local function scp914ONE(i: item):
-    if "%{_i}%" contains "&7Keycard shard":
-        if {_amt} >= 8:
-            add 1 to {_t}
-            if {_t} = 8:
-                drop lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
-                delete {_t}
+local function scp914ONE(i: entity):
     if "%{_i}%" contains "L1":
         drop lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
     if "%{_i}%" contains "L2":
@@ -99,11 +94,9 @@ local function scp914ONE(i: item):
         drop 2 of orange stained glass pane named "&8L3-card" at location(194.5, -35, 41.5, world "world") without velocity
     if "%{_i}%" contains "L5":
         drop 2 of red stained glass pane named "&8L4-card" at location(194.5, -35, 41.5, world "world") without velocity
-    else:
-        drop {_i} at location(194.5, -35, 41.5, world "world") without velocity
 
 
-local function scp914FINE(i: item):
+local function scp914FINE(i: entity):
     if "%{_i}%" contains "L1":
         chance of 50%:
             drop yellow stained glass pane named "&8L2-card" at location(194.5, -35, 41.5, world "world") without velocity
@@ -116,16 +109,17 @@ local function scp914FINE(i: item):
     if "%{_i}%" contains "L4":
         chance of 50%:
             drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
-    else:
-        drop {_i} at location(194.5, -35, 41.5, world "world") without velocity
+    if "%{_i}%" contains "L5":
+        chance of 100%:
+            drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
 
 
 
-local function scp914VERYFINE(i: item):
+local function scp914VERYFINE(i: entity):
+    if "%{_i}%" contains "L5":
+        drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
     if "%{_i}%" contains "L1" or "L2" or "L3" or "L4":
         chance of 5%:
             drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
         else:
             drop raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194.5, -35, 41.5, world "world") without velocity
-    else:
-        drop {_i} at location(194.5, -35, 41.5, world "world") without velocity

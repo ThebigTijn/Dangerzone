@@ -16,7 +16,6 @@ function scp131(l: location, tag: text, n: text, r: number):
     spawn chicken at {_l}:
         add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""%{_tag}%""]}" to nbt of entity
         set name of entity to {_n}
-        apply speed without particles to entity for 1 year
         apply resistance 5 without particles to entity for 1 year
         set {_e} to entity
 
