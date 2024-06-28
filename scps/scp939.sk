@@ -6,9 +6,9 @@ command spawn-scp939:
 
 local function scp939(l: location):
     loop 3 times:
-        set {_v} to loop-number #i couldnt put loop-number down there after i changed function to local
+        set {_v} to loop-number #i couldnt put loop-number down there after i changed the function to local
         spawn zoglin at {_l}:
-            add nbt from "{Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""939""]}" to nbt of entity
+            add nbt from "{Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""939"",""939-%{_v}%""]}" to nbt of entity
             set name of entity to "&c&lSCP-939-%{_v}% &r&4(KETER)"
             apply strength 1 without particles to entity for 1 year
             apply speed 3 without particles to entity for 1 year

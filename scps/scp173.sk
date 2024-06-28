@@ -17,14 +17,14 @@ local function scp173(l: location):
     while {173} is alive:
         wait 1 tick
         delete {_b}
-        set {_b} to a random element of all chickens in radius 15 around {_173}
+        set {_b} to a random element of all chickens in radius 15 around {173}
         loop all players:
-            if loop-player's targeted entity is {_173}:
+            if loop-player's targeted entity is {173}:
                 set {_b} to loop-player's target entity
         if {_b} is set:
-            set artificial intelligence of {_173} to false
+            set artificial intelligence of {173} to false
         if {_b} is not set:
-            set artificial intelligence of {_173} to true
+            set artificial intelligence of {173} to true
 
 
 #i cant find a way to do like (if "%all player's target entity%" contains "husk") so i have to loop them

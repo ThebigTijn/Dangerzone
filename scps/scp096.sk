@@ -5,31 +5,30 @@ local function SCP096(l:location):
         apply strength 255 without particles to entity for 1 year
         apply speed 2 without particles to entity for 1 year
         apply resistance 5 without particles to entity for 1 year
-        set {scp096} to entity
+        set {096} to entity
 
 on entity target:
-    event-entity = {scp096}
-    (metadata tag "target" of {scp096}) is not set
-    set (metadata tag "target" of {scp096}) to player
-    broadcast player
-    set artificial intelligence of {scp096} to false
+    event-entity = {096}
+    (metadata tag "target" of {096}) is not set
+    set (metadata tag "target" of {096}) to player
+    set artificial intelligence of {096} to false
     loop 10 times:
-        play sound "minecraft:entity.ghast.hurt" with volume 5 and pitch 0.9 at {scp096}
+        play sound "minecraft:entity.ghast.hurt" with volume 5 and pitch 0.9 at {096}
         wait 0.4 seconds
-    set artificial intelligence of {scp096} to true
-    play sound "minecraft:block.sculk_shrieker.shriek" with volume 5 at {scp096}
+    set artificial intelligence of {096} to true
+    play sound "minecraft:block.sculk_shrieker.shriek" with volume 5 at {096}
 
 
 on death of player:
-    (metadata tag "target" of {scp096}) is victim
-    delete (metadata tag "target" of {scp096})
+    (metadata tag "target" of {096}) is victim
+    delete (metadata tag "target" of {096})
 
 on quit:
-    (metadata tag "target" of {scp096}) is player
-    delete (metadata tag "target" of {scp096})
+    (metadata tag "target" of {096}) is player
+    delete (metadata tag "target" of {096})
 
 on entity teleport:
-    event-entity = {scp096}
+    event-entity = {096}
     cancel event
 
 command spawn-scp096:
