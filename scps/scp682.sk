@@ -6,7 +6,6 @@ function scp682(l: location):
     apply speed 3 without particles to {_682} for 1 year
     apply resistance 5 without particles to {_682} for 1 year
     while {_682} is alive:
-        wait 1 tick
         set {_i} to a random integer between 20 and 30
         wait "%{_i}% seconds" parsed as timespan
         set {_v} to a random integer between 1 and 5
