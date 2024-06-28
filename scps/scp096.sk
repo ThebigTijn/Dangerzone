@@ -24,3 +24,33 @@ function scp096(l: location):
 on entity teleport:
     if event-entity is an enderman:
         cancel event
+    
+
+local function SCP096(l:location):
+    spawn enderman at {_l}:
+        set name of entity to "&f&lSCP-096 &6(Euclid)"
+        add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""096""]}" to entity
+        apply strength 255 without particles to entity for 1 year
+        apply speed 2 without particles to entity for 1 year
+        apply resistance 5 without particles to entity for 1 year
+        set {scp096} to entity
+
+on entity target:
+    event-entity = {scp096}
+    (metadata tag "target" of {scp096}) is not set
+    set (metadata tag "target" of {scp096}) to player
+    loop 10 times:
+        play sound "minecraft:entity.ghast.hurt" with volume 5 and pitch 0.9 at {scp096}
+        wait 0.4 seconds
+    play sound "minecraft:block.sculk_shrieker.shriek" with volume 5 at {scp096}
+    kill player
+    delete (metadata tag "target" of {scp096})
+
+on entity teleport:
+    event-entity = {scp096}
+    cancel event
+
+command spawn-scp096:
+    permission: op
+    trigger:
+        SCP096(location of player)
