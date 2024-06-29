@@ -36,3 +36,22 @@ function warpPlayer(p: player,w: text):
 
 on tab complete of "warp":
     set tab completions for position 1 to "set" and "delete" and (yaml node keys "" from "warps")
+
+local function autoWarp(p:player):
+	set {_list::*} to "ci","goc","sd","mtf","scd" and "isd"
+	loop {_list::*}:
+		{_p} has permission "spawn.%loop-value%"
+		set {_value} to loop-value
+		exit loop
+	if {_value} is not set:
+		warpPlayer({_p},"class-d")
+		stop
+	warpPlayer({_p},"%{_value}%-spawn")
+
+on join:
+	wait 4 ticks
+	autoWarp(player)
+
+on death:
+	wait 4 ticks
+	autoWarp(victim)

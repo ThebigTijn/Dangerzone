@@ -45,15 +45,26 @@ function openGuiItemLog(1: player,2: number):
 				openGuiItemLog({_1},({_2} - 1))
 		loop 36 times:
 			set {_a} to loop-value
+<<<<<<< Updated upstream
 			format gui slot (loop-value - 1) with returnItemlogItem(loop-value + (36 * {_3})) with lore (lore of returnItemlogItem(loop-value + (36 * {_3})) ? "") and "%nl%&f%font("Item Information")%%nl%&9 (ID: %(loop-value + (36 * {_3}))%)%nl%&9 %font("click to take item.")%" with all flags hidden:
 				give {_1} returnItemlogItem({_a} + (36 * {_3}))
 				message "you have been given a %(uncolored name of returnItemlogItem({_a} + (36 * {_3}))) ? (returnItemlogItem({_a} + (36 * {_3})))%"
 	open last created gui to {_1}
+=======
+			format gui slot (loop-value - 1) with returnItemlogItem(loop-value + (36 * {_3})) with lore (lore of returnItemlogItem(loop-value + (36 * {_3})) ? "") and "%nl%&f%font("Item Information")%%nl%&9 (ID: %(loop-value + (36 * {_3}))%)%nl%&9 %font("click to take item.")%" with itemflag hide attributes and hide enchants:
+				give {_1} returnItemlogItem({_a} + (36 * {_3}))
+				message "you have been given a %(uncolored name of returnItemlogItem({_a} + (36 * {_3}))) ? (returnItemlogItem({_a} + (36 * {_3})))%"
+		open gui to {_1}
+>>>>>>> Stashed changes
 
 function returnItemlogItem(id: number) :: item:
 	set {_i} to yaml value "items.%{_id}%" from "itemlist"
 	if {_i} is set:
+<<<<<<< Updated upstream
 		return item from nbt {_i} with all flags hidden
+=======
+		return item from nbt {_i} with itemflag hide enchants and hide attributes
+>>>>>>> Stashed changes
 	else:
 		return {_none}
 
@@ -77,7 +88,11 @@ function replaceItemlogItem(i: inventory,s: number):
 function saveItemlogItem(i: item):
 	set {_s} to (size of yaml node keys "items" from "itemlist" + 1)
 	set {_compound} to full nbt compound of {_i}
+<<<<<<< Updated upstream
 	set tag "tag;itemlog" of {_compound} to {_s}
+=======
+	set int tag "tag;itemlog" of {_compound} to {_s}
+>>>>>>> Stashed changes
 	set int tag "Count" of {_compound} to 1
 	set yaml value "items.%{_s}%" from "itemlist" to {_compound}
 	save yaml "itemlist"
@@ -85,8 +100,16 @@ function saveItemlogItem(i: item):
 
 function editItemlogItem(i: item,id: number):
 	set {_compound} to full nbt compound of {_i}
+<<<<<<< Updated upstream
 	set tag "tag;itemlog" of {_compound} to {_s}
 	set int tag "Count" of {_compound} to 1
 	set yaml value "items.%{_id}%" from "itemlist" to {_compound}
 	save yaml "itemlist"
 	load yaml "plugins/Skript/yaml/items.yml" as "itemlist"
+=======
+	set int tag "tag;itemlog" of {_compound} to {_s}
+	set int tag "Count" of {_compound} to 1
+	set yaml value "items.%{_id}%" from "itemlist" to {_compound}
+	save yaml "itemlist"
+	load yaml "plugins/Skript/yaml/items.yml" as "itemlist"
+>>>>>>> Stashed changes
