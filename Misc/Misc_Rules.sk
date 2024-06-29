@@ -5,12 +5,9 @@ command rules:
 
 function rules(p: player):
     set {_rules} to a written book
-    set {_pg1} to text component of "<##E34234>&lDangerzone &r<##E34234>Rules&f:%nl%%nl%&c- &0Spam - I%nl%&c- &0Flooding - I%nl%&c- &0Fonts - I%nl%&c- &0Non-English-chats-I%nl%&c- &0Advertising - II%nl%&c- &0Extreme Toxicity - II%nl%&c- &0Slurs - II%nl%&c- &0Threats - III%nl%&c- &0Suicide Encouragement - III%nl%&c- &0Lying to staff - ?"
-    set {_pg2} to text component of "<##E34234>&lDangerzone &r<##E34234>Rules&f:%nl%%nl%&6- &0Spawn Camping - ?%nl%&6- &0Targeting - I%nl%&6- &0Kit Stacking (CD) - I%nl%&6- &0Minor Unfair Advantage - II%nl%&6- &0Major Unfair Advantage - III%nl%&6- &0AFK Farming - II%nl%&6- &0Accessory to an offence - ?%nl%&6- &0Combat evasion - ?"
-    set {_pg3} to text component of "<##E34234>&lDangerzone &r<##E34234>Rules&f:%nl%%nl%&8- &0Auto-Clickers - II%nl%&8- &0Clicking Methods - I%nl%&8- &0''Hacked'' Clients - II"
-    set page 1 of book {_rules} to {_pg1}
-    set page 2 of book {_rules} to {_pg2}
-    set page 3 of book {_rules} to {_pg3}
+    set page 1 of book {_rules} to text component of "<##E34234>&lDangerzone &r<##E34234>Rules&f:%nl%%nl%&c- &0Spam - I%nl%&c- &0Flooding - I%nl%&c- &0Fonts - I%nl%&c- &0Non-English-chats-I%nl%&c- &0Advertising - II%nl%&c- &0Extreme Toxicity - II%nl%&c- &0Slurs - II%nl%&c- &0Threats - III%nl%&c- &0Suicide Encouragement - III%nl%&c- &0Lying to staff - ?"
+    set page 2 of book {_rules} to text component of "<##E34234>&lDangerzone &r<##E34234>Rules&f:%nl%%nl%&6- &0Spawn Camping - ?%nl%&6- &0Targeting - I%nl%&6- &0Kit Stacking (CD) - I%nl%&6- &0Minor Unfair Advantage - II%nl%&6- &0Major Unfair Advantage - III%nl%&6- &0AFK Farming - II%nl%&6- &0Accessory to an offence - ?%nl%&6- &0Combat evasion - ?"
+    set page 3 of book {_rules} to text component of "<##E34234>&lDangerzone &r<##E34234>Rules&f:%nl%%nl%&8- &0Auto-Clickers - II%nl%&8- &0Clicking Methods - I%nl%&8- &0''Hacked'' Clients - II"
     set book author of {_rules} to "<##E34234>&lDangerzone"
     set book title of {_rules} to "Rules"
     open book {_rules} to {_p}
