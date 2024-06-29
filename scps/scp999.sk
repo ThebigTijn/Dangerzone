@@ -9,9 +9,8 @@ local function scp999(l: location):
         set name of last spawned entity to "&e&lSCP-999 &r&a(SAFE)"
         set {999} to last spawned entity
         apply invisibility without particles to {999} for 1 year
-        set (metadata tag "ogturnrotation" of {999}) to 0
 
-    make {model::999::*} ride {999}
+    make {model::999::*} ride {999} #doesnt turn its head tried with quaternions and i couldnt get it to work
 
     while {999} is alive:
         wait 1 second
@@ -22,20 +21,6 @@ local function scp999(l: location):
         else:
             make 1 of heart 2 meters above all players in radius 3 around {999}
             set {_p} to 0
-
-local function turn():
-    (metadata tag "turnrotation" of {999}) is not set
-    set (metadata tag "turnrotation" of {999}) to a random integer between 1 and 360
-    if (metadata tag "turnrotation" of {999}) > (metadata tag "ogturnrotation" of {999}):
-        loop (metadata tag "turnrotation" of {999}) - (metadata tag "ogturnrotation" of {999}) ? 0 times:
-            add nbt from "{Rotation:[%loop-number + (metadata tag "ogturnrotation" of {999})%f,0f,0f]}" to nbt of {model::999::*}
-            wait 1 tick
-    else:
-        loop (metadata tag "ogturnrotation" of {999}) - (metadata tag "turnrotation" of {999}) times:
-            add nbt from "{Rotation:[%(metadata tag "ogturnrotation" of {999}) - loop-number%f,0f,0f]}" to nbt of {model::999::*}
-            wait 1 tick  
-    set (metadata tag "ogturnrotation" of {999}) to (metadata tag "turnrotation" of {999})
-    delete (metadata tag "turnrotation" of {999})
 
 #the reason i dont use wait is because then it will stall the entire while event which stops the model from teleporting
 #and every second has 20 ticks so, by adding 1 to {_p} every tick, 40 ticks is 2 seconds
