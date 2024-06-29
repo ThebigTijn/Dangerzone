@@ -1,0 +1,38 @@
+import:
+    ch.njol.skript.lang.function.Functions
+    ch.njol.skript.Skript
+    java.lang.Runnable
+    org.bukkit.Bukkit
+
+local function isFunction(functionName:string) :: boolean:
+    set {_value} to Functions.getFunction({_functionName})
+    return true if {_value} is set else false
+
+local function runFunction(functionName:string):
+    set {_functions::run} to function reference {_functionName}
+    set {_proxy} to new proxy instance of Runnable using {_functions::*}
+    {_proxy}.run()
+
+local function removeEntity(e:entity):
+    kill {_e}
+
+command hibers-scp <string> <string>:   
+    permission: op
+    trigger:
+        if arg-1 = "spawn":
+            if isFunction(arg-2) = false:
+                message "<##E34234>&lSYSTEM &7» Failed to identify the SCP."
+                stop
+            runFunction(arg-1)
+        else if arg-1 = "remove":
+            removeEntity(arg-2 parsed as entity) # parsing string as entity will not work in this situation
+            message "<##E34234>&lSYSTEM &7» Entity removed."
+
+local function returnEntities() :: strings:
+    loop all entities where [(string tag "custom;scp" of nbt of input) = "true"]:
+        add uncolored name of loop-value to {_list::*}
+    return {_list::*}
+
+on tab complete of "scp":
+    set tab completions for position 1 to "spawn", "remove"
+    set tab completions for position 2 to {_list::*}
