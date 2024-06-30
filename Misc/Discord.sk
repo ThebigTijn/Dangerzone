@@ -1,26 +1,20 @@
-#cc: hibers
-
 options:
-    prefix: discord
-    no-perms: no perms
-
-    name: Lilypad #replace with custom name
-    token: MTIyMzA3NTIzMTk3MTY3MjA3NA.G_JjiY.0Q6NenNXYKubYTFGiz3SKhMlgHiM8NZFZaGOiA #replace with bot's token
-
-    server: 1221254994838294538 #server id
-    verify-role: 1225446402587623424 #role id
-    verify-channelname: ##commands #name of channel
-
-    server-ip: yourserver.minehut.gg #minecraft ip
-    discord-ip: discord.gg/yourserver #discord ip
-
-define new bot named "{@name}":
-    token: "{@token}"
-    intents: default intents
-    policy: all
-    auto reconnect: true
-    compression: none
+    prefix: <##E34234>&lDISCORD &7»
+    perms: <##E34234>&lSYSTEM &7» Insufficient Permissions
+    server-ip: DANGERZONE.MINEHUT.GG
+    discord-ip: https://discord.gg/dangerzone-688720684297617468
+    token: MTI1NjY2NjkyOTc4ODA5MjQ4Ng.Gzlhro.NY0Zq4ENGB5Nvtgsa-VXttzNEFkBH7oWB7D2mU
+    server-id: 688720684297617468
+    role-id: 1256684597497040967
+    channel: ##verify
 
 on ready:
-    send "&a%event-bot% &2has been loaded!" to console
-    set presence of bot "{@name}" to watching "%size of discord members of guild with id "{@server}"% Members"
+    message "&8[&eArchivist&8] Bot Loaded" to console
+    set the presence of the bot named "Archivist" to watching "%size of discord members of guild with id "{@server-id}"% Members"
+
+define new bot named "Archivist":
+    token: {@token}
+    intents: default intents
+    policy: all
+    compression: none
+    auto reconnect: true
