@@ -13,9 +13,11 @@ local function scp999(l: location):
     make {model::999::*} ride {999} #doesnt turn its head tried with quaternions and i couldnt get it to work
 
     while {999} is alive:
-        wait 1 second
-        turn()
-        apply regeneration 2 to all players in radius 3 around {999} where ["%input's potion effects%" does not contain "regeneration"] for 3 seconds
+        wait 1 tick
+        loop {model::999::*}:
+            loop-value.setRotation(yaw of {999},pitch of {999})
+            stop
+        apply regeneration 2 to all players in radius 3 around {999} where ["%input's potion effects%" does not contain "regeneration"] for 2 ticks
         if {_p} ? 0 < 40:
             add 1 to {_p}
         else:
