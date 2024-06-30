@@ -1,0 +1,81 @@
+options:
+    prefix: <##E34234>&lDISCORD &7»
+    perms: <##E34234>&lSYSTEM &7» Insufficient Permissions
+    server-ip: DANGERZONE.MINEHUT.GG
+    discord-ip: https://discord.gg/dangerzone-688720684297617468
+    server-id: 688720684297617468
+    role-id: 1256684597497040967
+    channel: ##verify
+
+discord command .link [<string>]:
+    trigger:
+        create a new message and store it in {_msg}:
+            make embed:
+                set title of embed to "Minecraft-Discord Integration"
+                set description of embed to "Link your Minecraft account to access exclusive server features."
+                set embed color of the embed to red
+                add field named "%nl%**INSTRUCTIONS**" with value "%nl%- Connect to our domain **{@server-ip}**%nl%- Type /discord link to obtain your verification code.%nl%- Click the button **LINK ACCOUNT** and enter the verification code." to fields of embed
+                set thumbnail of embed to "https://i.imgur.com/FDadl26.png"
+                set footer of embed to "Made by %event-user%"
+                set footer icon of embed to "https://i.imgur.com/95ZGsA6.png"
+                set timestamp of embed to now
+            add last embed to the embeds of the message
+            add new primary button with id "link" named "Link Account" to rows of the message
+        reply with {_msg}
+
+command discord [<string>]:
+    trigger:
+        arg-1 = "link":
+            (string tag "custom;discordID" of nbt of player) is set:
+                message "{@prefix} &cAccount is already linked!"
+                stop
+            set {_code} to random integer between 11111 and 99999
+            set {code::%uuid of player%} to {_code}
+            message formatted "", "{@prefix} &7Your Verification Code is: &c%{_code}% &8[<sgt:%{_code}%><ttp:&cClick to copy Verification Code>&7Copy<reset>&8]", "{@prefix} &7Follow instructions in &f{@channel} &7on our <url:{@discord-ip}><ttp:&7Join our Discord Server>&nDiscord<reset> &7to link your account!", and ""
+        else if arg-1 = "unlink":
+            (string tag "custom;discordID" of nbt of player) is not set:
+                message "{@prefix} &cAccount is not linked."
+                stop
+            set {_id} to (string tag "custom;discordID" of nbt of player)
+            set {_p} to user with id {_id} in guild with id "{@server-id}"
+            remove role with id "{@role-id}" from {_p}
+            delete (string tag "custom;discordID" of nbt of player)
+            message "{@prefix} &7You successfully unlinked your account!"
+        else:
+            message formatted "", "{@prefix} &7Available Commands:", "&8┃ <cmd:/discord link><ttp:&7Click to execute>&c/discord link<reset> &8× &7Link your account with Discord", "&8┃ <cmd:/discord unlink><ttp:&7Click to execute>&c/discord unlink<reset> &8× &7Unlink your account from Discord", "&8┃ <cmd:/discord sync><ttp:&7Click to execute>&c/discord sync<reset> &8× &7Sync your account with Discord", and ""
+
+on button click:
+    event-string = "link"
+    set {_modal} to new modal with id "verification" named "Link Account"
+    create a new row and store it in {_row}:
+        set {_input} to new short text input with id "code" named "Input Verification Code"
+        set minimum range of {_input} to 5
+        set maximum range of {_input} to 5
+        set required state of {_input} to true
+        add {_input} to the components of the row
+    add {_row} to components row of {_modal}
+    show {_modal} to event-user
+
+function syncAccount(p: player):
+    set {_dcid} to (string tag "custom;discordID" of nbt of player)
+    add role with id "{@role-id}" to roles of member with id {_dcid} in guild with id "{@server-id}"
+
+on modal receive:
+    event-string = "verification"
+    set {_code} to (value of text input with id "code") parsed as integer
+    {code::*} does not contain {_code}:
+        reply with hidden "Invalid Verification Code! Type **/discord link** ingame to generate yours."
+        stop
+    loop {code::*}:
+        loop-value = {_code}
+        set {_uuid} to loop-index
+    delete {code::%{_uuid}%}
+    set {_p} to {_uuid} parsed as offline player
+    set (string tag "custom;discordID" of nbt of {_p}) to discord id of event-user
+    reply with hidden "Account successfully linked with: **%{_p}%**"
+    send formatted "{@prefix} &7Your account is now linked with &c%event-member% &8[<cmd:/discord unlink><ttp:&cClick to unlink your account>&cUnlink<reset>&8]" to {_uuid} parsed as offline player
+    syncAccount({_uuid} parsed as offline player)
+
+on quit:
+    {code::%uuid of player%} is set
+    delete {code::%uuid of player%}

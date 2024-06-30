@@ -1,0 +1,10 @@
+on ready:
+    message "&8[&eArchivist&8] Bot Loaded" to console
+    set the presence of the bot named "Archivist" to watching "%size of discord members of guild with id "688720684297617468"% Members"
+
+define new bot named "Archivist":
+    token: MTI1NjY2NjkyOTc4ODA5MjQ4Ng.Gzlhro.NY0Zq4ENGB5Nvtgsa-VXttzNEFkBH7oWB7D2mU
+    intents: default intents
+    policy: all
+    compression: none
+    auto reconnect: true
