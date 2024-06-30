@@ -10,9 +10,9 @@ function scp914():
     play sound "minecraft:entity.minecart.riding" with volume 10 at location(194.5, -35, 41, world "world")
     open block at location(194, -35, 41, world "world")
     open block at location(190, -35, 41, world "world")
+    set {_t::*} to "%{_i}%" split at " "
+    set {_amt} to {_t::2} parsed as integer
     if "%{_i}%" contains "L1" or "L2" or "L3" or "L4" or "L5":
-        set {_t::*} to "%{_i}%" split at " "
-        set {_amt} to {_t::2} parsed as integer
         loop {_amt} ? 1 times:
             if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH":
                 scp914ROUGH({_i})
@@ -26,6 +26,11 @@ function scp914():
                 scp914VERYFINE({_i})
             kill {_i}
     else:
+        if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH":
+            loop {_amt} ? 1 times:
+                scp914ROUGH({_i})
+            kill {_i}
+            stop
         teleport {_i} to location(194.5, -35, 41.5, world "world")
     stop
 
