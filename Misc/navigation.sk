@@ -1,2 +1,32 @@
-local function spawnBossbar(p:player):
-    
+local function spawnNavigation(p:player,bound:string):
+    set {_facing} to "%facing of {_p}%"
+    set {_b} to boss bar with id "navigation" with title "&f%font(returnBound({_bound}))% &8[&e%font({_facing})%&8]" with color red with progress 100
+    set (metadata tag "navigation" of {_p}) to {_b}
+    add {_p} to {_b}
+
+local function updateNavigation(p:player,bound:string):
+    set {_facing} to "%facing of {_p}%"
+    set bar title of (metadata tag "navigation" of {_p}) to "&f%font(returnBound({_bound}))% &8[&e%font({_facing})%&8]"
+
+local function deleteNavigation(p:player):
+    delete boss bar with id "navigation"
+    delete (metadata tag "navigation" of {_p})
+
+local function returnBound(s:string) :: string:
+    set {_s} to {_s}.replaceAll("[^A-Za-z]"," ")
+    return {_s}
+
+on join:
+    spawnNavigation(player,"%bound id at player%")
+
+on bound enter:
+    wait 5 ticks
+    updateNavigation(player,"%bound id at player%")
+
+on bound exit:
+    wait 5 ticks
+    updateNavigation(player,"%bound id at player%")
+
+on player turning around:
+    wait 5 ticks
+    updateNavigation(player,"%bound id at player%")
