@@ -62,7 +62,6 @@ function factionUninvite(p:player,t:offlineplayer,id:int):
 
 function factionGetInvites(p:player,name:string) :: boolean:
     loop {-faction::%uuid of {_p}%::invites::*}:
-        broadcast "Inputted Name: %{_name}%, Required Name: %factionYMLGetValue(loop-value,"name")%"
         factionYMLGetValue(loop-value,"name") = {_name}
         set (int tag "custom;Faction_ID" of nbt compound from {_p}) to loop-value
         return true
@@ -87,15 +86,14 @@ function factionKick(p:player,t:offlineplayer,id:int):
     save yaml "faction-%{_id}%"
 
 function factionChat(p:player,id:int,t:string):
-    loop all players where [(int tag "custom;Faction_ID" of nbt compound from input) = {_id}]:
-        send "&8[&f%factionYMLGetValue({_id},"name")%&8] >> %{_t}%" to loop-value
+    send "&8[&cFaction &f(%factionYMLGetValue({_id},"name")%)&8] &7%{_p}% » %{_t}%" to all players where [(int tag "custom;Faction_ID" of nbt compound from input) = {_id}]
 
 function factionToggle(p:player):
-    if (tag "Faction_Chat" of nbt compound from {_p}) is not set:
-        set (tag "Faction_Chat" of nbt compound from {_p}) to "true"
+    if (string tag "Faction_Chat" of nbt compound from {_p}) is not set:
+        set (string tag "Faction_Chat" of nbt compound from {_p}) to "true"
         stop
-    (tag "Faction_Chat" of nbt compound from {_p}) = "true"
-    delete (tag "Faction_Chat" of nbt compound from {_p})
+    (string tag "Faction_Chat" of nbt compound from {_p}) = "true"
+    delete (string tag "Faction_Chat" of nbt compound from {_p})
 
 command faction <string> [<string>]:
     trigger:
@@ -116,20 +114,20 @@ command faction <string> [<string>]:
         else if arg-1 = "accept":
             arg-2 is set
             if inFaction(player) = true:
-                send "Already in a faction" to player
+                send "<##E34234>&lSYSTEM &7» Already in a faction" to player
                 stop
             if factionGetInvites(player,arg-2) = false:
-                send "you are not invited to that faction" to player
+                send "<##E34234>&lSYSTEM &7» You have not been invited to that faction." to player
                 stop
             factionGetInvites(player,arg-2) = true
             set {_id} to (int tag "custom;Faction_ID" of nbt compound from player)
             set {_name} to factionYMLGetValue({_id},"name")
             factionAddMember(player,{_id})
-            send "joined faction %{_name}%" to player
+            send "<##E34234>&lSYSTEM &7» Joined faction %{_name}%" to player
         else if arg-1 = "decline":
             arg-2 is set
             factionUninvite(player,player,arg-2 parsed as integer)
-            send "declined invite" to player
+            send "<##E34234>&lSYSTEM &7» Declined Invite" to player
         else if arg-1 = "disband":
             if arg-2 = "confirm":
                 factionDisband({_id})
@@ -153,14 +151,14 @@ command faction <string> [<string>]:
                 stop
             set {_arg-2} to (arg-2 parsed as offlineplayer)
             if {_arg-2} = player:
-                send "cannot invite yourself" to player
+                send "<##E34234>&lSYSTEM &7» You cannot invite yourself." to player
                 stop
             inFaction({_arg-2}) = false
             if {_arg-2} is online:
                 {-faction::%uuid of {_arg-2}%::invites::*} does not contain {_id}
-                send "invited to faction %{_name}% by %player%" to {_arg-2}
+                send "<##E34234>&lSYSTEM &7» Invited to faction %{_name}% by %player%" to {_arg-2}
             factionInvite(player,{_arg-2},{_id})
-            send "invited %{_arg-2}%" to player
+            send "<##E34234>&lSYSTEM &7» Invited %{_arg-2}%" to player
         else if arg-1 = "uninvite":
             arg-2 is set
             if isLeader(player) = false:
@@ -168,7 +166,7 @@ command faction <string> [<string>]:
                 stop
             set {_arg-2} to (arg-2 parsed as offlineplayer)
             factionUninvite(player,{_arg-2},{_id})
-            send "uninvited %{_arg-2}%" to player
+            send "<##E34234>&lSYSTEM &7» Uninvited %{_arg-2}%" to player
         else if arg-1 = "kick":
             if isLeader(player) = false:
                 send "<##E34234>&lSYSTEM &7» Must be the leader of your faction." to player

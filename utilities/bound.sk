@@ -1,0 +1,52 @@
+local function setPos(pos:int,p:player,l:location):
+    set (metadata tag "bound.%{_pos}%" of {_p}) to {_l}
+    message "<##E34234>&lSYSTEM &7» Set bound position %{_pos}% to location &f%{_l}%." to {_p}
+
+on left click:
+    event-block is set
+    (string tag "boundTool" of nbt of event-item) = "true"
+    setPos(1,player,location of event-block)
+
+on right click:
+    event-block is set
+    (string tag "boundTool" of nbt of event-item) = "true"
+    setPos(2,player,location of event-block)
+
+local function createBound(id:string,1:location,2:location):
+    create bound with id {_id} between {_1} and {_2}
+
+local function deleteBound(id:string):
+    delete bound with id {_id}
+
+command bound <string> [<string>]:
+    permission: op
+    trigger:
+        if arg-1 = "create":
+            (metadata tag "bound.1" of player) and (metadata tag "bound.2" of player) is not set:
+                message "<##E34234>&lSYSTEM &7» Locations not set"
+                stop
+            createBound(arg-2,(metadata tag "bound.1" of player),(metadata tag "bound.2" of player))
+            message "<##E34234>&lSYSTEM &7» Created Bound &f%arg-2%"
+        else if arg-1 = "delete":
+            bound with id arg-2 exists
+            deleteBound(arg-2)
+            message "<##E34234>&lSYSTEM &7» Deleted Bound &f%arg-2%"
+        else if arg-1 = "list":
+            message "<##E34234>&l%font("bound list")%"
+            loop all bounds:
+                add 1 to {_n}
+                message "&6##%{_n}%: &7%font(bound id of loop-value)%"
+
+command bound-tool:
+    permission: op
+    trigger:
+        set {_i} to blaze rod named "&7Bound Selector"
+        set (string tag "boundTool" of nbt of {_i}) to "true"
+        give player {_i}
+
+on break:
+    (string tag "boundTool" of nbt of (tool of player)) = "true"
+    cancel event
+
+on bound exit:
+    message bound id at player
