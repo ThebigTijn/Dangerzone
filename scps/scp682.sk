@@ -1,10 +1,4 @@
-command spawn-scp682:
-    permission: op
-    trigger:
-        scp682(location of player)
-
-
-local function scp682(l: location):
+function scp682(l: location):
     spawn ravager at {_l}:
         add nbt from "{Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""682""]}" to nbt of entity
         set {682} to entity
@@ -16,6 +10,7 @@ local function scp682(l: location):
     while {682} is alive:
         set {_i} to a random integer between 20 and 30
         wait "%{_i}% seconds" parsed as timespan
+        {int::682999} isn't set
         set {_v} to a random integer between 1 and 5
         if {_v} is 1:
             send "&2&lSCP-682 &r&4(KETER) &8◇&f You are all such cowards, come face me!" to all players in radius 20 around {682}

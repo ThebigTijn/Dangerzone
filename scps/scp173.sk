@@ -1,9 +1,4 @@
-command spawn-scp173:
-    permission: op
-    trigger:
-        scp173(location of player)
-
-local function scp173(l: location):
+function scp173(l: location):
     spawn husk at {_l}:
         add nbt from "{PersistenceRequired:1,Silent:1,Tags:[""173""]}" to nbt of entity
         set name of entity to "<##C4A484>&lSCP-173 &6(Euclid)"
@@ -18,7 +13,9 @@ local function scp173(l: location):
     while {173} is alive:
         wait 1 tick
         delete {_b}
-        set {_b} to a random element of all chickens in radius 15 around {173}
+        set {_b} to a random element of all slimes in radius 15 around {173}
+        if {_b} = {999}:
+            delete {_b}
         if {_b} is not set: #if i dont do this then the chicken thing doesnt matter as it will set {_b} to <none> if none is looking
             set {_b} to a random element of all players where [target entity of input is {173}]
         if {_b} is set:

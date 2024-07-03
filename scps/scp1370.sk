@@ -9,7 +9,6 @@ local function scp1370(l: location):
         add nbt from "{ShowArms:1b,NoBasePlate:1b,Small:1b,DisabledSlots:4144959,Invulnerable:1b,PersistenceRequired:1b,Silent:1b,HandItems:[{id:iron_shovel,count:1},{id:spyglass,count:1}],HandDropChances:[0f,0f],ArmorDropChances:[0f,0f,0f],ArmorItems:[{id:iron_boots,count:1},{id:iron_leggings,count:1},{id:iron_chestplate,count:1}],Tags:[""1370""]}" to nbt of entity
         set name of entity to "&f&lSCP-1370 &r&a(SAFE)"
         set {_1370::model} to entity
-        set {_nbt}
 
     while {_1370} is alive:
         wait 1 tick

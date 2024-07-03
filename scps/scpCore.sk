@@ -1,39 +1,36 @@
-import:
-    ch.njol.skript.lang.function.Functions
-    ch.njol.skript.Skript
-    java.lang.Runnable
-    org.bukkit.Bukkit
-
-local function isFunction(functionName:string,file:string) :: boolean:
-    set {_value} to getLocalFunction({_functionName},{_file}) #Functions.getFunction({_functionName}) <-- for global func.
-    return true if {_value} is set else false
-
-local function runFunction(functionName:string):
-    set {_functions::run} to function reference {_functionName}
-    set {_proxy} to new proxy instance of Runnable using {_functions::*}
-    {_proxy}.run()
-
-local function removeEntity(e:entity):
-    kill {_e}
-
-command hibers-scp <string> <string>:   
+command scp <text> <text>:
     permission: op
     trigger:
-        if arg-1 = "spawn":
-            if isFunction(arg-2) = false:
-                message "<##E34234>&lSYSTEM &7» Failed to identify the SCP."
-                stop
-            runFunction(arg-1)
-        else if arg-1 = "remove":
-            removeEntity(arg-2 parsed as entity) # parsing string as entity will not work in this situation
-            message "<##E34234>&lSYSTEM &7» Entity removed."
+        if arg-2 is "spawn":
+            scp096(player) if arg-1 = "096"
+            scp131(player) if arg-1 = "131"
+            scp173(player) if arg-1 = "173"
+            scp682(player) if arg-1 = "682"
+            scp939(player) if arg-1 = "939"
+            scp999(player) if arg-1 = "999"
+            give player record relic named "&6SCP-500" if arg-1 = "500"
+        if arg-2 is "kill":
+            add nbt from "{Size:0}" to nbt of {999} if arg-1 is "999"
+            make player execute command "kill @e[tag=%arg-1%]"
 
-local function loadYAML():
-    load yaml "plugins/Skript/yaml/scps.yml" as "SCPS"
 
-local function returnSCPS() :: strings:
-    return all yaml nodes from "SCPS"
+on tab complete of "/scp":
+    set tab completions for position 1 to "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370"
+    set tab completions for position 2 to "spawn" and "kill"
 
-on tab complete of "scp":
-    set tab completions for position 1 to "spawn", "remove"
-    set tab completions for position 2 to returnSCPS()
+on death:
+    attacker is set
+    victim is not a player
+    if victim's name contains "SCP":
+        cancel event
+
+#local function runFunction(functionName:string):
+    #set {_functions::run} to function reference {_functionName}
+    #set {_proxy} to new proxy instance of Runnable using {_functions::*}
+    #{_proxy}.run()
+
+
+
+command testscp:
+    trigger:
+        teleport player to location(202.5, -36, 58.5, world "world")

@@ -1,6 +1,6 @@
 #THIS IS JUST A START please dont judge this being bad lmao
 
-function scp914():
+local function scp914():
     set {_l} to block at location(190.5, -34.5, 40.5, world "world")
     loop all dropped items in radius 2 around {_l}:
         set {_e} to loop-entity
@@ -40,7 +40,7 @@ on right click on dark oak sign:
         scp914selection(player)
 
 
-function scp914selection(p:player):
+local function scp914selection(p:player):
     create a gui with virtual hopper inventory named "           &8SCP-914 &a(Safe)":
         format gui slot 0 with black stained glass pane named "&8ROUGH":
             cancel event

@@ -1,4 +1,4 @@
-local function SCP096(l:location):
+function scp096(l:location):
     spawn enderman at {_l}:
         set name of entity to "&f&lSCP-096 &6(Euclid)"
         add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""096""]}" to nbt of entity
@@ -32,8 +32,3 @@ on quit:
 on entity teleport:
     event-entity = {096}
     cancel event
-
-command spawn-scp096:
-    permission: op
-    trigger:
-        SCP096(location of player)

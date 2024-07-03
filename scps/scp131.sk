@@ -1,36 +1,33 @@
 #I set 131's movement speed to 0 instead of setting its AI off because if its AI is off then it cant
 #be knocked back and it cant turn its head using with skript
 
-#Reason i use {_b} and not add it to the nbt is because NBT is a text and it wont let me parse the text
-#as an entity so i used {_b} instead
+function scp131(l: location):
+    scp131spawn({_l}, "&6&lSCP-131-A &r&a(SAFE)")
+    scp131spawn({_l}, "&c&lSCP-131-B &r&a(SAFE)")
 
-#need while event to keep tping the model
-
-command spawn-scp131:
-    permission: op
-    trigger:
-        scp131(location of player, "131", "&6&lSCP-131-A &r&a(SAFE)", 15)
-        scp131(location of player, "131", "&c&lSCP-131-B &r&a(SAFE)", 15)
-
-function scp131(l: location, tag: text, n: text, r: number):
+local function scp131spawn(l: location, n: text):
     spawn slime at {_l}:
-        add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""%{_tag}%""]}" to nbt of entity
+        add nbt from "{Size:0,PersistenceRequired:1,Silent:1b,Tags:[""131""]}" to nbt of entity
         set name of entity to {_n}
         apply resistance 5 without particles to entity for 1 year
         set {_e} to entity
 
-    while {_e} is alive:
+    while {_e} is alive: #its better then every 0.25 seconds because it only works when 131 is alive
         wait 0.25 seconds
         delete {_b}
-        set {_b} to a random element of all husks in radius {_r} of {_e}
-        if {_b} is set:
-            if {_b} = {173}: 
-                set {_e}'s movement speed attribute to 0
-                force {_e} to face {_b} at head rotation speed 99999
-            else:
-                reset {_e}'s movement speed attribute
-            
-        set {_tp} to {_e}'s location
-        set pitch of {_tp} to 0
-        set yaw of {_tp} to yaw of {_e}
-        #teleport {model::%{_tag}%::*} above {_tp}
+        if distance between {_e} and {173} <= 15:
+            set {_e}'s movement speed attribute to 0
+            force {_e} to face {173} at head rotation speed 99999
+        else:
+            reset {_e}'s movement speed attribute
+
+on entity target:
+    event-entity is a slime
+    event-entity != {999}
+    cancel event
+
+on entity jump:
+    event-entity is a slime
+    event-entity != {999}
+    event-entity's movement speed attribute is 0
+    cancel event

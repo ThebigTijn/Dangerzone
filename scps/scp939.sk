@@ -1,10 +1,4 @@
-command spawn-scp939:
-    permission: op
-    trigger:
-        scp939(location of player)
-
-
-local function scp939(l: location):
+function scp939(l: location):
     loop 3 times:
         set {_v} to loop-number #i couldnt put loop-number down there after i changed the function to local
         spawn zoglin at {_l}:
