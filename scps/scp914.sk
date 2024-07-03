@@ -110,29 +110,38 @@ local function scp914ONE(i: item, amt: integer):
 
 
 local function scp914FINE(i: item, amt: integer):
-    if {_i}'s name contains "L1":
-        chance of 50%:
-            drop yellow stained glass pane named "&8L2-card" at location(194.5, -35, 41.5, world "world") without velocity
-    if {_i}'s name contains "L2":
-        chance of 50%:
-            drop orange stained glass pane named "&8L3-card" at location(194.5, -35, 41.5, world "world") without velocity
-    if {_i}'s name contains "L3":
-        chance of 50%:
-            drop red stained glass pane named "&8L4-card" at location(194.5, -35, 41.5, world "world") without velocity
-    if {_i}'s name contains "L4":
-        chance of 50%:
-            drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
-    if {_i}'s name contains "L5":
-        chance of 100%:
-            drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
+    loop {_amt} times:
+        if {_i}'s name contains "L1":
+            chance of 75%:
+                drop yellow stained glass pane named "&8L2-card" at location(194.5, -35, 41.5, world "world") without velocity
+            else:
+                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+        if {_i}'s name contains "L2":
+            chance of 50%:
+                drop orange stained glass pane named "&8L3-card" at location(194.5, -35, 41.5, world "world") without velocity
+            else:
+                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+        if {_i}'s name contains "L3":
+            chance of 25%:
+                drop red stained glass pane named "&8L4-card" at location(194.5, -35, 41.5, world "world") without velocity
+            else:
+                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+        if {_i}'s name contains "L4":
+            chance of 15%:
+                drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
+            else:
+                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+        if {_i}'s name contains "L5":
+            teleport {_i} to location(194.5, -35, 41.5, world "world")
 
 
 
 local function scp914VERYFINE(i: item, amt: integer):
-    if {_i}'s name contains "L5":
-        drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
-    if {_i}'s name contains "L1" or "L2" or "L3" or "L4":
-        chance of 5%:
+    loop {_amt} times:
+        if {_i}'s name contains "L5":
             drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
-        else:
-            drop raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194.5, -35, 41.5, world "world") without velocity
+        if {_i}'s name contains "L1" or "L2" or "L3" or "L4":
+            chance of 2%:
+                drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
+            else:
+                drop raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194.5, -35, 41.5, world "world") without velocity

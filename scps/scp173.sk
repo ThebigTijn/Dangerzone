@@ -14,13 +14,9 @@ function scp173(l: location):
         wait 1 tick
         delete {_b}
         set {_b} to a random element of all slimes in radius 15 around {173}
-        if {_b} = {999}:
-            delete {_b}
-        if {_b} is not set: #if i dont do this then the chicken thing doesnt matter as it will set {_b} to <none> if none is looking
-            set {_b} to a random element of all players where [target entity of input is {173}]
-        if {_b} is set:
-            set artificial intelligence of {173} to false
-        if {_b} is not set:
-            set artificial intelligence of {173} to true
+        delete {_b} if {_b} = {999}
+        set {_b} to a random element of all players where [target entity of input is {173}] if {_b} is not set
+        set artificial intelligence of {173} to false if {_b} is set
+        set artificial intelligence of {173} to true if {_b} is not set
 
 #while is better for this as you cant do (on player target) ect. and you need to check fast

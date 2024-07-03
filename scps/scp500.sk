@@ -1,11 +1,14 @@
 on right click:
-    if name of 1 of player's tool contains "&6SCP-500":
-        remove 1 record relic from player's inventory
-        clear player's potion effects #this is meant to remove good ones aswell, its not a mistake
-        apply regeneration 4 to player for 7 seconds
-        loop 3 times:
-            play sound "minecraft:entity.generic.eat" to player
-            wait 2 ticks
+    name of 1 of player's tool contains "&6SCP-500"
+    remove 1 record relic from player's inventory
+    clear player's potion effects #this is meant to remove good ones aswell, its not a mistake
+    apply regeneration 4 to player for 7 seconds
+    loop 3 times:
+        play sound "minecraft:entity.generic.eat" to player
+        wait 2 ticks
+    {zombies::*} contains player
+    remove player from {zombies::*}
+    clear player's inventory
 
 
 

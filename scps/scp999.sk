@@ -7,47 +7,47 @@ function scp999(l: location):
         wait 3 seconds
         distance between {682} and {999} < 10
         set {int::682999} to true
-        set {999}'s movement speed attribute to 0
-        set {682}'s movement speed attribute to 0
+        apply slowness 255 without particles to {682} for 1 year
         face({682}, {999})
         send "&e&lSCP-999 &r&a(SAFE) &8◇ &7&o(elated gurgles)" to all players in radius 15 around {999}
-        wait 2 seconds
-        face({682}, {999})
-        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(unintelligible groans, growling) &fWhat is that?" to all players in radius 15 around {682}
         wait 3 seconds
         face({682}, {999})
-        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(groans) &fDisgusting…" to all players in radius 15 around {682}
-        wait 2 seconds
-        face({682}, {999})
-        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(grunts) &fHmmm? &7&o(unintelligible) &fwhat is this… &7&o(low noise, similar to light chuckle) &fI feel… good…" to all players in radius 15 around {682}
-        wait 5 seconds
-        face({682}, {999})
-        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(deep chuckling) &fFeel… so… happy. Happy… &7&o(laughs) &fhappy… happy…" to all players in radius 15 around {682}
+        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(unintelligible groans, growling) &fWhat is that?" to all players in radius 15 around {682}
         wait 4 seconds
         face({682}, {999})
-        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(bellowing laughter) &fStop! No tickling! &7&o(continues laughing)" to all players in radius 15 around {682}
+        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(groans) &fDisgusting…" to all players in radius 15 around {682}
+        wait 3 seconds
+        face({682}, {999})
+        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(grunts) &fHmmm? &7&o(unintelligible) &fwhat is this… &7&o(low noise, similar to light chuckle) &fI feel… good…" to all players in radius 15 around {682}
+        wait 6 seconds
+        face({682}, {999})
+        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(deep chuckling) &fFeel… so… happy. Happy… &7&o(laughs) &fhappy… happy…" to all players in radius 15 around {682}
         wait 5 seconds
-        reset {682}'s movement speed attribute
+        face({682}, {999})
+        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(bellowing laughter) &fStop! No tickling! &7&o(continues laughing)" to all players in radius 15 around {682}
+        wait 6 seconds
+        remove slowness from {682}'s potion effects
         reset {999}'s movement speed attribute
         wait 5 minutes #this waits 5 mins after the interaction before 682 attackers players
         delete {int::682999}
+        apply speed 5 without particles to {682} for 1 year
+        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(runt) &f&oinput message" to all players in radius 15 around {682}
+        wait 90 seconds
+        remove speed from {682}'s potion effects
+        apply speed 3 without particles to {682} for 1 year
+
 
 
 
 local function face(e: entity, t: entity):
     force {_e} to face {_t} at head rotation speed 99999
-    force {_t} to face {_e} at head rotation speed 99999
+    make {_t} pathfind to {_e}
         
 
 
 on entity target:
     event-entity = {682}
     {int::682999} is set
-    cancel event
-
-on entity jump:
-    event-entity = {999}
-    event-entity's movement speed attribute is 0
     cancel event
 
 

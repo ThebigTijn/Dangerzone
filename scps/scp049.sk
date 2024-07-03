@@ -1,0 +1,61 @@
+function scp049(l: location):
+    spawn skeleton at {_l}:
+        add nbt from "{PersistenceRequired:1,Tags:[""049""]}" to nbt of entity
+        set name of entity to "&8&lSCP-049 &6(Euclid)"
+        set entity's helmet to skeleton skull
+        set entity's chestplate to leather chestplate with nbt from "{Unbreakable:1b,display:{color:0}}"
+        set entity's leggings to leather leggings with nbt from "{Unbreakable:1b,display:{color:0}}"
+        set entity's boots to leather boots with nbt from "{Unbreakable:1b,display:{color:0}}"
+        set entity's tool to iron hoe
+        set entity's offhand tool to shears
+        apply strength 2 without particles to entity for 1 year
+        apply speed 2 without particles to entity for 1 year
+        apply resistance 5 without particles to entity for 1 year
+        set {049} to entity
+    
+on death:
+    victim is a player
+    remove victim from {zombies::*} if {zombies::*} contains victim
+    if attacker = {049}:
+        cancel event
+        zombie(victim)
+        delete target of {049}
+    if {zombies::*} contains attacker:
+        zombie(victim)
+        cancel event
+
+on entity target:
+    event-entity = {049}
+    {zombies::*} contains target
+    cancel event
+
+on damage:
+    {zombies::*} contains attacker
+    {zombies::*} contains victim
+    cancel event
+
+
+on pickup:
+    {zombies::*} contains player
+    event-item != record relic
+    cancel event
+
+on drop:
+    {zombies::*} contains player
+    cancel event
+
+on quit:
+    {zombies::*} contains player
+    clear player's inventory
+    remove player from {zombies::*}
+
+
+local function zombie(p: player):
+    send " %nl%&2&lYOU HAVE BEEN INFECTED%nl% " to {_p}
+    add {_p} to {zombies::*} if {zombies::*} does not contain {_p}
+    clear {_p}'s inventory
+    set {_p}'s helmet to zombie skull of curse of vanishing and curse of binding
+    set {_p}'s chestplate to leather chestplate of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
+    set {_p}'s leggings to leather leggings of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
+    set {_p}'s boots to leather boots of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
+    set {_p}'s tool to stick of sharpness 11 and curse of vanishing named "&2&lZombie Stick" with lore "&fA Stick for Zombies" and "" and "&7| &x&8&2&9&1&A&2sᴛᴀᴛɪsᴛɪᴄs:" and "&c🗡 Damage: +6" and "" with nbt from "{HideFlags:-1}"
