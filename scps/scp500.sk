@@ -3,9 +3,12 @@ on right click:
         remove 1 record relic from player's inventory
         clear player's potion effects #this is meant to remove good ones aswell, its not a mistake
         apply regeneration 4 to player for 7 seconds
+        loop 3 times:
+            play sound "minecraft:entity.generic.eat" to player
+            wait 2 ticks
 
 
 
 every 10 seconds:
     if block at location(183, -36, 50, world "world")'s inventory does not contain a record relic:
-        set slot 13 of block at location(183, -36, 50, world "world")'s inventory to record relic named "&6SCP-500"
+        set slot 13 of block at location(183, -36, 50, world "world")'s inventory to record relic named "&6SCP-500" with nbt from "{HideFlags:-1}"

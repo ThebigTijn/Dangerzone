@@ -2,10 +2,10 @@ function scp682(l: location):
     spawn ravager at {_l}:
         add nbt from "{Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""682""]}" to nbt of entity
         set {682} to entity
-        set name of {682} to "&2&lSCP-682 &r&4(KETER)"
-        apply strength 1 without particles to {682} for 1 year
-        apply speed 3 without particles to {682} for 1 year
-        apply resistance 5 without particles to {682} for 1 year
+        set name of entity to "&2&lSCP-682 &r&4(KETER)"
+        apply strength 1 without particles to entity for 1 year
+        apply speed 3 without particles to entity for 1 year
+        apply resistance 5 without particles to entity for 1 year
         
     while {682} is alive:
         set {_i} to a random integer between 20 and 30

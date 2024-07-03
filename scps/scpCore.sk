@@ -19,10 +19,11 @@ on tab complete of "/scp":
     set tab completions for position 2 to "spawn" and "kill"
 
 on death:
-    attacker is set
+    victim's name contains "SCP"
     victim is not a player
-    if victim's name contains "SCP":
-        cancel event
+    cancel drops
+    attacker is set
+    cancel event
 
 #local function runFunction(functionName:string):
     #set {_functions::run} to function reference {_functionName}
@@ -31,6 +32,5 @@ on death:
 
 
 
-command testscp:
-    trigger:
-        teleport player to location(202.5, -36, 58.5, world "world")
+on command "/testscp": #this command if for me to get ppl to tp into testing area while they are helping me without having to tp them all the time
+    teleport player to location(202.5, -36, 58.5, world "world")

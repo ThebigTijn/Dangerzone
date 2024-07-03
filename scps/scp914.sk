@@ -3,7 +3,7 @@
 local function scp914():
     set {_l} to block at location(190.5, -34.5, 40.5, world "world")
     loop all dropped items in radius 2 around {_l}:
-        set {_e} to loop-entity
+        set {_e} to loop-entity #i have to do this to kill the entity as you can't kill an item of entity, and parsing everything else as an item of the entity is just not worth for 1 local variable to be set
         set {_i} to item of loop-entity
         set {_amt} to item amount of item of loop-entity
     {_i} is set

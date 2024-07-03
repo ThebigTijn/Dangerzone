@@ -19,10 +19,10 @@ function scp999(l: location):
         send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(groans) &fDisgusting…" to all players in radius 15 around {682}
         wait 2 seconds
         face({682}, {999})
-        send "&2&lSCP-682 &r&t(KETER) &8◇ &7&o(grunts) &fHmmm? &7&o(unintelligible) &fwhat is this… &7&o(low noise, similar to light chuckle) &fI feel… good…" to all players in radius 15 around {682}
+        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(grunts) &fHmmm? &7&o(unintelligible) &fwhat is this… &7&o(low noise, similar to light chuckle) &fI feel… good…" to all players in radius 15 around {682}
         wait 5 seconds
         face({682}, {999})
-        send "&2&lSCP-682 &r&uik(KETER) &8◇ &7&o(deep chuckling) &fFeel… so… happy. Happy… &7&o(laughs) &fhappy… happy…" to all players in radius 15 around {682}
+        send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(deep chuckling) &fFeel… so… happy. Happy… &7&o(laughs) &fhappy… happy…" to all players in radius 15 around {682}
         wait 4 seconds
         face({682}, {999})
         send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(bellowing laughter) &fStop! No tickling! &7&o(continues laughing)" to all players in radius 15 around {682}
@@ -43,6 +43,11 @@ local function face(e: entity, t: entity):
 on entity target:
     event-entity = {682}
     {int::682999} is set
+    cancel event
+
+on entity jump:
+    event-entity = {999}
+    event-entity's movement speed attribute is 0
     cancel event
 
 

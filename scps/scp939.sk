@@ -1,6 +1,6 @@
 function scp939(l: location):
     loop 3 times:
-        set {_v} to loop-number #i couldnt put loop-number down there after i changed the function to local
+        set {_v} to loop-number #since the add nbt is down there you have to set this to add it to its name, and you cant put it after because then you cant do "to nbt of entity"
         spawn zoglin at {_l}:
             add nbt from "{Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""939"",""939-%{_v}%""]}" to nbt of entity
             set name of entity to "&c&lSCP-939-%{_v}% &r&4(KETER)"
