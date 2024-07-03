@@ -36,17 +36,11 @@ command bound <string> [<string>]:
             loop all bounds:
                 add 1 to {_n}
                 message "&6##%{_n}%: &7%font(bound id of loop-value)%"
-
-command bound-tool:
-    permission: op
-    trigger:
-        set {_i} to blaze rod named "&7Bound Selector"
-        set (string tag "boundTool" of nbt of {_i}) to "true"
-        give player {_i}
+        else if arg-1 = "tool":
+            set {_i} to blaze rod named "&7Bound Selector"
+            set (string tag "boundTool" of nbt of {_i}) to "true"
+            give player {_i}
 
 on break:
     (string tag "boundTool" of nbt of (tool of player)) = "true"
     cancel event
-
-on bound exit:
-    message bound id at player

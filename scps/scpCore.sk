@@ -29,10 +29,8 @@ command hibers-scp <string> <string>:
             message "<##E34234>&lSYSTEM &7» Entity removed."
 
 local function returnEntities() :: strings:
-    loop all entities where [(string tag "custom;scp" of nbt of input) = "true"]:
-        add uncolored name of loop-value to {_list::*}
-    return {_list::*}
+
 
 on tab complete of "scp":
     set tab completions for position 1 to "spawn", "remove"
-    set tab completions for position 2 to {_list::*}
+    set tab completions for position 2 to 

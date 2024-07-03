@@ -1,38 +1,70 @@
-local function getOxygen(p:player) :: int:
-    return (int tag "custom;oxygen" of nbt of {_p}) ? 99
+local function returnOxygen(obj:object) :: int:
+    return (int tag "custom;oxygen" of nbt of {_obj}) ? 100
 
-local function isOxygenValid(p:player) :: boolean:
-    return true if getOxygen({_p}) is between 1 and 100 else false
+local function setOxygen(obj:object,n:int):
+    set (int tag "custom;oxygen" of nbt of {_obj}) to {_n}
 
-local function updateOxygen(p:player,change:int):
-    set {_oxygen} to (int tag "custom;oxygen" of nbt of {_p})
-    set (int tag "custom;oxygen" of nbt of {_p}) to {_oxygen}+({_change})
-    send action bar "&7%font("oxygen tank")% &8[&r%textB(10,{_oxygen},100)%&8]" to {_p}
+local function addOxygen(obj:object):
+    set {_oxygenAmount} to returnOxygen({_obj})+1.25
+    setOxygen({_obj},{_oxygenAmount})
 
-local function gainOxygen(p:player):
+local function removeOxygen(obj:object):
+    set {_oxygenAmount} to returnOxygen({_obj})-2.5
+    setOxygen({_obj},{_oxygenAmount})
+
+local function regainOxygen(p:player):
     while (metadata tag "oxygen" of {_p}) = true:
-        set {_gainedOxygen} to getOxygen({_p})+5
-        updateOxygen({_p},5) if {_gainedOxygen} < 100
-        if getOxygen({_p}) > 100:
-            set (int tag "custom;oxygen" of nbt of {_p}) to 100
+        returnOxygen({_p}) > 100:
+            setOxygen({_p},100)
             stop
+        send action bar "&f%font("oxygen status")% &7» &a↑ &8[&r%textB(10,(int tag "custom;oxygen" of nbt of {_p}),100)%&8]" to {_p}
+        addOxygen({_p})
         wait a second
-
+    
 local function loseOxygen(p:player):
     while (metadata tag "oxygen" of {_p}) != true:
-        isOxygenValid({_p}) = false
-        set {_lostOxygen} to getOxygen({_p})-5
-        updateOxygen({_p},-5) if {_lostOxygen} > 0
-        set (int tag "custom;oxygen" of nbt of {_p}) to 0 if {_lostOxygen} < 0
-        damage {_p} by 0.1
+        returnOxygen({_p}) < 0:
+            setOxygen({_p},0)
+            damage {_p} by 1
+        send action bar "&f%font("oxygen status")% &7» &c↓ &8[&r%textB(10,(int tag "custom;oxygen" of nbt of {_p}),100)%&8]" to {_p}
+        removeOxygen({_p})
         wait a second
 
 on bound enter:
-    id of event-bound contains "oxygen"
+    bound id of event-bound contains "oxygen"
     set (metadata tag "oxygen" of player) to true
-    gainOxygen(player)
+    regainOxygen(player)
 
 on bound exit:
-    id of event-bound contains "oxygen"
+    bound id of event-bound contains "oxygen"
+    (metadata tag "oxygen-mask" of player) != true
     delete (metadata tag "oxygen" of player)
     loseOxygen(player)
+
+on death:
+    setOxygen(victim,100)
+
+local function breakMask(i:item,p:player):
+    remove 1 of {_i} from {_p}
+    send action bar "&e%font("oxygen mask broke")%" to {_p}
+
+local function removeMaskOxygen(p:player,i:item):
+    while (metadata tag "oxygenMask" of {_p}) = true:
+        breakMask({_i},{_p}) if returnOxygen({_i}) < 0
+        removeOxygen({_i})
+        wait a second
+
+on armor change:
+    (int tag "custom;oxygen" of nbt of new armor item) is set:
+        set (metadata tag "oxygenMask" of player) to true
+        stop
+    (metadata tag "oxygenMask" of player) != true
+    delete (metadata tag "oxygenMask" of player)
+
+command oxygen [<string>] [<string>]:
+    permission: op
+    trigger:
+        if arg-1 = "set":
+            arg-2 = "mask"
+            setOxygen(tool of player,100)
+            message "<##E34234>&lSYSTEM &7» Created Oxygen Mask"

@@ -13,7 +13,7 @@ on tab complete of "reloadyaml":
 
 command /reloadyaml <text>:
 	permission: op
-	trigger:t
+	trigger:
 		if arg-1 = "dishwashing":
 			load yaml "plugins/Skript/yaml/jobs/dishwashing.yml" as "dishwashing"
 		else if arg-1 = "warps"

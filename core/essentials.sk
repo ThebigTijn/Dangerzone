@@ -47,11 +47,13 @@ command feed [<player>]:
         feed player
 
 local function returnFly(p:player) :: boolean:
-    return false if fly state of {_p} = true
-    return true if fly state of {_p} = false
+    set {_state} to fly state of {_p}
+    return false if {_state} = true
+    return true
 
 local function setFly(p:player):
-    set fly state of {_p} to returnFly({_p})
+    set {_state} to returnFly({_p})
+    set fly state of {_p} to {_state}
 
 command fly [<player>]:
     permission: op

@@ -14,6 +14,7 @@ local function deleteNavigation(p:player):
 
 local function returnBound(s:string) :: string:
     set {_s} to {_s}.replaceAll("[^A-Za-z]"," ")
+    replace all "oxygen" in {_s} with " "
     return {_s}
 
 on join:

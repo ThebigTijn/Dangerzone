@@ -12,3 +12,8 @@ on tab complete:
 	player does not have permission "op"
 	{disabledslashcommands::*} contains event-string
 	cancel event
+
+on right click:
+	inventory of event-block is set
+	player is not op
+	cancel event

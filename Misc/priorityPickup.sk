@@ -1,35 +1,36 @@
-local function addAttacker(p:player,pl:player):
-    add (uuid of {_pl}) to {-attackers.%uuid of {_p}%::*}
+local function addAttacker(attacker:player,victim:player):
+    add (uuid of {_attacker}) to {-attackers.%uuid of {_victim}%::*}
 
-local function removeAttacker(p:player):
-    set {_u} to (uuid of {_p})
-    loop {-attackers.%{_u}%::*}:
-        delete {-hits.%loop-value%.%{_u}%}
-    delete {-attackers.%{_u}%::*}
+local function deleteAttackers(victim:player):
+    set {_uuid} to (uuid of {_victim})
+    loop {-attackers.%{_uuid}%::*}:
+        delete {-hits.%loop-value%.%{_uuid}%}
+    delete {-attackers.%{_uuid}%::*}
 
-local function getHits(p:player):
-    set {_u} to (uuid of {_p})
-    loop {-attackers.%{_u}%::*}:
-        add {-hits.%loop-value%.%{_u}%} to {_nums::*}
+local function addDMG(attacker:player,victim:player,dmg:int):
+    add {_dmg} to {-damage.%uuid of {_attacker}%.%uuid of {_victim}%}
 
-local function getHighestHits(p:player):
-    getHits({_p})
-    set {_highest} to max({_nums::*})
-    set {_u} to (uuid of {_p})
-    loop {-attackers.%{_u}%::*}:
-        {-hits.%loop-value%.%{_u}%} = {_highest}
-        set {_pl} to loop-value
-        set (string tag "priority-%uuid of {_p}%" of nbt compound from {_pl}) to "true"
-        removeAttacker({_p})
-        stop
+local function returnHits(victim:player) :: integers:
+    set {_uuid} to (uuid of {_victim})
+    loop {-attackers.%{_uuid}%::*}:
+        add {-damage.%loop-value%.%{_uuid}%} to {_dmgs::*}
+    return {_dmgs::*}
 
-local function priority(p:player):
-    
-
-on damage:
-    if {-attackers.%uuid of victim%::*} does not contain (uuid of attacker):
-        addAttacker(victim,attacker)
-    add 1 to {-hits.%uuid of attacker%.%uuid of victim%}
+local function getHighestDMG(victim:player):
+    set {_dmgs::*} to returnHits({_victim})
+    set {_highestDMG} to max({_dmgs::*})
+    set {_uuid} to (uuid of {_victim})
+    loop {-attackers.%{_uuid}%::*}:
+        {-damage.%loop-value%.%{_uuid}%} = {_highest}
+        set {_attacker} to loop-value
+    {_attacker} is set
+    deleteAttackers({_victim})
+    loop all items in (inventory of {_victim}):
+        set (string tag "priority-  ")
 
 on death:
-    getHighestHits(victim)
+    getHighestDMG(victim)
+
+on damage:
+    attacker and victim is a player
+    addDMG(attacker,victim,damage)
