@@ -13,21 +13,22 @@ command spawn-scp131:
         scp131(location of player, "131", "&c&lSCP-131-B &r&a(SAFE)", 15)
 
 function scp131(l: location, tag: text, n: text, r: number):
-    spawn chicken at {_l}:
+    spawn slime at {_l}:
         add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""%{_tag}%""]}" to nbt of entity
         set name of entity to {_n}
         apply resistance 5 without particles to entity for 1 year
         set {_e} to entity
 
     while {_e} is alive:
-        wait 1 tick
+        wait 0.25 seconds
         delete {_b}
         set {_b} to a random element of all husks in radius {_r} of {_e}
         if {_b} is set:
-            set {_e}'s movement speed attribute to 0
-            force {_e} to face {_b} at head rotation speed 99999
-        else:
-            reset {_e}'s movement speed attribute
+            if {_b} = {173}: 
+                set {_e}'s movement speed attribute to 0
+                force {_e} to face {_b} at head rotation speed 99999
+            else:
+                reset {_e}'s movement speed attribute
             
         set {_tp} to {_e}'s location
         set pitch of {_tp} to 0

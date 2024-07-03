@@ -4,6 +4,8 @@ command scp <text> <text>:
         if arg-2 is "spawn":
             make player execute command "spawn-scp%arg-1%"
         if arg-2 is "kill":
+            if arg-1 is "999":
+                add nbt from "{Size:0}" to nbt of {999}
             make player execute command "kill @e[tag=%arg-1%]"
         if arg-2 is "model":
             delete {model::%arg-1%::*}

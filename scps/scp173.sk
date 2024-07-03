@@ -7,23 +7,23 @@ local function scp173(l: location):
     spawn husk at {_l}:
         add nbt from "{PersistenceRequired:1,Silent:1,Tags:[""173""]}" to nbt of entity
         set name of entity to "<##C4A484>&lSCP-173 &6(Euclid)"
-        set {_173} to entity
+        set {173} to entity
         set {_nbt} to nbt compound of "{SkullOwner:{Id:[I;1856353646,-1068737322,-1270716841,1649385879],Properties:{textures:[{Value:""e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmUyMDliZWUwZGE4ZmE1OWEyYWVlOTliNmYwNjdiY2JjZmZhMzZiNjVlOTQzMzZhMDE3MzVkNWJjMGE3ZTQ1YiJ9fX0=""}]}}}"
         set {_head} to player head with nbt {_nbt}
-        equip {_173} with {_head}
-        apply speed 5 without particles to {_173} for 1 year
-        apply strength 255 without particles to {_173} for 1 year
-        apply resistance 5 without particles to {_173} for 1 year
+        equip {173} with {_head}
+        apply speed 5 without particles to {173} for 1 year
+        apply strength 255 without particles to {173} for 1 year
+        apply resistance 5 without particles to {173} for 1 year
         
-    while {_173} is alive:
+    while {173} is alive:
         wait 1 tick
         delete {_b}
-        set {_b} to a random element of all chickens in radius 15 around {_173}
+        set {_b} to a random element of all chickens in radius 15 around {173}
         if {_b} is not set: #if i dont do this then the chicken thing doesnt matter as it will set {_b} to <none> if none is looking
-            set {_b} to a random element of all players where [target entity of input is {_173}]
+            set {_b} to a random element of all players where [target entity of input is {173}]
         if {_b} is set:
-            set artificial intelligence of {_173} to false
+            set artificial intelligence of {173} to false
         if {_b} is not set:
-            set artificial intelligence of {_173} to true
+            set artificial intelligence of {173} to true
 
 #while is better for this as you cant do (on player target) ect. and you need to check fast
