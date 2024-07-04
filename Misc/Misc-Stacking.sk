@@ -1,0 +1,18 @@
+command potionstack:
+    aliases: pt
+    trigger:
+        potionStack(player)
+
+
+function potionStack(p: player):
+    loop all items in {_p}'s inventory:
+        if {_pt::*} contains 1 of loop-item:
+            set loop-item to air
+        loop-item is a potion
+        set item amount of loop-item to amount of loop-item in {_p}'s inventory
+        add 1 of loop-item to {_pt::*}
+
+
+on inventory click:
+    event-item is a potion
+    potionStack(player)
