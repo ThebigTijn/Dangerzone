@@ -10,14 +10,16 @@ command scp <text> <text>:
             scp999(player) if arg-1 = "999"
             scp054(player) if arg-1 = "054"
             scp049(player) if arg-1 = "049"
+            set block at location(210, -30, 73, world "world") to redstone block if arg-1 = "087"
             give player red dye named "&cSCP-500" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{HideFlags:-1}" if arg-1 = "500"
         if arg-2 is "kill":
+            set block at location(210, -30, 73, world "world") to air if arg-1 = "087"
             add nbt from "{Size:0}" to nbt of {999} if arg-1 is "999"
             make player execute command "kill @e[tag=%arg-1%]"
 
 
 on tab complete of "/scp":
-    set tab completions for position 1 to "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049"
+    set tab completions for position 1 to "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087"
     set tab completions for position 2 to "spawn" and "kill"
 
 on death:
