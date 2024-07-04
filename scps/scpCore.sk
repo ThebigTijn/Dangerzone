@@ -4,8 +4,8 @@ command scp <text> [<text>]:
         if arg-1 is "list":
             set {_list} to a written book
             set page 1 of book {_list} to text component of "&a&lSafe Class SCPs:%nl%  &8- &6SCP-999%nl%  &8- &2SCP-1370%nl%  &8- &cSCP-500%nl%  &8- &9SCP-054%nl%  &8- &0SCP-131 &8[&6A &8/ &cB&8]"
-            set page 2 of book {_list} to text component of "&6&lEuclid Class SCPs:%nl%  &8- &8SCP-914%nl%  &8- &0SCP-096%nl%  &8- &7SCP-087%nl%  &8- &6SCP-173%nl%  &8- &0SCP-049"
-            set page 3 of book {_list} to text component of "&c&lKeter Class SCPs:%nl%  &8- &2SCP-682%nl%  &8- &cSCP-939 &8[&c3x&8]"
+            set page 2 of book {_list} to text component of "&6&lEuclid Class SCPs:%nl%  &8- &8SCP-914%nl%  &8- &0SCP-096%nl%  &8- &2SCP-268%nl%  &8- &7SCP-087%nl%  &8- &6SCP-173%nl%  &8- &0SCP-049"
+            set page 3 of book {_list} to text component of "&c&lKeter Class SCPs:%nl%  &8- &2SCP-682%nl%  &8- &cSCP-939 &8[&c3x&8]%nl%  &8- &cSCP-035"
             set book author of {_list} to "DANGERZONE"
             set book title of {_list} to "SCP List:"
             open book {_list} to player
@@ -22,10 +22,13 @@ command scp <text> [<text>]:
             scp999(player) if arg-1 = "999"
             scp054(player) if arg-1 = "054"
             scp049(player) if arg-1 = "049"
-            set block at location(210, -30, 73, world "world") to redstone block if arg-1 = "087"
+            give player skeleton skull named "&cSCP-035 &c(KETER)" with lore "&fYou know you want to wear me :D" if arg-1 = "035"
+            give player leather cap named "&2SCP-268 &a(SAFE)" with lore "&fThe Garden is the" and "&fSerpent's Place." with nbt from "{Unbreakable:1,Damage:0,display:{color:13807160}}" if arg-1 = "268"
             give player red dye named "&cSCP-500" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{HideFlags:-1}" if arg-1 = "500"
+            set block at location(210, -22, 73, world "world") to redstone block if arg-1 = "087"
         if arg-2 is "kill":
-            set block at location(210, -30, 73, world "world") to air if arg-1 = "087"
+            set block at location(210, -22, 73, world "world") to air if arg-1 = "087"
+            stop if arg-1 = "087" or "035" or "268" or "500"
             add nbt from "{Size:0}" to nbt of {999} if arg-1 is "999"
             make player execute command "kill @e[tag=%arg-1%]"
 
