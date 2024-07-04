@@ -1,6 +1,18 @@
-command scp <text> <text>:
+command scp <text> [<text>]:
     permission: op
     trigger:
+        if arg-1 is "list":
+            set {_list} to a written book
+            set page 1 of book {_list} to text component of "&a&lSafe Class SCPs:%nl%  &8- &6SCP-999%nl%  &8- &2SCP-1370%nl%  &8- &cSCP-500%nl%  &8- &9SCP-054%nl%  &8- &0SCP-131 &8[&6A &8/ &cB&8]"
+            set page 2 of book {_list} to text component of "&6&lEuclid Class SCPs:%nl%  &8- &8SCP-914%nl%  &8- &0SCP-096%nl%  &8- &7SCP-087%nl%  &8- &6SCP-173%nl%  &8- &0SCP-049"
+            set page 3 of book {_list} to text component of "&c&lKeter Class SCPs:%nl%  &8- &2SCP-682%nl%  &8- &cSCP-939 &8[&c3x&8]"
+            set book author of {_list} to "DANGERZONE"
+            set book title of {_list} to "SCP List:"
+            open book {_list} to player
+            stop
+        if arg-2 is not set:
+            send "&c&lERROR &8| &fIncorrect usage: /scp <scp> <spawn/kill>" to player
+            stop
         if arg-2 is "spawn":
             scp096(player) if arg-1 = "096"
             scp131(player) if arg-1 = "131"
@@ -19,7 +31,7 @@ command scp <text> <text>:
 
 
 on tab complete of "/scp":
-    set tab completions for position 1 to "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087"
+    set tab completions for position 1 to "list" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087"
     set tab completions for position 2 to "spawn" and "kill"
 
 on death:
