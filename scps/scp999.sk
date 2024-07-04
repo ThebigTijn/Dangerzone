@@ -41,7 +41,7 @@ function scp999(l: location):
 
 local function face(e: entity, t: entity):
     force {_e} to face {_t} at head rotation speed 99999
-    make {_t} pathfind to {_e}
+    set {_t}'s target to {_e}
         
 
 

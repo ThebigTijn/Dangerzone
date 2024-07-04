@@ -1,13 +1,18 @@
 on right click:
     name of 1 of player's tool contains "&cSCP-500"
     remove 1 red dye named "&cSCP-500" from player's inventory
-    clear player's potion effects #this is meant to remove good ones aswell, its not a mistake
-    apply regeneration 4 to player for 7 seconds
+    
     loop 3 times:
         play sound "minecraft:entity.generic.eat" to player
         wait 4 ticks
-    {zombies::*} contains player
-    remove player from {zombies::*}
+
+    clear player's potion effects #this is meant to remove good ones aswell, its not a mistake
+    apply regeneration 4 to player for 7 seconds
+    feed player
+    set player's saturation to 5
+
+    (metadata tag "zombies" of player) is set
+    delete (metadata tag "zombies" of player)
     clear player's inventory
 
 

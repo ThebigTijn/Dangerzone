@@ -15,12 +15,12 @@ function scp049(l: location):
     
 on death:
     victim is a player
-    remove victim from {zombies::*} if {zombies::*} contains victim
+    delete (metadata tag "zombies" of victim)
     if attacker = {049}:
         cancel event
         zombie(victim)
         delete target of {049}
-    if {zombies::*} contains attacker:
+    if (metadata tag "zombies" of attacker) is set:
         zombie(victim)
         feed attacker
         set attacker's saturation to 5
@@ -28,36 +28,36 @@ on death:
 
 on entity target:
     event-entity = {049}
-    {zombies::*} contains target
+    (metadata tag "zombies" of target) is set
     cancel event
 
 on damage:
-    if {zombies::*} contains attacker:
+    if (metadata tag "zombies" of attacker) is set:
         1 of attacker's tool != a stick
         cancel event
-    {zombies::*} contains attacker
-    {zombies::*} contains victim
+    (metadata tag "zombies" of attacker) is set
+    (metadata tag "zombies" of victim) is set
     cancel event
 
 
 on pickup:
-    {zombies::*} contains player
+    (metadata tag "zombies" of player) is set
     event-item != record relic
     cancel event
 
 on drop:
-    {zombies::*} contains player
+    (metadata tag "zombies" of player) is set
     cancel event
 
 on quit:
-    {zombies::*} contains player
+    (metadata tag "zombies" of player) is set
     clear player's inventory
-    remove player from {zombies::*}
+    delete (metadata tag "zombies" of player)
 
 
 local function zombie(p: player):
     send " %nl%&2&lYOU HAVE BEEN INFECTED%nl% " to {_p}
-    add {_p} to {zombies::*} if {zombies::*} does not contain {_p}
+    set (metadata tag "zombies" of {_p}) to true
     clear {_p}'s inventory
     set {_p}'s helmet to zombie skull of curse of vanishing and curse of binding
     set {_p}'s chestplate to leather chestplate of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"

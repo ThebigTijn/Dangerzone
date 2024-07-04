@@ -44,7 +44,7 @@ on join:
 
 on death:
 	wait 4 ticks
-	stop if {zombies::*} contains attacker
+	stop if (metadata tag "zombies" of attacker) is true
 	stop if {049} = attacker
 	if victim's gamemode != creative or spectator:
 		if victim has permission "spawn.ci":
