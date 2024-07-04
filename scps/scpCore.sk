@@ -34,7 +34,7 @@ command scp <text> [<text>]:
 
 
 on tab complete of "/scp":
-    set tab completions for position 1 to "list" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087"
+    set tab completions for position 1 to "list" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087" and "035" and "268"
     set tab completions for position 2 to "spawn" and "kill"
 
 on death:
