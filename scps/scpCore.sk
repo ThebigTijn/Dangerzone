@@ -10,7 +10,7 @@ command scp <text> <text>:
             scp999(player) if arg-1 = "999"
             scp054(player) if arg-1 = "054"
             scp049(player) if arg-1 = "049"
-            give player record relic named "&6SCP-500" if arg-1 = "500"
+            give player red dye named "&cSCP-500" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{HideFlags:-1}" if arg-1 = "500"
         if arg-2 is "kill":
             add nbt from "{Size:0}" to nbt of {999} if arg-1 is "999"
             make player execute command "kill @e[tag=%arg-1%]"

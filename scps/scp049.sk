@@ -22,6 +22,8 @@ on death:
         delete target of {049}
     if {zombies::*} contains attacker:
         zombie(victim)
+        feed attacker
+        set attacker's saturation to 5
         cancel event
 
 on entity target:
@@ -30,6 +32,9 @@ on entity target:
     cancel event
 
 on damage:
+    if {zombies::*} contains attacker:
+        1 of attacker's tool != a stick
+        cancel event
     {zombies::*} contains attacker
     {zombies::*} contains victim
     cancel event
