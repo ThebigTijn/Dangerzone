@@ -6,11 +6,12 @@ command potionstack:
 
 function potionStack(p: player):
     loop all items in {_p}'s inventory:
+        loop-item is a potion
         if {_pt::*} contains 1 of loop-item:
             set loop-item to air
-        loop-item is a potion
         set item amount of loop-item to amount of loop-item in {_p}'s inventory
         add 1 of loop-item to {_pt::*}
+    delete {_pt::*}
 
 
 on inventory click:
