@@ -22,19 +22,18 @@ command scp <text> [<text>]:
             scp999(player) if arg-1 = "999"
             scp054(player) if arg-1 = "054"
             scp049(player) if arg-1 = "049"
-            give player skeleton skull named "&cSCP-035 &c(KETER)" with lore "&fYou know you want to wear me :D" if arg-1 = "035"
             give player leather cap named "&2SCP-268 &a(SAFE)" with lore "&fThe Garden is the" and "&fSerpent's Place." with nbt from "{Unbreakable:1,Damage:0,display:{color:13807160}}" if arg-1 = "268"
             give player red dye named "&cSCP-500" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{HideFlags:-1}" if arg-1 = "500"
             set block at location(210, -22, 73, world "world") to redstone block if arg-1 = "087"
         if arg-2 is "kill":
             set block at location(210, -22, 73, world "world") to air if arg-1 = "087"
-            stop if arg-1 = "087" or "035" or "268" or "500"
+            stop if arg-1 = "087" or "268" or "500" or "914"
             add nbt from "{Size:0}" to nbt of {999} if arg-1 is "999"
             make player execute command "kill @e[tag=%arg-1%]"
 
 
 on tab complete of "/scp":
-    set tab completions for position 1 to "list" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087" and "035" and "268"
+    set tab completions for position 1 to "list" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087" and "268"
     set tab completions for position 2 to "spawn" and "kill"
 
 on death:

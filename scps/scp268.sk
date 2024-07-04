@@ -1,0 +1,7 @@
+on armor change:
+    apply invisibility to player for 1 year if new armor item's name = "&2SCP-268 &6(EUCLID)"
+    remove invisibility from player's potion effects if old armor item's name = "&2SCP-268 &6(EUCLID)"
+    
+every 10 seconds:
+    #block at location(183, -36, 54, world "world")'s inventory does not contain a leather helmet named "&2SCP-268 &6(EUCLID)"
+    set slot 13 of block at location(183, -36, 54, world "world")'s inventory to leather helmet of curse of vanishing named "&2SCP-268 &6(EUCLID)" with lore "&fThe Garden is the" and "&fSerpent's Place." with nbt from "{HideFlags:-1,Unbreakable:1,Damage:0,display:{color:13807160}}"
