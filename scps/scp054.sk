@@ -1,33 +1,33 @@
 function scp054(l: location):
     spawn drowned at {_l}:
-        set {054} to entity
+        set {scp::054} to entity
         set name of entity to "&9&lSCP-054 &a(SAFE)"
         add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""054""]}" to nbt of entity
     
-    while {054} is alive:
+    while {scp::054} is alive:
         wait 1 second
-        make 1 of falling water above all blocks in radius 1 around {054}
+        make 1 of falling water above all blocks in radius 1 around {scp::054}
 
 on damage:
-    victim = {054}
-    set (metadata tag "target" of {054}) to attacker
-    apply speed 2 without particles to {054} for 1 year
-    set target of {054} to attacker
+    victim = {scp::054}
+    set (metadata tag "target" of {scp::054}) to attacker
+    apply speed 2 without particles to {scp::054} for 1 year
+    set target of {scp::054} to attacker
 
 on entity target:
-    event-entity = {054}
-    (metadata tag "target" of {054}) != target
+    event-entity = {scp::054}
+    (metadata tag "target" of {scp::054}) != target
     cancel event
 
 on death:
-    (metadata tag "target" of {054}) = victim
-    delete (metadata tag "target" of {054})
-    remove speed from {054}'s potion effects
+    (metadata tag "target" of {scp::054}) = victim
+    delete (metadata tag "target" of {scp::054})
+    remove speed from {scp::054}'s potion effects
 
 on quit:
-    (metadata tag "target" of {054}) = player
-    delete (metadata tag "target" of {054})
-    remove speed from {054}'s potion effects
+    (metadata tag "target" of {scp::054}) = player
+    delete (metadata tag "target" of {scp::054})
+    remove speed from {scp::054}'s potion effects
 
 #idk really what to make it do, all its meant to do is become water and adapt with it
 #but i cant really do that soooo

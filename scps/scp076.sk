@@ -1,0 +1,12 @@
+local function face(e: entity, t: entity):
+    force {_e} to face block above {_t} at head rotation speed 99999
+    force {_t} to face block above {_e} at head rotation speed 99999
+    make 5 of angry villager at block above {scp::076}
+
+function scp076(l: location):
+    spawn vindicator at {_l}:
+        add nbt from "{PersistenceRequired:1,Tags:[""076""]}" to nbt of entity
+        set name of entity to "&cAble &c&lSCP-076 &c(KETER)"
+        apply speed 1 without particles to entity for 1 year
+        apply resistance 5 without particles to entity for 1 year
+        set {scp::076} to entity

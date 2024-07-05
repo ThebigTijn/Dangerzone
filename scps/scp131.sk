@@ -15,19 +15,19 @@ local function scp131spawn(l: location, n: text):
     while {_e} is alive: #its better then every 0.25 seconds because it only works when 131 is alive
         wait 0.25 seconds
         delete {_b}
-        if distance between {_e} and {173} <= 15:
+        if distance between {_e} and {scp::173} <= 15:
             set {_e}'s movement speed attribute to 0
-            force {_e} to face {173} at head rotation speed 99999
+            force {_e} to face {scp::173} at head rotation speed 99999
         else:
             reset {_e}'s movement speed attribute
 
 on entity target:
     event-entity is a slime
-    event-entity != {999}
+    event-entity != {scp::999}
     cancel event
 
 on entity jump:
     event-entity is a slime
-    event-entity != {999}
+    event-entity != {scp::999}
     event-entity's movement speed attribute is 0
     cancel event

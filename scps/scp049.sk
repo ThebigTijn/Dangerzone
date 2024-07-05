@@ -8,18 +8,17 @@ function scp049(l: location):
         set entity's boots to leather boots with nbt from "{Unbreakable:1b,display:{color:0}}"
         set entity's tool to iron hoe
         set entity's offhand tool to shears
-        apply strength 2 without particles to entity for 1 year
-        apply speed 2 without particles to entity for 1 year
+        apply strength 255 without particles to entity for 1 year
         apply resistance 5 without particles to entity for 1 year
-        set {049} to entity
+        set {scp::049} to entity
     
 on death:
     victim is a player
     delete (metadata tag "zombies" of victim)
-    if attacker = {049}:
+    if attacker = {scp::049}:
         cancel event
         zombie(victim)
-        delete target of {049}
+        delete target of {scp::049}
     if (metadata tag "zombies" of attacker) is set:
         zombie(victim)
         feed attacker
@@ -27,7 +26,7 @@ on death:
         cancel event
 
 on entity target:
-    event-entity = {049}
+    event-entity = {scp::049}
     (metadata tag "zombies" of target) is set
     cancel event
 
@@ -56,6 +55,7 @@ on quit:
 
 
 local function zombie(p: player):
+    apply blindness 255 without particles to {_p} for 5 seconds
     send " %nl%&2&lYOU HAVE BEEN INFECTED%nl% " to {_p}
     set (metadata tag "zombies" of {_p}) to true
     clear {_p}'s inventory

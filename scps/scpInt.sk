@@ -1,0 +1,133 @@
+#THIS IS NOT DONE!!
+
+every 3 seconds:
+    if {int::076-073} is not set:
+        distance between {scp::076} and {scp::073} < 10
+        int076_073()
+    else:
+        set {scp::076}'s target to {scp::073}
+    if {int::999-682} is not set:
+        distance between {scp::999} and {scp::682} < 10
+        int999_682()
+    else:
+        {int::999-682} != "angry" or "calm"
+        set {scp::999}'s target to {scp::682}
+
+
+
+
+local function face(e: entity, t: entity, 1: boolean, 2: boolean, 3: boolean):
+    force {_e} to face block above {_t} at head rotation speed 99999 if {_1} = true
+    force {_t} to face block above {_e} at head rotation speed 99999 if {_2} = true
+    make 5 of angry villager at block above {scp::076} if {_3} = true
+        
+
+
+on entity target:
+    if event-entity = {scp::682}:
+        {int::999-682} is set
+        {int::999-682} != "angry"
+        cancel event
+    if event-entity = {scp::076}:
+        {int::076-073} = true
+        target is a player
+        cancel event
+
+
+on pickup:
+    event-item's name = "076"
+    cancel event
+
+
+local function int076_073():
+    set {int::076-073} to true
+    set movement speed attribute of {scp::073} to 0
+    set movement speed attribute of {scp::076} to 0
+    face({scp::076}, {scp::073}, true, true, true)
+    send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇&f Hello Able." to all players in radius 15 of {scp::073}
+    wait 2 seconds
+    face({scp::076}, {scp::073}, true, true, true)
+    send "&cAble &c&lSCP-076 &c(KETER) &8◇&f YOU!" to all players in radius 15 of {scp::076}
+    wait 1 second
+    face({scp::076}, {scp::073}, true, true, true)
+    send "&cAble &c&lSCP-076 &c(KETER) &8◇&f I TOLD MYSELF IF I EVER SAW YOU AGAIN" to all players in radius 15 of {scp::076}
+    wait 3 seconds
+    face({scp::076}, {scp::073}, true, true, true)
+    send "&cAble &c&lSCP-076 &c(KETER) &8◇&f I WOULD KILL YOU!" to all players in radius 15 of {scp::076}
+    wait 2 seconds
+    face({scp::076}, {scp::073}, true, true, true)
+    send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇&f Able that was along time ago." to all players in radius 15 of {scp::073}
+    wait 3 seconds
+    face({scp::076}, {scp::073}, true, true, true)
+    send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇&f I have had a lot of time to think about it." to all players in radius 15 of {scp::073}
+    wait 3 seconds
+    face({scp::076}, {scp::073}, true, true, true)
+    send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇&f You were right, and I was jealous." to all players in radius 15 of {scp::073}
+    wait 3 seconds
+    face({scp::076}, {scp::073}, true, true, true)
+    send "&cAble &c&lSCP-076 &c(KETER) &8◇&f IT DOESN'T MATTER HOW SORRY YOU ARE!" to all players in radius 15 of {scp::076}
+    wait 3 seconds
+    face({scp::076}, {scp::073}, true, true, true)
+    send "&cAble &c&lSCP-076 &c(KETER) &8◇&f YOU KILLED ME! NOW I WILL KILL YOU!" to all players in radius 15 of {scp::076}
+    wait 1 second
+    reset {scp::076}'s movement speed attribute
+    wait 2 seconds
+    apply slowness 4 without particles to {scp::073} for 1 year 
+    reset {scp::073}'s movement speed attribute
+    wait 6 seconds
+    send "&cAble &c&lSCP-076 &c(KETER) &8◇&f WHY DOES THIS HURT ME!" to all players in radius 15 of {scp::076}
+    wait 20 seconds
+    remove slowness from {scp::073}
+    set {_skull} to {scp::076}'s location
+    set block at {_skull} to skeleton skull if block at {_skull} = air
+    loop 20 times:
+        chance of 75%:
+            drop red dye named "076" with nbt from "{Tags:[""%random integer between 1 and 10000%""]}" at block above {scp::076}
+            add last dropped item to {_drop::*}
+        else:
+            drop bone named "076" with nbt from "{Tags:[""%random integer between 1 and 10000%""]}" at block above {scp::076}
+            add last dropped item to {_drop::*}
+    kill {scp::076}
+    delete {scp::076}
+    delete {int::076-073}
+    wait 1 minutes
+    scp076(location(221, -36, 40, world "world"))
+    kill {_drop::*}
+    delete {_drop::*}
+    set block at {_skull} to air
+
+
+
+local function int999_682():
+    set {int::999-682} to true
+    apply slowness 255 without particles to {scp::682} for 1 year
+    face({scp::682}, {scp::999}, true, false, false)
+    send "&e&lSCP-999 &r&a(SAFE) &8◇ &7&o(elated gurgles)" to all players in radius 15 around {scp::999}
+    wait 3 seconds
+    face({scp::682}, {scp::999}, true, false, false)
+    send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(unintelligible groans, growling) &fWhat is that?" to all players in radius 15 around {scp::682}
+    wait 4 seconds
+    face({scp::682}, {scp::999}, true, false, false)
+    send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(groans) &fDisgusting…" to all players in radius 15 around {scp::682}
+    wait 3 seconds
+    face({scp::682}, {scp::999}, true, false, false)
+    send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(grunts) &fHmmm? &7&o(unintelligible) &fwhat is this… &7&o(low noise, similar to light chuckle) &fI feel… good…" to all players in radius 15 around {scp::682}
+    wait 6 seconds
+    face({scp::682}, {scp::999}, true, false, false)
+    send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(deep chuckling) &fFeel… so… happy. Happy… &7&o(laughs) &fhappy… happy…" to all players in radius 15 around {scp::682}
+    wait 5 seconds
+    face({scp::682}, {scp::999}, true, false, false)
+    send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(bellowing laughter) &fStop! No tickling! &7&o(continues laughing)" to all players in radius 15 around {scp::682}
+    wait 6 seconds
+    remove slowness from {scp::682}'s potion effects
+    reset {scp::999}'s movement speed attribute
+    delete {scp::999}'s target
+    set {int::999-682} to "calm"
+    wait 5 minutes #this waits 5 mins after the interaction before 682 attackers players
+    set {int::999-682} to "angry"
+    apply speed 5 without particles to {scp::682} for 1 year
+    send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(runt) &f&oinput message" to all players in radius 15 around {scp::682}
+    wait 90 seconds
+    remove speed from {scp::682}'s potion effects
+    apply speed 3 without particles to {scp::682} for 1 year
+    delete {int::999-682}

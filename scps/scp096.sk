@@ -2,33 +2,33 @@ function scp096(l:location):
     spawn enderman at {_l}:
         set name of entity to "&f&lSCP-096 &6(Euclid)"
         add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""096""]}" to nbt of entity
-        apply strength 255 without particles to entity for 1 year
+        apply strength 2 without particles to entity for 1 year
         apply speed 2 without particles to entity for 1 year
         apply resistance 5 without particles to entity for 1 year
-        set {096} to entity
+        set {scp::096} to entity
 
 on entity target:
-    event-entity = {096}
-    (metadata tag "target" of {096}) is not set
-    set (metadata tag "target" of {096}) to player
-    set artificial intelligence of {096} to false
+    event-entity = {scp::096}
+    (metadata tag "target" of {scp::096}) is not set
+    set (metadata tag "target" of {scp::096}) to player
+    set artificial intelligence of {scp::096} to false
 
     loop 10 times:
-        play sound "minecraft:entity.ghast.hurt" with volume 5 and pitch 0.9 at {096}
+        play sound "minecraft:entity.ghast.hurt" with volume 5 and pitch 0.9 at {scp::096}
         wait 0.4 seconds
         
-    set artificial intelligence of {096} to true
-    play sound "minecraft:block.sculk_shrieker.shriek" with volume 5 at {096}
+    set artificial intelligence of {scp::096} to true
+    play sound "minecraft:block.sculk_shrieker.shriek" with volume 5 at {scp::096}
 
 
 on death of player:
-    (metadata tag "target" of {096}) is victim
-    delete (metadata tag "target" of {096})
+    (metadata tag "target" of {scp::096}) is victim
+    delete (metadata tag "target" of {scp::096})
 
 on quit:
-    (metadata tag "target" of {096}) is player
-    delete (metadata tag "target" of {096})
+    (metadata tag "target" of {scp::096}) is player
+    delete (metadata tag "target" of {scp::096})
 
 on entity teleport:
-    event-entity = {096}
+    event-entity = {scp::096}
     cancel event

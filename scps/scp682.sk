@@ -1,27 +1,27 @@
 function scp682(l: location):
     spawn ravager at {_l}:
         add nbt from "{Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""682""]}" to nbt of entity
-        set {682} to entity
+        set {scp::682} to entity
         set name of entity to "&2&lSCP-682 &r&4(KETER)"
         apply strength 1 without particles to entity for 1 year
-        apply speed 3 without particles to entity for 1 year
+        apply speed 2 without particles to entity for 1 year
         apply resistance 5 without particles to entity for 1 year
         
-    while {682} is alive:
+    while {scp::682} is alive:
         set {_i} to a random integer between 20 and 30
         wait "%{_i}% seconds" parsed as timespan
-        {int::682999} isn't set
+        {int::999-682} isn't set
         set {_v} to a random integer between 1 and 5
         if {_v} is 1:
-            send "&2&lSCP-682 &r&4(KETER) &8◇&f You are all such cowards, come face me!" to all players in radius 20 around {682}
+            send "&2&lSCP-682 &r&4(KETER) &8◇&f You are all such cowards, come face me!" to all players in radius 20 around {scp::682}
         if {_v} is 2:
-            send "&2&lSCP-682 &r&4(KETER) &8◇&f HAHAHAH, you can't contain me forever!" to all players in radius 20 around {682}
+            send "&2&lSCP-682 &r&4(KETER) &8◇&f HAHAHAH, you can't contain me forever!" to all players in radius 20 around {scp::682}
         if {_v} is 3:
-            send "&2&lSCP-682 &r&4(KETER) &8◇&f I can't wait to crush your bones between my TEETH!" to all players in radius 20 around {682}
+            send "&2&lSCP-682 &r&4(KETER) &8◇&f I can't wait to crush your bones between my TEETH!" to all players in radius 20 around {scp::682}
         if {_v} is 4:
-            send "&2&lSCP-682 &r&4(KETER) &8◇&f I look forwards to hearing you scream while I crush you!" to all players in radius 20 around {682}
+            send "&2&lSCP-682 &r&4(KETER) &8◇&f I look forwards to hearing you scream while I crush you!" to all players in radius 20 around {scp::682}
         if {_v} is 5:
-            send "&2&lSCP-682 &r&4(KETER) &8◇&f Your time of living running short." to all players in radius 20 around {682}
+            send "&2&lSCP-682 &r&4(KETER) &8◇&f Your time of living running short." to all players in radius 20 around {scp::682}
 
 
 #ik you can do it without a while look but the while loop only runs every 20-30 seconds
