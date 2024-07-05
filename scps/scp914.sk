@@ -1,18 +1,19 @@
-#THIS IS JUST A START please dont judge this being bad lmao
+#I was gonna use options to make it cleaner but it lags out
+#THIS IS NOT READY
+#Its still laggy and im trying to figure it out
 
 local function scp914():
     set {_l} to block at location(190.5, -34.5, 40.5, world "world")
-    loop all dropped items in radius 2 around {_l}:
-        set {_e} to loop-entity #i have to do this to kill the entity as you can't kill an item of entity, and parsing everything else as an item of the entity is just not worth for 1 local variable to be set
-        set {_i} to item of loop-entity
-        set {_amt} to item amount of item of loop-entity
+    set {_e} to a random element of dropped items in radius 2 around {_l}
+    set {_i} to item of {_e}
+    set {_amt} to item amount of item of {_i}
     {_i} is set
     play sound "minecraft:entity.minecart.riding" with volume 10 at location(194.5, -35, 41, world "world")
     open block at location(194, -35, 41, world "world")
     open block at location(190, -35, 41, world "world")
     if {_i}'s name contains "L1" or "L2" or "L3" or "L4" or "L5" or "Keycard shard":
         if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH":
-            scp914ROUGH({_i}, {_amt})
+            drop {_amt} of raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194.5, -35, 41.5, world "world") without velocity
         if line 3 of block at location(192, -35, 42, world "world") is "&cCOARSE":
             scp914COARSE({_i}, {_amt})
         if line 3 of block at location(192, -35, 42, world "world") contains "1:1":
@@ -23,8 +24,8 @@ local function scp914():
             scp914VERYFINE({_i}, {_amt})
         kill {_e}
     else:
-        if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH":
-            scp914ROUGH({_i}, {_amt})
+        if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH" or "&cCOARSE":
+            drop {_amt} of raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194.5, -35, 41.5, world "world") without velocity
             kill {_e}
             stop
         teleport {_i} to location(194.5, -35, 41.5, world "world")
@@ -65,18 +66,9 @@ local function scp914selection(p:player):
         open gui to {_p}
 
 
-
-local function scp914ROUGH(i: item, amt: integer):
-    if {_i}'s name contains "L1" or "L2" or "L3" or "L4" or "L5":
-        drop 8*{_amt} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
-    else:
-        drop {_amt} of raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194.5, -35, 41.5, world "world") without velocity
-
-
-
 local function scp914COARSE(i: item, amt: integer):
     if {_i}'s name contains "L1":
-        drop 8*{_amt} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+        drop 8*{_amt} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{HideFlags:-1}" at location(194.5, -35, 41.5, world "world") without velocity
     if {_i}'s name contains "L2":
         drop {_amt} of lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
     if {_i}'s name contains "L3":
@@ -91,11 +83,11 @@ local function scp914COARSE(i: item, amt: integer):
 local function scp914ONE(i: item, amt: integer):
     if {_i}'s name contains "Keycard shard":
         set {_r} to mod({_amt}, 8)
-        drop {_r} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+        drop {_r} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{HideFlags:-1}" at location(194.5, -35, 41.5, world "world") without velocity
         drop ({_amt} - {_r}) / 8 of lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
     
     if {_i}'s name contains "L1":
-        drop 8*{_amt} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+        drop 8*{_amt} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{HideFlags:-1}" at location(194.5, -35, 41.5, world "world") without velocity
     if {_i}'s name contains "L2":
         drop 2*{_amt} of lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
     if {_i}'s name contains "L3":
@@ -107,36 +99,36 @@ local function scp914ONE(i: item, amt: integer):
 
 
 local function scp914FINE(i: item, amt: integer):
+    if {_i}'s name contains "L5":
+        teleport {_i} to location(194.5, -35, 41.5, world "world")
     loop {_amt} times:
         if {_i}'s name contains "L1":
             chance of 75%:
                 drop yellow stained glass pane named "&8L2-card" at location(194.5, -35, 41.5, world "world") without velocity
             else:
-                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{HideFlags:-1}" at location(194.5, -35, 41.5, world "world") without velocity
         if {_i}'s name contains "L2":
             chance of 50%:
                 drop orange stained glass pane named "&8L3-card" at location(194.5, -35, 41.5, world "world") without velocity
             else:
-                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{HideFlags:-1}" at location(194.5, -35, 41.5, world "world") without velocity
         if {_i}'s name contains "L3":
             chance of 25%:
                 drop red stained glass pane named "&8L4-card" at location(194.5, -35, 41.5, world "world") without velocity
             else:
-                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{HideFlags:-1}" at location(194.5, -35, 41.5, world "world") without velocity
         if {_i}'s name contains "L4":
             chance of 15%:
                 drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
             else:
-                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
-        if {_i}'s name contains "L5":
-            teleport {_i} to location(194.5, -35, 41.5, world "world")
+                drop 2 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{HideFlags:-1}" at location(194.5, -35, 41.5, world "world") without velocity
 
 
 
 local function scp914VERYFINE(i: item, amt: integer):
+    if {_i}'s name contains "L5":
+        teleport {_i} to location(194.5, -35, 41.5, world "world")
     loop {_amt} times:
-        if {_i}'s name contains "L5":
-            drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity
         if {_i}'s name contains "L1" or "L2" or "L3" or "L4":
             chance of 2%:
                 drop purple stained glass pane named "&8L5-card" at location(194.5, -35, 41.5, world "world") without velocity

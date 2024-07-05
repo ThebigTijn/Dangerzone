@@ -1,0 +1,139 @@
+#I tried to make it less laggy, but it made it worse lmao
+#DONT USE THIS ONE
+
+options:
+    sign: block at location(192, -35, 42, world "world")
+    output: location(194.5, -35, 41.5, world "world")
+    shard: record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{HideFlags:-1}"
+    scrap: raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..."
+    L1: lime stained glass pane named "&8L1-card"
+    L2: yellow stained glass pane named "&8L2-card"
+    L3: orange stained glass pane named "&8L3-card"
+    L4: red stained glass pane named "&8L4-card"
+    L5: purple stained glass pane named "&8L5-card"
+
+local function scp914():
+    loop all dropped items in radius 2 around location(190.5, -34.5, 40.5, world "world"):
+        set {_e} to loop-entity #i have to do this to kill the entity as you can't kill an item of entity, and parsing everything else as an item of the entity is just not worth for 1 local variable to be set
+        set {_i} to item of loop-entity
+        set {_amt} to item amount of item of loop-entity
+    {_i} is set
+    play sound "minecraft:entity.minecart.riding" with volume 10 at {@sign}
+    open block at location(194, -35, 41, world "world")
+    open block at location(190, -35, 41, world "world")
+    if {_i} = {@shard} or {@L1} or {@L2} or {@L3} or {@L5} or {@L4}:
+        if line 3 of {@sign} is "&8ROUGH":
+            drop 8*{_amt} of {@shard} at {@output} without velocity
+        if line 3 of {@sign} is "&cCOARSE":
+            scp914COARSE({_i}, {_amt})
+        if line 3 of {@sign} contains "1:1":
+            scp914ONE({_i}, {_amt})
+        if line 3 of {@sign} is "&aFINE":
+            scp914FINE({_i}, {_amt})
+        if line 3 of {@sign} is "&2VERY FINE":
+            scp914VERYFINE({_i}, {_amt})
+        kill {_e}
+    else:
+        if line 3 of {@sign} is "&8ROUGH" or "&cCOARSE":
+            drop 8*{_amt} of {@scrap} at {@output} without velocity
+            kill {_e}
+            stop
+        teleport {_i} to {@output}
+
+
+on right click on lever:
+    if block behind event-block is blackstone:
+        scp914()
+
+on right click on dark oak sign:
+    if block behind event-block is blackstone:
+        cancel event
+        scp914selection(player)
+
+
+local function scp914selection(p:player):
+    create a gui with virtual hopper inventory named "           &8SCP-914 &a(Safe)":
+        format gui slot 0 with black stained glass pane named "&8ROUGH":
+            cancel event
+            set line 3 of {@sign} to "&8ROUGH"
+            close {_p}'s inventory
+        format gui slot 1 with red stained glass pane named "&cCOARSE":
+            cancel event
+            set line 3 of {@sign} to "&cCOARSE"
+            close {_p}'s inventory
+        format gui slot 2 with white stained glass pane named "&f1:1":
+            cancel event
+            set line 3 of {@sign} to "&f1:1"
+            close {_p}'s inventory
+        format gui slot 3 with lime stained glass pane named "&aFINE":
+            cancel event
+            set line 3 of {@sign} to "&aFINE"
+            close {_p}'s inventory
+        format gui slot 4 with green stained glass pane named "&2VERY FINE":
+            cancel event
+            set line 3 of {@sign} to "&2VERY FINE"
+            close {_p}'s inventory
+        open gui to {_p}
+
+
+
+
+
+local function scp914COARSE(i: item, amt: integer):
+    drop 4*{_amt} of {@shard} at {@output} without velocity if {_i} = {@L1}
+    drop {_amt} of {@L1} at {@output} without velocity if {_i} = {@L2}
+    drop {_amt} of {@L2} at {@output} without velocity if {_i} = {@L3}
+    drop {_amt} of {@L3} at {@output} without velocity if {_i} = {@L4}
+    drop {_amt} of {@L4} at {@output} without velocity if {_i} = {@L5}
+
+
+
+local function scp914ONE(i: item, amt: integer):
+    if {_i} = {@shard}:
+        set {_r} to mod({_amt}, 8)
+        drop {_r} of {@shard} at {@output} without velocity
+        drop ({_amt} - {_r}) / 8 of {@L1} at {@output} without velocity
+    
+    drop 8*{_amt} of {@shard} at {@output} without velocity if {_i} = {@L1}
+    drop 2*{_amt} of {@L1} at {@output} without velocity if {_i} = {@L2}
+    drop 2*{_amt} of {@L2} at {@output} without velocity if {_i} = {@L3}
+    drop 2*{_amt} of {@L3} at {@output} without velocity if {_i} = {@L4}
+    drop 2*{_amt} of {@L4} at {@output} without velocity if {_i} = {@L5}
+
+
+local function scp914FINE(i: item, amt: integer):
+    if {_i} = {@L5}:
+        teleport {_i} to {@output}
+    loop {_amt} times:
+        if {_i} = {@L1}:
+            chance of 75%:
+                drop {@L2} at {@output} without velocity
+            else:
+                drop 2 of {@shard} at {@output} without velocity
+        if {_i} = {@L2}:
+            chance of 50%:
+                drop {@L3} at {@output} without velocity
+            else:
+                drop 2 of {@shard} at {@output} without velocity
+        if {_i} = {@L3}:
+            chance of 25%:
+                drop {@L4} at {@output} without velocity
+            else:
+                drop 2 of {@shard} at {@output} without velocity
+        if {_i} = {@L4}:
+            chance of 15%:
+                drop {@L5} at {@output} without velocity
+            else:
+                drop 2 of {@shard} at {@output} without velocity
+
+
+
+local function scp914VERYFINE(i: item, amt: integer):
+    if {_i} = {@L5}:
+        teleport {_i} to {@output}
+    loop {_amt} times:
+        if {_i} = {@L1} or {@L2} or {@L3} or {@L4} or {@L5}:
+            chance of 2%:
+                drop {@L5} at {@output} without velocity
+            else:
+                drop {@scrap} at {@output} without velocity
