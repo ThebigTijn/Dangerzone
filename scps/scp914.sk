@@ -67,26 +67,24 @@ local function scp914selection(p:player):
 
 
 local function scp914ROUGH(i: item, amt: integer):
-    loop {_amt} times:
-        if {_i}'s name contains "L1" or "L2" or "L3" or "L4" or "L5":
-            drop 8 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
-        else:
-            drop raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L1" or "L2" or "L3" or "L4" or "L5":
+        drop 8*{_amt} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+    else:
+        drop {_amt} of raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." at location(194.5, -35, 41.5, world "world") without velocity
 
 
 
 local function scp914COARSE(i: item, amt: integer):
-    loop {_amt} times:
-        if {_i}'s name contains "L1":
-            drop 8 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
-        if {_i}'s name contains "L2":
-            drop lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
-        if {_i}'s name contains "L3":
-            drop yellow stained glass pane named "&8L2-card" at location(194.5, -35, 41.5, world "world") without velocity
-        if {_i}'s name contains "L4":
-            drop orange stained glass pane named "&8L3-card" at location(194.5, -35, 41.5, world "world") without velocity
-        if {_i}'s name contains "L5":
-            drop red stained glass pane named "&8L4-card" at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L1":
+        drop 8*{_amt} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L2":
+        drop {_amt} of lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L3":
+        drop {_amt} of yellow stained glass pane named "&8L2-card" at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L4":
+        drop {_amt} of orange stained glass pane named "&8L3-card" at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L5":
+        drop {_amt} of red stained glass pane named "&8L4-card" at location(194.5, -35, 41.5, world "world") without velocity
 
 
 
@@ -96,17 +94,16 @@ local function scp914ONE(i: item, amt: integer):
         drop {_r} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
         drop ({_amt} - {_r}) / 8 of lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
     
-    loop {_amt} times:
-        if {_i}'s name contains "L1":
-            drop 8 of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
-        if {_i}'s name contains "L2":
-            drop 2 of lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
-        if {_i}'s name contains "L3":
-            drop 2 of yellow stained glass pane named "&8L2-card" at location(194.5, -35, 41.5, world "world") without velocity
-        if {_i}'s name contains "L4":
-            drop 2 of orange stained glass pane named "&8L3-card" at location(194.5, -35, 41.5, world "world") without velocity
-        if {_i}'s name contains "L5":
-            drop 2 of red stained glass pane named "&8L4-card" at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L1":
+        drop 8*{_amt} of record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L2":
+        drop 2*{_amt} of lime stained glass pane named "&8L1-card" at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L3":
+        drop 2*{_amt} of yellow stained glass pane named "&8L2-card" at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L4":
+        drop 2*{_amt} of orange stained glass pane named "&8L3-card" at location(194.5, -35, 41.5, world "world") without velocity
+    if {_i}'s name contains "L5":
+        drop 2*{_amt} of red stained glass pane named "&8L4-card" at location(194.5, -35, 41.5, world "world") without velocity
 
 
 local function scp914FINE(i: item, amt: integer):

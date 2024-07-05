@@ -1,6 +1,6 @@
 on right click:
-    name of 1 of player's tool contains "&cSCP-500"
-    remove 1 red dye named "&cSCP-500" from player's inventory
+    name of 1 of player's tool contains "&cSCP-500 &a(SAFE)"
+    remove 1 red dye named "&cSCP-500 &a(SAFE)" from player's inventory
     
     loop 3 times:
         play sound "minecraft:entity.generic.eat" to player
@@ -18,5 +18,5 @@ on right click:
 
 
 every 10 seconds:
-    if block at location(183, -36, 50, world "world")'s inventory does not contain a red dye named "&cSCP-500":
-        set slot 13 of block at location(183, -36, 50, world "world")'s inventory to red dye named "&cSCP-500" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment."
+    if block at location(183, -36, 50, world "world")'s inventory does not contain a red dye named "&cSCP-500 &a(SAFE)":
+        set slot 13 of block at location(183, -36, 50, world "world")'s inventory to red dye named "&cSCP-500 &a(SAFE)" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment."

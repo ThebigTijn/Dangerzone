@@ -3,5 +3,5 @@ on armor change:
     remove invisibility from player's potion effects if old armor item's name = "&2SCP-268 &6(EUCLID)"
     
 every 10 seconds:
-    #block at location(183, -36, 54, world "world")'s inventory does not contain a leather helmet named "&2SCP-268 &6(EUCLID)"
-    set slot 13 of block at location(183, -36, 54, world "world")'s inventory to leather helmet of curse of vanishing named "&2SCP-268 &6(EUCLID)" with lore "&fThe Garden is the" and "&fSerpent's Place." with nbt from "{HideFlags:-1,Unbreakable:1,Damage:0,display:{color:13807160}}"
+    block at location(183, -36, 54, world "world")'s inventory does not contain a leather helmet named "&2SCP-268 &6(EUCLID)"
+    set slot 13 of block at location(183, -36, 54, world "world")'s inventory to leather helmet of curse of vanishing named "&2SCP-268 &6(EUCLID)" with lore "&fThe Garden is the" and "&fSerpent's Place." and "" and "&7| &x&8&2&9&1&A&2sᴛᴀᴛɪsᴛɪᴄs:" and "&a🛡 Armor: +0" with nbt from "{AttributeModifiers:[{Amount:0.0d,AttributeName:""minecraft:generic.armor"",Name:""minecraft:generic.armor"",Operation:0,UUID:[I;-616096160,2058371824,-1484296850,810028585]}],HideFlags:-1,Unbreakable:1,Damage:0,display:{color:13807160}}"
