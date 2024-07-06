@@ -9,7 +9,7 @@ command scp <text> [<text>]:
             set book title of {_list} to "SCP List:"
             open book {_list} to player
             stop
-        all ops contains player
+        player is op
         if arg-2 is not set:
             send "&c&lERROR &8| &fIncorrect usage: /scp <scp> <spawn/kill/cell/tp>" to player
             stop
@@ -47,7 +47,7 @@ command scp <text> [<text>]:
 
 
 on tab complete of "/scp":
-    if all ops contains player:
+    if player is op:
         set tab completions for position 1 to "list" and "343" and "073" and "076" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087" and "268"
         set tab completions for position 2 to "spawn" and "kill" and "cell" and "tp"
     else:
