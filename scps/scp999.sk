@@ -4,6 +4,9 @@ function scp999(l: location):
         set name of last spawned entity to "&e&lSCP-999 &r&a(SAFE)"
         set {scp::999} to last spawned entity
 
+on entity jump:
+    event-entity = {scp::999}
+    cancel event
 
 
 on damage:

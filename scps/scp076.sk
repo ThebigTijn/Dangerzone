@@ -7,7 +7,6 @@ function scp076(l: location):
     spawn vindicator at {_l}:
         add nbt from "{PersistenceRequired:1,Tags:[""076""]}" to nbt of entity
         set name of entity to "&cAble &c&lSCP-076 &c(KETER)"
-        apply speed 1 without particles to entity for 1 year
         apply resistance 4 without particles to entity for 1 year
         apply regeneration 2 without particles to entity for 1 year
         set {scp::076} to entity
@@ -31,7 +30,7 @@ on death:
             add last dropped item to {_drop::*}
 
     delete {scp::076}
-    wait 1 minutes
+    wait 10 seconds
 
     scp076(location(221, -36, 40, world "world"))
     kill {_drop::*}

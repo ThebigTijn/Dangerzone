@@ -6,7 +6,7 @@ function scp173(l: location):
         set {_nbt} to nbt compound of "{SkullOwner:{Id:[I;1856353646,-1068737322,-1270716841,1649385879],Properties:{textures:[{Value:""e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmUyMDliZWUwZGE4ZmE1OWEyYWVlOTliNmYwNjdiY2JjZmZhMzZiNjVlOTQzMzZhMDE3MzVkNWJjMGE3ZTQ1YiJ9fX0=""}]}}}"
         set {_head} to player head with nbt {_nbt}
         equip {scp::173} with {_head}
-        apply speed 5 without particles to {scp::173} for 1 year
+        apply speed 10 without particles to {scp::173} for 1 year
         apply strength 255 without particles to {scp::173} for 1 year
         apply resistance 5 without particles to {scp::173} for 1 year
         
