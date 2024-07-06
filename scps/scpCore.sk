@@ -1,7 +1,10 @@
 command scp <text> [<text>]:
     permission: op
     trigger:
-        if arg-1 is "list":
+        if arg-2 is not set:
+            send "&c&lERROR &8| &fIncorrect usage: /scp <scp> <spawn/kill/cell/tp>" to player
+            stop
+        if arg-1 = "list":
             set {_list} to a written book
             set page 1 of book {_list} to text component of "&a&lSafe Class SCPs:%nl%  &8- &6SCP-999%nl%  &8- &7SCP-343%nl%  &8- &2SCP-1370%nl%  &8- &cSCP-500%nl%  &8- &9SCP-054%nl%  &8- &0SCP-131 &8[&6A &8/ &cB&8]"
             set page 2 of book {_list} to text component of "&6&lEuclid Class SCPs:%nl%  &8- &8SCP-914%nl%  &8- &0SCP-096%nl%  &8- &2SCP-268%nl%  &8- &7SCP-087%nl%  &8- &6SCP-173%nl%  &8- &0SCP-049%nl%  &8- &3Cain (SCP-073)"
@@ -10,10 +13,15 @@ command scp <text> [<text>]:
             set book title of {_list} to "SCP List:"
             open book {_list} to player
             stop
-        if arg-2 is not set:
-            send "&c&lERROR &8| &fIncorrect usage: /scp <scp> <spawn/kill>" to player
-            stop
-        if arg-2 is "spawn":
+        if arg-2 = "tp":
+            teleport player to location(183, -36, 54, world "world") if arg-1 = "268"
+            teleport player to location(183, -36, 50, world "world") if arg-1 = "268"
+            teleport player to location(192, -36, 43, world "world") if arg-1 = "914"
+            teleport player to location(206, -36, 78, world "world") if arg-1 = "087"
+            make player execute command "npc sel 35" if arg-1 = "343"
+            make player execute command "npc tp" if arg-1 = "343"
+            make player execute command "execute at @e[tag=%arg-1%] run teleport @s ~ ~ ~"
+        if arg-2 = "spawn":
             #When server updates to allow runFunction to be here it will be
             make player execute command "npc sel 35" if arg-1 = "343"
             make player execute command "npc tp" if arg-1 = "343"
@@ -30,22 +38,23 @@ command scp <text> [<text>]:
             give player leather cap named "&2SCP-268 &a(SAFE)" with lore "&fThe Garden is the" and "&fSerpent's Place." with nbt from "{Unbreakable:1,Damage:0,display:{color:13807160}}" if arg-1 = "268"
             give player red dye named "&cSCP-500" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{HideFlags:-1}" if arg-1 = "500"
             set block at location(210, -22, 73, world "world") to redstone block if arg-1 = "087"
-        if arg-2 is "kill":
+        if arg-2 = "kill":
             set block at location(210, -22, 73, world "world") to air if arg-1 = "087"
             stop if arg-1 = "087" or "268" or "500" or "914" or "343"
             add nbt from "{Size:0}" to nbt of {scp::999} if arg-1 is "999"
-            make player execute command "kill @e[tag=%arg-1%]"
+            make player execute command "kill @e[tag=%arg-1%]" #this is so any dupe scps will also be killed
             delete {scp::%arg-1%}
 
 
 on tab complete of "/scp":
     set tab completions for position 1 to "list" and "343" and "073" and "076" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087" and "268"
-    set tab completions for position 2 to "spawn" and "kill"
+    set tab completions for position 2 to "spawn" and "kill" and "cell" and "tp"
 
 on death:
     victim's name contains "SCP"
     victim is not a player
     cancel drops
+    victim's name does not contain "Able"
     attacker is set
     cancel event
 
@@ -53,8 +62,3 @@ on death:
     #set {_functions::run} to function reference {_functionName}
     #set {_proxy} to new proxy instance of Runnable using {_functions::*}
     #{_proxy}.run()
-
-
-
-on command "/testscp": #this command if for me to get ppl to tp into testing area while they are helping me without having to tp them all the time
-    teleport player to location(202.5, -36, 58.5, world "world")

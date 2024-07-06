@@ -5,6 +5,8 @@ every 3 seconds:
         distance between {scp::076} and {scp::073} < 10
         int076_073()
     else:
+        make {scp::073} pathfind to {scp::076}
+        {scp::076}'s target != {scp::073}
         set {scp::076}'s target to {scp::073}
     if {int::999-682} is not set:
         distance between {scp::999} and {scp::682} < 10
@@ -71,30 +73,14 @@ local function int076_073():
     send "&cAble &c&lSCP-076 &c(KETER) &8◇&f YOU KILLED ME! NOW I WILL KILL YOU!" to all players in radius 15 of {scp::076}
     wait 1 second
     reset {scp::076}'s movement speed attribute
-    wait 2 seconds
     apply slowness 4 without particles to {scp::073} for 1 year 
     reset {scp::073}'s movement speed attribute
-    wait 6 seconds
+    wait 10 seconds
     send "&cAble &c&lSCP-076 &c(KETER) &8◇&f WHY DOES THIS HURT ME!" to all players in radius 15 of {scp::076}
     wait 20 seconds
     remove slowness from {scp::073}
-    set {_skull} to {scp::076}'s location
-    set block at {_skull} to skeleton skull if block at {_skull} = air
-    loop 20 times:
-        chance of 75%:
-            drop red dye named "076" with nbt from "{Tags:[""%random integer between 1 and 10000%""]}" at block above {scp::076}
-            add last dropped item to {_drop::*}
-        else:
-            drop bone named "076" with nbt from "{Tags:[""%random integer between 1 and 10000%""]}" at block above {scp::076}
-            add last dropped item to {_drop::*}
     kill {scp::076}
-    delete {scp::076}
     delete {int::076-073}
-    wait 1 minutes
-    scp076(location(221, -36, 40, world "world"))
-    kill {_drop::*}
-    delete {_drop::*}
-    set block at {_skull} to air
 
 
 
