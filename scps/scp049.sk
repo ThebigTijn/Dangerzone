@@ -41,7 +41,7 @@ on damage:
 
 on pickup:
     (metadata tag "zombies" of player) is set
-    event-item != record relic
+    event-item != red dye
     cancel event
 
 on drop:

@@ -1,12 +1,10 @@
 #THIS IS NOT DONE!!
+#DONT JUDGE THIS
 
 every 3 seconds:
     if {int::076-073} is not set:
         distance between {scp::076} and {scp::073} < 10
         int076_073()
-    #else:
-        #{scp::076}'s target != {scp::073}
-        #set {scp::076}'s target to {scp::073}
     if {int::999-682} is not set:
         distance between {scp::999} and {scp::682} < 10
         int999_682()

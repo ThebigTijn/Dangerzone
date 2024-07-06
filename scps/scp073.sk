@@ -12,7 +12,7 @@ on damage:
     make 5 of angry villager at block above victim
     (metadata tag "cooldown" of attacker) is not set:
         set (metadata tag "cooldown" of attacker) to true
-        push attacker backwards at speed 0.3
+        push attacker backwards at speed 0.4
         set {_v} to a random integer between 1 and 5
         send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇ &fOUCH!" to attacker if {_v} = 1
         send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇ &fHey!" to attacker if {_v} = 2

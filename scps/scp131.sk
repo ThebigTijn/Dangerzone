@@ -13,7 +13,7 @@ local function scp131spawn(l: location, n: text):
         set {_e} to entity
 
     while {_e} is alive: #its better then every 0.25 seconds because it only works when 131 is alive
-        wait 0.25 seconds
+        wait 1 seconds
         delete {_b}
         if distance between {_e} and {scp::173} <= 15:
             set {_e}'s movement speed attribute to 0
