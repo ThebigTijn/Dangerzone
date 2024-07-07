@@ -25,6 +25,11 @@ on death:
         set attacker's saturation to 5
         cancel event
 
+
+function cure_049(p: player):
+    delete (metadata tag "zombies" of {_p})
+    clear {_p}'s inventory
+
 on entity target:
     event-entity = {scp::049}
     (metadata tag "zombies" of target) is set
@@ -50,8 +55,7 @@ on drop:
 
 on quit:
     (metadata tag "zombies" of player) is set
-    clear player's inventory
-    delete (metadata tag "zombies" of player)
+    cure_049(player)
 
 
 local function zombie(p: player):

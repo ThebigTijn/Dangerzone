@@ -5,27 +5,27 @@ local function scp914():
     set {_l} to block at location(190.5, -34.5, 40.5, world "world")
     set {_e} to a random element of dropped items in radius 2 around {_l}
     set {_i} to item of {_e}
-    set {_amt} to item amount of item of {_e}
+    set {_amount} to item amount of item of {_e}
     {_i} is set
     play sound "minecraft:entity.minecart.riding" with volume 10 at location(194.5, -35, 41, world "world")
     open block at location(194, -35, 41, world "world")
     open block at location(190, -35, 41, world "world")
     if {_i}'s name contains "L1" or "L2" or "L3" or "L4" or "L5" or "Keycard shard":
         if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH":
-            drop("shard", 4*{_amt})
+            drop("shard", 4*{_amount})
         if line 3 of block at location(192, -35, 42, world "world") is "&cCOARSE":
-            scp914COARSE({_i}, {_amt})
+            scp914COARSE({_i}, {_amount})
         if line 3 of block at location(192, -35, 42, world "world") contains "1:1":
-            scp914ONE({_i}, {_amt})
+            scp914ONE({_i}, {_amount})
         if line 3 of block at location(192, -35, 42, world "world") is "&aFINE":
-            scp914FINE({_i}, {_amt})
+            scp914FINE({_i}, {_amount})
         if line 3 of block at location(192, -35, 42, world "world") is "&2VERY FINE":
-            scp914VERYFINE({_i}, {_amt})
+            scp914VERYFINE({_i}, {_amount})
         kill {_e}
     else:
         if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH" or "&cCOARSE":
-            #drop(raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before...", {_amt})
-            drop("scrap", {_amt})
+            #drop(raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before...", {_amount})
+            drop("scrap", {_amount})
             kill {_e}
             stop
         teleport {_e} to location(194.5, -35, 41.5, world "world")
@@ -39,7 +39,7 @@ local function drop(i: text, amt: integer):
     set {_i} to red stained glass pane named "&8L4-card" if {_i} = "L4"
     set {_i} to purple stained glass pane named "&8L5-card" if {_i} = "L5"
 
-    drop {_amt} of {_i} at location(194.5, -35, 41.5, world "world") without velocity
+    drop {_amount} of {_i} at location(194.5, -35, 41.5, world "world") without velocity
 
 on right click on lever:
     if block behind event-block is blackstone:
@@ -78,40 +78,40 @@ local function scp914selection(p:player):
 
 local function scp914COARSE(i: item, amt: integer):
     if {_i}'s name contains "L1":
-        drop("shard", 8*{_amt})
+        drop("shard", 8*{_amount})
     if {_i}'s name contains "L2":
-        drop("L1", {_amt})
+        drop("L1", {_amount})
     if {_i}'s name contains "L3":
-        drop("L2", {_amt})
+        drop("L2", {_amount})
     if {_i}'s name contains "L4":
-        drop("L3", {_amt})
+        drop("L3", {_amount})
     if {_i}'s name contains "L5":
-        drop("L4", {_amt})
+        drop("L4", {_amount})
 
 
 
 local function scp914ONE(i: item, amt: integer):
     if {_i}'s name contains "Keycard shard":
-        set {_r} to mod({_amt}, 8)
+        set {_r} to mod({_amount}, 8)
         drop("shard", {_r})
-        drop("L1", ({_amt} - {_r}) / 8)
+        drop("L1", ({_amount} - {_r}) / 8)
     
     if {_i}'s name contains "L1":
-        drop("shard", 8*{_amt})
+        drop("shard", 8*{_amount})
     if {_i}'s name contains "L2":
-        drop("L1", 2*{_amt})
+        drop("L1", 2*{_amount})
     if {_i}'s name contains "L3":
-        drop("L2", 2*{_amt})
+        drop("L2", 2*{_amount})
     if {_i}'s name contains "L4":
-        drop("L3", 2*{_amt})
+        drop("L3", 2*{_amount})
     if {_i}'s name contains "L5":
-        drop("L4", 2*{_amt})
+        drop("L4", 2*{_amount})
 
 
 local function scp914FINE(i: item, amt: integer):
     if {_i}'s name contains "L5":
         teleport {_i} to location(194.5, -35, 41.5, world "world")
-    loop {_amt} times:
+    loop {_amount} times:
         if {_i}'s name contains "L1":
             chance of 75%:
                 drop("L2", 1)
@@ -137,7 +137,7 @@ local function scp914FINE(i: item, amt: integer):
 local function scp914VERYFINE(i: item, amt: integer):
     if {_i}'s name contains "L5":
         teleport {_i} to location(194.5, -35, 41.5, world "world")
-    loop {_amt} times:
+    loop {_amount} times:
         if {_i}'s name contains "L1" or "L2" or "L3" or "L4":
             chance of 2%:
                 drop("L5", 1)

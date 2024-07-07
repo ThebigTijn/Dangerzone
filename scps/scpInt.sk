@@ -38,10 +38,22 @@ on pickup:
 
 
 local function int076_073():
+    int076_073_start()
+    int076_073_chat()
+    wait 40 seconds
+    int076_073_end()
+
+
+
+
+local function int076_073_start():
     set {int::076-073} to true
     set {scp::076}'s target to {scp::073}
     apply slowness 3 without particles to {scp::073} for 1 year
     apply resistance 255 without particles to {scp::076} for 1 year
+
+
+local function int076_073_chat():
     send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇&f Hello Able." to all players in radius 15 of {scp::073}
     wait 2 seconds
     send "&cAble &c&lSCP-076 &c(KETER) &8◇&f YOU!" to all players in radius 15 of {scp::076}
@@ -62,6 +74,10 @@ local function int076_073():
     wait 10 seconds
     send "&cAble &c&lSCP-076 &c(KETER) &8◇&f WHY DOES THIS HURT ME!" to all players in radius 15 of {scp::076}
     wait 10 seconds
+
+
+
+local function int076_073_end():
     remove resistance from {scp::076}
     remove slowness from {scp::073}
     kill {scp::076}
@@ -69,9 +85,26 @@ local function int076_073():
 
 
 
+
+
+
+
 local function int999_682():
+    int_999_682_start()
+    int_999_682_chat()
+    wait 27 seconds
+    int_999_682_calm()
+    wait 5 minutes
+    int_999_682_angry()
+
+
+
+local function int_999_682_start():
     set {int::999-682} to true
     apply slowness 255 without particles to {scp::682} for 1 year
+
+
+local function int_999_682_chat():
     face({scp::682}, {scp::999}, true, false, false)
     send "&e&lSCP-999 &r&a(SAFE) &8◇ &7&o(elated gurgles)" to all players in radius 15 around {scp::999}
     wait 3 seconds
@@ -90,11 +123,18 @@ local function int999_682():
     face({scp::682}, {scp::999}, true, false, false)
     send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(bellowing laughter) &fStop! No tickling! &7&o(continues laughing)" to all players in radius 15 around {scp::682}
     wait 6 seconds
+
+
+
+local function int_999_682_calm():
     remove slowness from {scp::682}'s potion effects
     reset {scp::999}'s movement speed attribute
     delete {scp::999}'s target
     set {int::999-682} to "calm"
     wait 5 minutes #this waits 5 mins after the interaction before 682 attackers players
+
+
+local function int_999_682_angry():
     set {int::999-682} to "angry"
     apply strength 3 without particles to {scp::682} for 1 year
     apply speed 5 without particles to {scp::682} for 1 year

@@ -12,8 +12,7 @@ on right click:
     set player's saturation to 5
 
     (metadata tag "zombies" of player) is set
-    delete (metadata tag "zombies" of player)
-    clear player's inventory
+    cure_049(player)
 
 
 

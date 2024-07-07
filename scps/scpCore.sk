@@ -1,49 +1,19 @@
 command scp <text> [<text>]:
     trigger:
-        if arg-1 = "list":
-            set {_list} to a written book
-            set page 1 of book {_list} to text component of "&a&lSafe Class SCPs:%nl%  &8- &6SCP-999%nl%  &8- &7SCP-343%nl%  &8- &cSCP-500%nl%  &8- &9SCP-054%nl%  &8- &0SCP-131 &8[&6A &8/ &cB&8]"
-            set page 2 of book {_list} to text component of "&6&lEuclid Class SCPs:%nl%  &8- &8SCP-914%nl%  &8- &0SCP-096%nl%  &8- &2SCP-268%nl%  &8- &7SCP-087%nl%  &8- &6SCP-173%nl%  &8- &0SCP-049%nl%  &8- &3Cain (SCP-073)"
-            set page 3 of book {_list} to text component of "&c&lKeter Class SCPs:%nl%  &8- &cSCP-939 &8[&c3x&8]%nl%  &8- &2SCP-682%nl%  &8- &cAble (SCP-076)"
-            set book author of {_list} to "DANGERZONE"
-            set book title of {_list} to "SCP List:"
-            open book {_list} to player
+        if {_scp} = "list":
+            scplist(player)
             stop
         player is op
         if arg-2 is not set:
             send "&c&lERROR &8| &fIncorrect usage: /scp <scp> <spawn/kill/cell/tp>" to player
             stop
         if arg-2 = "tp":
-            teleport player to location(183, -36, 54, world "world") if arg-1 = "268"
-            teleport player to location(183, -36, 50, world "world") if arg-1 = "268"
-            teleport player to location(192, -36, 43, world "world") if arg-1 = "914"
-            teleport player to location(206, -36, 78, world "world") if arg-1 = "087"
-            make player execute command "npc sel 35" if arg-1 = "343"
-            make player execute command "npc tp" if arg-1 = "343"
-            make player execute command "execute at @e[tag=%arg-1%] run teleport @s ~ ~ ~"
+            scptp(player,arg-1)
         if arg-2 = "spawn":
+            scpspawn(player,arg-1)
             #When server updates to allow runFunction to be here it will be
-            make player execute command "npc sel 35" if arg-1 = "343"
-            make player execute command "npc tp" if arg-1 = "343"
-            scp076(player) if arg-1 = "076"
-            scp073(player) if arg-1 = "073"
-            scp096(player) if arg-1 = "096"
-            scp131(player) if arg-1 = "131"
-            scp173(player) if arg-1 = "173"
-            scp682(player) if arg-1 = "682"
-            scp939(player) if arg-1 = "939"
-            scp999(player) if arg-1 = "999"
-            scp054(player) if arg-1 = "054"
-            scp049(player) if arg-1 = "049"
-            give player leather cap named "&2SCP-268 &a(SAFE)" with lore "&fThe Garden is the" and "&fSerpent's Place." with nbt from "{Unbreakable:1,Damage:0,display:{color:13807160}}" if arg-1 = "268"
-            give player red dye named "&cSCP-500" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{HideFlags:-1}" if arg-1 = "500"
-            set block at location(210, -22, 73, world "world") to redstone block if arg-1 = "087"
         if arg-2 = "kill":
-            set block at location(210, -22, 73, world "world") to air if arg-1 = "087"
-            stop if arg-1 = "087" or "268" or "500" or "914" or "343"
-            add nbt from "{Size:0}" to nbt of {scp::999} if arg-1 is "999"
-            make player execute command "kill @e[tag=%arg-1%]" #this is so any dupe scps will also be killed
-            delete {scp::%arg-1%}
+            scpkill(player,arg-1)
 
 
 on tab complete of "/scp":
@@ -61,7 +31,47 @@ on death:
     attacker is set
     cancel event
 
-#local function runFunction(functionName:string):
-    #set {_functions::run} to function reference {_functionName}
-    #set {_proxy} to new proxy instance of Runnable using {_functions::*}
-    #{_proxy}.run()
+
+local function scplist(p: player):
+    set {_list} to a written book
+    set page 1 of book {_list} to text component of "&a&lSafe Class SCPs:%nl%  &8- &6SCP-999%nl%  &8- &7SCP-343%nl%  &8- &cSCP-500%nl%  &8- &9SCP-054%nl%  &8- &0SCP-131 &8[&6A &8/ &cB&8]"
+    set page 2 of book {_list} to text component of "&6&lEuclid Class SCPs:%nl%  &8- &8SCP-914%nl%  &8- &0SCP-096%nl%  &8- &2SCP-268%nl%  &8- &7SCP-087%nl%  &8- &6SCP-173%nl%  &8- &0SCP-049%nl%  &8- &3Cain (SCP-073)"
+    set page 3 of book {_list} to text component of "&c&lKeter Class SCPs:%nl%  &8- &cSCP-939 &8[&c3x&8]%nl%  &8- &2SCP-682%nl%  &8- &cAble (SCP-076)"
+    set book author of {_list} to "DANGERZONE"
+    set book title of {_list} to "SCP List:"
+    open book {_list} to {_p}
+
+local function scptp(p:player,scp:string):
+    teleport {_p} to location(183, -36, 54, world "world") if {_scp} = "087"
+    teleport {_p} to location(183, -36, 50, world "world") if {_scp} = "914"
+    teleport {_p} to location(192, -36, 43, world "world") if {_scp} = "500"
+    teleport {_p} to location(206, -36, 78, world "world") if {_scp} = "268"
+    make {_p} execute command "npc sel 35" if {_scp} = "343"
+    make {_p} execute command "npc tp" if {_scp} = "343"
+    make {_p} execute command "execute at @e[tag=%{_scp}%] run teleport @s ~ ~ ~"
+
+
+local function scpspawn(p:player,scp:string):
+    make {_p} execute command "npc sel 35" if {_scp} = "343"
+    make {_p} execute command "npc tp" if {_scp} = "343"
+    scp076({_p}) if {_scp} = "076"
+    scp073({_p}) if {_scp} = "073"
+    scp096({_p}) if {_scp} = "096"
+    scp131({_p}) if {_scp} = "131"
+    scp173({_p}) if {_scp} = "173"
+    scp682({_p}) if {_scp} = "682"
+    scp939({_p}) if {_scp} = "939"
+    scp999({_p}) if {_scp} = "999"
+    scp054({_p}) if {_scp} = "054"
+    scp049({_p}) if {_scp} = "049"
+    give {_p} leather cap named "&2SCP-268 &a(SAFE)" with lore "&fThe Garden is the" and "&fSerpent's Place." with nbt from "{Unbreakable:1,Damage:0,display:{color:13807160}}" if {_scp} = "268"
+    give {_p} red dye named "&cSCP-500" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{HideFlags:-1}" if {_scp} = "500"
+    set block at location(210, -22, 73, world "world") to redstone block if {_scp} = "087"
+
+
+local function scpkill(p:player,scp:string):
+    set block at location(210, -22, 73, world "world") to air if {_scp} = "087"
+    stop if {_scp} = "087" or "914" or "268" or "500"
+    add nbt from "{Size:0}" to nbt of {scp::999} if {_scp} = "999"
+    make {_p} execute command "kill @e[tag=%{_scp}%]" #this is so any dupe scps will also be killed
+    delete {scp::%{_scp}%}

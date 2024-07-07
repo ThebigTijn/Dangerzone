@@ -1,8 +1,3 @@
-local function face(e: entity, t: entity):
-    force {_e} to face block above {_t} at head rotation speed 99999
-    force {_t} to face block above {_e} at head rotation speed 99999
-    make 5 of angry villager at block above {scp::076}
-
 function scp076(l: location):
     spawn vindicator at {_l}:
         add nbt from "{PersistenceRequired:1,Tags:[""076""]}" to nbt of entity
@@ -18,6 +13,11 @@ on death:
     set {_d} to true if attacker is set
     {_d} = true
 
+    death_076()
+
+
+
+local function death_076():
     set {_skull} to {scp::076}'s location
     set block at {_skull} to skeleton skull if block at {_skull} = air
 
