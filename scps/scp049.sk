@@ -11,24 +11,40 @@ function scp049(l: location):
         apply strength 255 without particles to entity for 1 year
         apply resistance 5 without particles to entity for 1 year
         set {scp::049} to entity
-    
-on death:
-    victim is a player
-    delete (metadata tag "zombies" of victim)
-    if attacker = {scp::049}:
-        cancel event
-        zombie(victim)
-        delete target of {scp::049}
-    if (metadata tag "zombies" of attacker) is set:
-        zombie(victim)
-        feed attacker
-        set attacker's saturation to 5
-        cancel event
 
 
 function cure_049(p: player):
     delete (metadata tag "zombies" of {_p})
     clear {_p}'s inventory
+
+
+local function infect(p: player):
+    apply blindness 255 without particles to {_p} for 5 seconds
+    send " %nl%&2&lYOU HAVE BEEN INFECTED%nl% " to {_p}
+    set (metadata tag "zombies" of {_p}) to true
+    clear {_p}'s inventory
+    set {_p}'s helmet to zombie skull of curse of vanishing and curse of binding
+    set {_p}'s chestplate to leather chestplate of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
+    set {_p}'s leggings to leather leggings of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
+    set {_p}'s boots to leather boots of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
+    set {_p}'s tool to stick of sharpness 11 and curse of vanishing named "&2&lZombie Stick" with lore "&fA Stick for Zombies" and "" and "&7| &x&8&2&9&1&A&2sᴛᴀᴛɪsᴛɪᴄs:" and "&c🗡 Damage: +6" and "" with nbt from "{HideFlags:-1}"
+
+
+
+on death:
+    victim is a player
+    delete (metadata tag "zombies" of victim)
+    if attacker = {scp::049}:
+        cancel event
+        infect(victim)
+        delete target of {scp::049}
+    if (metadata tag "zombies" of attacker) is set:
+        infect(victim)
+        feed attacker
+        set attacker's saturation to 5
+        cancel event
+
+
 
 on entity target:
     event-entity = {scp::049}
@@ -56,15 +72,3 @@ on drop:
 on quit:
     (metadata tag "zombies" of player) is set
     cure_049(player)
-
-
-local function zombie(p: player):
-    apply blindness 255 without particles to {_p} for 5 seconds
-    send " %nl%&2&lYOU HAVE BEEN INFECTED%nl% " to {_p}
-    set (metadata tag "zombies" of {_p}) to true
-    clear {_p}'s inventory
-    set {_p}'s helmet to zombie skull of curse of vanishing and curse of binding
-    set {_p}'s chestplate to leather chestplate of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
-    set {_p}'s leggings to leather leggings of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
-    set {_p}'s boots to leather boots of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
-    set {_p}'s tool to stick of sharpness 11 and curse of vanishing named "&2&lZombie Stick" with lore "&fA Stick for Zombies" and "" and "&7| &x&8&2&9&1&A&2sᴛᴀᴛɪsᴛɪᴄs:" and "&c🗡 Damage: +6" and "" with nbt from "{HideFlags:-1}"

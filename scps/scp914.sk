@@ -1,45 +1,5 @@
-#I was gonna use options to make it cleaner but it lags out
+#IM TRYING TO MAKE THIS LOOK NICER BUT ITS HARD
 #THIS IS NOT READY
-
-local function scp914():
-    set {_l} to block at location(190.5, -34.5, 40.5, world "world")
-    set {_e} to a random element of dropped items in radius 2 around {_l}
-    set {_i} to item of {_e}
-    set {_amount} to item amount of item of {_e}
-    {_i} is set
-    play sound "minecraft:entity.minecart.riding" with volume 10 at location(194.5, -35, 41, world "world")
-    open block at location(194, -35, 41, world "world")
-    open block at location(190, -35, 41, world "world")
-    if {_i}'s name contains "L1" or "L2" or "L3" or "L4" or "L5" or "Keycard shard":
-        if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH":
-            drop("shard", 4*{_amount})
-        if line 3 of block at location(192, -35, 42, world "world") is "&cCOARSE":
-            scp914COARSE({_i}, {_amount})
-        if line 3 of block at location(192, -35, 42, world "world") contains "1:1":
-            scp914ONE({_i}, {_amount})
-        if line 3 of block at location(192, -35, 42, world "world") is "&aFINE":
-            scp914FINE({_i}, {_amount})
-        if line 3 of block at location(192, -35, 42, world "world") is "&2VERY FINE":
-            scp914VERYFINE({_i}, {_amount})
-        kill {_e}
-    else:
-        if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH" or "&cCOARSE":
-            #drop(raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before...", {_amount})
-            drop("scrap", {_amount})
-            kill {_e}
-            stop
-        teleport {_e} to location(194.5, -35, 41.5, world "world")
-
-local function drop(i: text, amt: integer):
-    set {_i} to raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." if {_i} = "scrap"
-    set {_i} to record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{HideFlags:-1}" if {_i} = "shard"
-    set {_i} to lime stained glass pane named "&8L1-card" if {_i} = "L1"
-    set {_i} to yellow stained glass pane named "&8L2-card" if {_i} = "L2"
-    set {_i} to orange stained glass pane named "&8L3-card" if {_i} = "L3"
-    set {_i} to red stained glass pane named "&8L4-card" if {_i} = "L4"
-    set {_i} to purple stained glass pane named "&8L5-card" if {_i} = "L5"
-
-    drop {_amount} of {_i} at location(194.5, -35, 41.5, world "world") without velocity
 
 on right click on lever:
     if block behind event-block is blackstone:
@@ -49,7 +9,6 @@ on right click on dark oak sign:
     if block behind event-block is blackstone:
         cancel event
         scp914selection(player)
-
 
 local function scp914selection(p:player):
     create a gui with virtual hopper inventory named "           &8SCP-914 &a(Safe)":
@@ -76,70 +35,147 @@ local function scp914selection(p:player):
         open gui to {_p}
 
 
-local function scp914COARSE(i: item, amt: integer):
-    if {_i}'s name contains "L1":
-        drop("shard", 8*{_amount})
-    if {_i}'s name contains "L2":
-        drop("L1", {_amount})
-    if {_i}'s name contains "L3":
-        drop("L2", {_amount})
-    if {_i}'s name contains "L4":
-        drop("L3", {_amount})
-    if {_i}'s name contains "L5":
-        drop("L4", {_amount})
+
+local function item(item: string) :: item: #to find out the item using a string (using options lagged it out crazy)
+    set {_i} to raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." if {_item} = "scrap"
+    set {_i} to record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{custom:{},HideFlags:-1}" if {_item} = "shard"
+    set {_i} to lime stained glass pane named "&8L1-card" with nbt from "{custom:{Keycard:""1""}}" if {_item} = "L1"
+    set {_i} to yellow stained glass pane named "&8L2-card" with nbt from "{custom:{Keycard:""2""}}" if {_item} = "L2"
+    set {_i} to orange stained glass pane named "&8L3-card" with nbt from "{custom:{Keycard:""3""}}" if {_item} = "L3"
+    set {_i} to red stained glass pane named "&8L4-card" with nbt from "{custom:{Keycard:""4""}}" if {_item} = "L4"
+    set {_i} to purple stained glass pane named "&8L5-card" with nbt from "{custom:{Keycard:""5""}}" if {_item} = "L5"
+
+    return {_i}
+
+
+local function drop(item:item,amount:integer):
+    drop {_amount} of {_item} at location(194.5, -35, 41.5, world "world") without velocity
+
+
+local function scp914():
+    set {_l} to block at location(190.5, -34.5, 40.5, world "world")
+    set {_e} to a random element of dropped items in radius 2 around {_l}
+    set {_i} to 1 of item of {_e}
+    set {_amount} to item amount of item of {_e}
+    {_i} is set
+    play sound "minecraft:entity.minecart.riding" with volume 10 at location(194.5, -35, 41, world "world")
+    open block at location(194, -35, 41, world "world")
+    open block at location(190, -35, 41, world "world")
+    if {_i} = item("L1") or item("L2") or item("L3") or item("L4") or item("L5") or item("shard"):
+        if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH":
+            drop(item("shard"), 4*{_amount})
+        if line 3 of block at location(192, -35, 42, world "world") is "&cCOARSE":
+            scp914COARSE({_i}, {_amount})
+        if line 3 of block at location(192, -35, 42, world "world") contains "1:1":
+            scp914ONE({_i}, {_amount})
+        if line 3 of block at location(192, -35, 42, world "world") is "&aFINE":
+            scp914FINE({_i}, {_amount})
+        if line 3 of block at location(192, -35, 42, world "world") is "&2VERY FINE":
+            scp914VERYFINE({_i}, {_amount})
+        kill {_e}
+    else:
+        non_card_914({_e},{_amount})
+
+local function non_card_914(e:entity,amount:integer):
+    if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH" or "&cCOARSE":
+        drop(item("scrap"), {_amount})
+        kill {_e}
+        stop
+    teleport {_e} to location(194.5, -35, 41.5, world "world")
 
 
 
-local function scp914ONE(i: item, amt: integer):
-    if {_i}'s name contains "Keycard shard":
+local function scp914COARSE(i: item, amount: integer):
+    if {_i} = item("shard"):
+        non_card_914({_i},{_amount})
+        stop
+    if {_i} = item("L1"):
+        set {_id} to item("shard")
+        set {_amount} to {_amount}*8
+    if {_i} = item("L2"):
+        set {_id} to item("L1")
+    if {_i} = item("L3"):
+        set {_id} to item("L2")
+    if {_i} = item("L4"):
+        set {_id} to item("L3")
+    if {_i} = item("L5"):
+        set {_id} to item("L4")
+
+    drop({_id},{_amount})
+
+
+
+local function scp914ONE(i: item, amount: integer):
+    if {_i} = item("shard"):
         set {_r} to mod({_amount}, 8)
-        drop("shard", {_r})
-        drop("L1", ({_amount} - {_r}) / 8)
+        drop(item("shard"), {_r})
+        drop(item("L1"), ({_amount} - {_r}) / 8)
+        stop
     
-    if {_i}'s name contains "L1":
-        drop("shard", 8*{_amount})
-    if {_i}'s name contains "L2":
-        drop("L1", 2*{_amount})
-    if {_i}'s name contains "L3":
-        drop("L2", 2*{_amount})
-    if {_i}'s name contains "L4":
-        drop("L3", 2*{_amount})
-    if {_i}'s name contains "L5":
-        drop("L4", 2*{_amount})
+    if {_i} = item("L1"):
+        set {_amount} to {_amount}*4
+        set {_id} to item("shard")
+    if {_i} = item("L2"):
+        set {_id} to item("L1")
+    if {_i} = item("L3"):
+        set {_id} to item("L2")
+    if {_i} = item("L4"):
+        set {_id} to item("L3")
+    if {_i} = item("L5"):
+        set {_id} to item("L4")
+    
+    drop({_id},2*{_amount})
 
 
-local function scp914FINE(i: item, amt: integer):
-    if {_i}'s name contains "L5":
-        teleport {_i} to location(194.5, -35, 41.5, world "world")
-    loop {_amount} times:
-        if {_i}'s name contains "L1":
+local function scp914FINE(i: item, amount: integer):
+    if {_i} = item("L5") or item("shard"):
+        non_card_914({_i},{_amount})
+        stop
+
+    if {_i} = item("L1"):
+        loop {_amount} times:
             chance of 75%:
-                drop("L2", 1)
+                add 1 to {_card}
             else:
-                drop("shard", 2)
-        if {_i}'s name contains "L2":
+                add 1 to {_shard}
+        set {_id} to item("L2")
+    if {_i} = item("L2"):
+        loop {_amount} times:
             chance of 50%:
-                drop("L3", 1)
+                add 1 to {_card}
             else:
-                drop("shard", 2)
-        if {_i}'s name contains "L3":
+                add 1 to {_shard}
+        set {_id} to item("L3")
+    if {_i} = item("L3"):
+        loop {_amount} times:
             chance of 25%:
-                drop("L4", 1)
+                add 1 to {_card}
             else:
-                drop("shard", 2)
-        if {_i}'s name contains "L4":
+                add 1 to {_shard}
+        set {_id} to item("L4")
+    if {_i} = item("L4"):
+        loop {_amount} times:
             chance of 15%:
-                drop("L5", 1)
+                add 1 to {_card}
             else:
-                drop("shard", 2)
+                add 1 to {_shard}
+        set {_id} to item("L5")
 
 
-local function scp914VERYFINE(i: item, amt: integer):
-    if {_i}'s name contains "L5":
-        teleport {_i} to location(194.5, -35, 41.5, world "world")
+    drop({_id},{_card}) #drop card / shards
+    drop(item("shard"),{_shard}) 
+
+
+local function scp914VERYFINE(i: item, amount: integer):
+    if {_i} = item("L5") or item("shard"):
+        non_card_914({_i},{_amount})
+        stop
+
     loop {_amount} times:
-        if {_i}'s name contains "L1" or "L2" or "L3" or "L4":
-            chance of 2%:
-                drop("L5", 1)
-            else:
-                drop("scrap", 1)
+        chance of 2%:
+            add 1 to {_card}
+        else:
+            add 1 to {_shard}
+
+    drop(item("L5"), {_card})
+    drop(item("scrap"), {_shard})

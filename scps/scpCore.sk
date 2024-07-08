@@ -10,26 +10,10 @@ command scp <text> [<text>]:
         if arg-2 = "tp":
             scptp(player,arg-1)
         if arg-2 = "spawn":
-            scpspawn(player,arg-1)
+            scpspawn(player,player's location,arg-1)
             #When server updates to allow runFunction to be here it will be
         if arg-2 = "kill":
             scpkill(player,arg-1)
-
-
-on tab complete of "/scp":
-    if player is op:
-        set tab completions for position 1 to "list" and "343" and "073" and "076" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087" and "268"
-        set tab completions for position 2 to "spawn" and "kill" and "cell" and "tp"
-    else:
-        set tab completions for position 1 to "list"
-
-on death:
-    victim's name contains "SCP"
-    victim is not a player
-    cancel drops
-    victim's name does not contain "Able"
-    attacker is set
-    cancel event
 
 
 local function scplist(p: player):
@@ -51,22 +35,22 @@ local function scptp(p:player,scp:string):
     make {_p} execute command "execute at @e[tag=%{_scp}%] run teleport @s ~ ~ ~"
 
 
-local function scpspawn(p:player,scp:string):
+local function scpspawn(p:player,l:location,scp:string):
     make {_p} execute command "npc sel 35" if {_scp} = "343"
     make {_p} execute command "npc tp" if {_scp} = "343"
-    scp076({_p}) if {_scp} = "076"
-    scp073({_p}) if {_scp} = "073"
-    scp096({_p}) if {_scp} = "096"
-    scp131({_p}) if {_scp} = "131"
-    scp173({_p}) if {_scp} = "173"
-    scp682({_p}) if {_scp} = "682"
-    scp939({_p}) if {_scp} = "939"
-    scp999({_p}) if {_scp} = "999"
-    scp054({_p}) if {_scp} = "054"
-    scp049({_p}) if {_scp} = "049"
-    give {_p} leather cap named "&2SCP-268 &a(SAFE)" with lore "&fThe Garden is the" and "&fSerpent's Place." with nbt from "{Unbreakable:1,Damage:0,display:{color:13807160}}" if {_scp} = "268"
-    give {_p} red dye named "&cSCP-500" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{HideFlags:-1}" if {_scp} = "500"
+    scp076({_l}) if {_scp} = "076"
+    scp073({_l}) if {_scp} = "073"
+    scp096({_l}) if {_scp} = "096"
+    scp131({_l}) if {_scp} = "131"
+    scp173({_l}) if {_scp} = "173"
+    scp682({_l}) if {_scp} = "682"
+    scp939({_l}) if {_scp} = "939"
+    scp999({_l}) if {_scp} = "999"
+    scp054({_l}) if {_scp} = "054"
+    scp049({_l}) if {_scp} = "049"
     set block at location(210, -22, 73, world "world") to redstone block if {_scp} = "087"
+    give {_p} leather cap named "&2SCP-268 &a(SAFE)" with lore "&fThe Garden is the" and "&fSerpent's Place." with nbt from "{Unbreakable:1,Damage:0,display:{color:13807160}}" if {_scp} = "268"
+    give {_p} red dye named "&cSCP-500 &a(SAFE)" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{Tags:[""%random integer between 1 and 10000%""]}" if {_scp} = "500"
 
 
 local function scpkill(p:player,scp:string):
@@ -75,3 +59,20 @@ local function scpkill(p:player,scp:string):
     add nbt from "{Size:0}" to nbt of {scp::999} if {_scp} = "999"
     make {_p} execute command "kill @e[tag=%{_scp}%]" #this is so any dupe scps will also be killed
     delete {scp::%{_scp}%}
+
+
+
+on tab complete of "/scp":
+    if player is op:
+        set tab completions for position 1 to "list" and "343" and "073" and "076" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087" and "268"
+        set tab completions for position 2 to "spawn" and "kill" and "cell" and "tp"
+    else:
+        set tab completions for position 1 to "list"
+
+on death:
+    victim's name contains "SCP"
+    victim is not a player
+    cancel drops
+    victim's name does not contain "Able"
+    attacker is set
+    cancel event

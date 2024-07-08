@@ -8,6 +8,16 @@ function scp054(l: location):
         wait 1 second
         make 1 of falling water above all blocks in radius 1 around {scp::054}
 
+
+        
+local function passive_054(p:player):
+    (metadata tag "target" of {scp::054}) = {_p}
+    delete (metadata tag "target" of {scp::054})
+    remove speed from {scp::054}'s potion effects
+
+
+
+
 on damage:
     victim = {scp::054}
     set (metadata tag "target" of {scp::054}) to attacker
@@ -19,15 +29,12 @@ on entity target:
     (metadata tag "target" of {scp::054}) != target
     cancel event
 
+
 on death:
-    (metadata tag "target" of {scp::054}) = victim
-    delete (metadata tag "target" of {scp::054})
-    remove speed from {scp::054}'s potion effects
+    passive_054(victim)
 
 on quit:
-    (metadata tag "target" of {scp::054}) = player
-    delete (metadata tag "target" of {scp::054})
-    remove speed from {scp::054}'s potion effects
+    passive_054(player)
 
 #idk really what to make it do, all its meant to do is become water and adapt with it
 #but i cant really do that soooo

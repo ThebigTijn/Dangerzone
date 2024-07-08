@@ -1,10 +1,11 @@
 on right click on entity:
     name of target entity = "CIT-9d3396529c9d"
-    play sound "minecraft:entity.villager.ambient" to player
+    cancel event
     chat_343(player)
 
 
 local function chat_343(p: player):
+    play sound "minecraft:entity.villager.ambient" to {_p}
     set {_c} to a random integer between 1 and 50
 
     send "&f&lSCP-343 &a(SAFE) &8◇ &fHello, my child. How are you today◇" to {_p} if {_c} = 1
@@ -57,3 +58,4 @@ local function chat_343(p: player):
     send "&f&lSCP-343 &a(SAFE) &8◇ &fYou are exactly where you need to be." to {_p} if {_c} = 48
     send "&f&lSCP-343 &a(SAFE) &8◇ &fTrust in the divine plan." to {_p} if {_c} = 49
     send "&f&lSCP-343 &a(SAFE) &8◇ &fYou are a reflection of the divine." to {_p} if {_c} = 50
+    send "&f&lSCP-343 &a(SAFE) &8◇ &fBehold, I am God, creator of the universe. Greetings, my child." to {_p} if {_c} = 51

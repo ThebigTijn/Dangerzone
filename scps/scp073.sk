@@ -5,18 +5,8 @@ function scp073(l: location):
         set {scp::073} to entity
 
 
-on damage:
-    victim = {scp::073}
-    attacker is set
-    damage attacker by damage
-    make 5 of angry villager at block above victim
-    (metadata tag "cooldown" of attacker) is not set:
-        reflect_073(attacker)
-
-
-
-
 local function reflect_073(p: player):
+    (metadata tag "cooldown" of {_p}) is not set
     set (metadata tag "cooldown" of {_p}) to true
     push {_p} backwards at speed 0.4
     set {_v} to a random integer between 1 and 5
@@ -27,3 +17,12 @@ local function reflect_073(p: player):
     send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇ &fwhy?" to {_p} if {_v} = 5
     wait 0.25 seconds
     delete (metadata tag "cooldown" of {_p})
+
+
+
+on damage:
+    victim = {scp::073}
+    attacker is set
+    damage attacker by damage
+    make 5 of angry villager at block above victim
+    reflect_073(attacker)

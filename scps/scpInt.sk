@@ -19,24 +19,8 @@ local function face(e: entity, t: entity, 1: boolean, 2: boolean, 3: boolean):
     force {_e} to face block above {_t} at head rotation speed 99999 if {_1} = true
     force {_t} to face block above {_e} at head rotation speed 99999 if {_2} = true
     make 5 of angry villager at block above {scp::076} if {_3} = true
-        
-
-
-on entity target:
-    if event-entity = {scp::682}:
-        {int::999-682} = "calm"
-        cancel event
-    if event-entity = {scp::076}:
-        {int::076-073} = true
-        target is a player
-        cancel event
-
-
-on pickup:
-    event-item's name = "076"
-    cancel event
-
-
+    
+    
 local function int076_073():
     int076_073_start()
     int076_073_chat()
@@ -44,8 +28,18 @@ local function int076_073():
     int076_073_end()
 
 
+local function int999_682():
+    int_999_682_start()
+    int_999_682_chat()
+    wait 27 seconds
+    int_999_682_calm()
+    wait 5 minutes
+    int_999_682_angry()
 
 
+
+
+#076 + 073 INTERACTION BELOW
 local function int076_073_start():
     set {int::076-073} to true
     set {scp::076}'s target to {scp::073}
@@ -89,16 +83,8 @@ local function int076_073_end():
 
 
 
-local function int999_682():
-    int_999_682_start()
-    int_999_682_chat()
-    wait 27 seconds
-    int_999_682_calm()
-    wait 5 minutes
-    int_999_682_angry()
 
-
-
+#682 + 999 INTERACTION BELOW
 local function int_999_682_start():
     set {int::999-682} to true
     apply slowness 255 without particles to {scp::682} for 1 year
@@ -145,3 +131,20 @@ local function int_999_682_angry():
     apply speed 3 without particles to {scp::682} for 1 year
     apply strength 1 without particles to {scp::682} for 1 year
     delete {int::999-682}
+
+
+#DISABLING EVENTS
+
+on entity target:
+    if event-entity = {scp::682}:
+        {int::999-682} = "calm"
+        cancel event
+    if event-entity = {scp::076}:
+        {int::076-073} = true
+        target is a player
+        cancel event
+
+
+on pickup:
+    event-item's name = "076"
+    cancel event
