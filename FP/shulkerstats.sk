@@ -1,0 +1,58 @@
+#This is temp to help kit devs
+
+local function armor(i: item) :: number:
+    set {_lore::*} to lore of {_i}
+    loop {_lore::*}:
+        loop-value contains "Armor"
+        set {_a} to loop-value
+    set {_b::*} to {_a} split at "+"
+    set {_a} to {_b::2} parsed as number
+    return {_a}
+
+local function health(i: item) :: number:
+    set {_lore::*} to lore of {_i}
+    loop {_lore::*}:
+        loop-value contains "Max Health"
+        set {_a} to loop-value
+    set {_b::*} to {_a} split at "+"
+    set {_a} to {_b::2} parsed as number
+    return {_a}
+
+
+local function speed(i: item) :: number:
+    set {_lore::*} to lore of {_i}
+    loop {_lore::*}:
+        loop-value contains "Movement Speed"
+        set {_a} to loop-value
+    set {_b::*} to {_a} split at ": "
+    replace all "%%" in {_b::2} with ""
+    replace all "+" in {_b::2} with ""
+    set {_a} to {_b::2} parsed as number
+    return {_a}
+
+
+local function prot(i: item) :: number:
+    return protection level of {_i}
+
+local function proj(i: item) :: number:
+    return projectile protection level of {_i}
+
+local function fire(i: item) :: number:
+    return fire protection level of {_i}
+
+
+command stats:
+    aliases: stat
+    trigger:
+        loop all items in target block's inventory:
+            loop-item is armor
+            add armor(loop-item) to {_armor}
+            add speed(loop-item) to {_speed}
+            add health(loop-item) to {_health}
+            add prot(loop-item) to {_prot}
+            add proj(loop-item) to {_proj}
+            add fire(loop-item) to {_fire}
+        
+        remove all paper from target block's inventory
+        add paper named "%name of target block ? "&8[&fNO SHULKER NAME&8]"% &fStats" with lore "&a⛨ %{_armor} ? 0% Armor" and "&x&5&5&C&7&D&4&l⚡ &b%{_speed} ? 0%%% Movement Speed" and "&x&F&F&7&8&7&F❤ %{_health} ? 0% Max Health" and "" and "&e🛡 %{_prot} ? 0% Protection" and "&e🏹 %{_proj} ? 0% Projectile Protection" and "&e🔥 %{_fire} ? 0% Fire Protection" to target block's inventory
+        give player paper named "%name of target block ? "&8[&fNO SHULKER NAME&8]"% &fStats" with lore "&a⛨ %{_armor} ? 0% Armor" and "&x&5&5&C&7&D&4&l⚡ &b%{_speed} ? 0%%% Movement Speed" and "&x&F&F&7&8&7&F❤ %{_health} ? 0% Max Health" and "" and "&e🛡 %{_prot} ? 0% Protection" and "&e🏹 %{_proj} ? 0% Projectile Protection" and "&e🔥 %{_fire} ? 0% Fire Protection"

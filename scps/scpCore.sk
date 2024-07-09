@@ -1,6 +1,6 @@
 command scp <text> [<text>]:
     trigger:
-        if {_scp} = "list":
+        if arg-1 = "list":
             scpList(player)
             stop
         player is op
