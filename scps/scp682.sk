@@ -10,10 +10,10 @@ function scp682(l: location):
     while {scp::682} is alive:
         set {_i} to a random integer between 20 and 30
         wait "%{_i}% seconds" parsed as timespan
-        chat_682()
+        scp682Chat()
 
 
-local function chat_682():
+local function scp682Chat():
     {int::999-682} isn't set
     set {_v} to a random integer between 1 and 5
     if {_v} is 1:

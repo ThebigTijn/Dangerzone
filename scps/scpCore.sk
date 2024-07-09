@@ -1,22 +1,22 @@
 command scp <text> [<text>]:
     trigger:
         if {_scp} = "list":
-            scplist(player)
+            scpList(player)
             stop
         player is op
         if arg-2 is not set:
             send "&c&lERROR &8| &fIncorrect usage: /scp <scp> <spawn/kill/cell/tp>" to player
             stop
         if arg-2 = "tp":
-            scptp(player,arg-1)
+            scpTP(player,arg-1)
         if arg-2 = "spawn":
-            scpspawn(player,player's location,arg-1)
+            scpSpawn(player,player's location,arg-1)
             #When server updates to allow runFunction to be here it will be
         if arg-2 = "kill":
-            scpkill(player,arg-1)
+            scpKill(player,arg-1)
 
 
-local function scplist(p: player):
+local function scpList(p: player):
     set {_list} to a written book
     set page 1 of book {_list} to text component of "&a&lSafe Class SCPs:%nl%  &8- &6SCP-999%nl%  &8- &7SCP-343%nl%  &8- &cSCP-500%nl%  &8- &9SCP-054%nl%  &8- &0SCP-131 &8[&6A &8/ &cB&8]"
     set page 2 of book {_list} to text component of "&6&lEuclid Class SCPs:%nl%  &8- &8SCP-914%nl%  &8- &0SCP-096%nl%  &8- &2SCP-268%nl%  &8- &7SCP-087%nl%  &8- &6SCP-173%nl%  &8- &0SCP-049%nl%  &8- &3Cain (SCP-073)"
@@ -25,7 +25,7 @@ local function scplist(p: player):
     set book title of {_list} to "SCP List:"
     open book {_list} to {_p}
 
-local function scptp(p:player,scp:string):
+local function scpTP(p:player,scp:string):
     teleport {_p} to location(183, -36, 54, world "world") if {_scp} = "087"
     teleport {_p} to location(183, -36, 50, world "world") if {_scp} = "914"
     teleport {_p} to location(192, -36, 43, world "world") if {_scp} = "500"
@@ -35,7 +35,7 @@ local function scptp(p:player,scp:string):
     make {_p} execute command "execute at @e[tag=%{_scp}%] run teleport @s ~ ~ ~"
 
 
-local function scpspawn(p:player,l:location,scp:string):
+local function scpSpawn(p:player,l:location,scp:string):
     make {_p} execute command "npc sel 35" if {_scp} = "343"
     make {_p} execute command "npc tp" if {_scp} = "343"
     scp076({_l}) if {_scp} = "076"
@@ -53,7 +53,7 @@ local function scpspawn(p:player,l:location,scp:string):
     give {_p} red dye named "&cSCP-500 &a(SAFE)" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{Tags:[""%random integer between 1 and 10000%""]}" if {_scp} = "500"
 
 
-local function scpkill(p:player,scp:string):
+local function scpKill(p:player,scp:string):
     set block at location(210, -22, 73, world "world") to air if {_scp} = "087"
     stop if {_scp} = "087" or "914" or "268" or "500"
     add nbt from "{Size:0}" to nbt of {scp::999} if {_scp} = "999"

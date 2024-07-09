@@ -4,10 +4,10 @@
 every 3 seconds:
     if {int::076-073} is not set:
         distance between {scp::076} and {scp::073} < 10
-        int076_073()
+        scp076_073Int()
     if {int::999-682} is not set:
         distance between {scp::999} and {scp::682} < 10
-        int999_682()
+        scp999_682Int()
     else:
         {int::999-682} != "angry" or "calm"
         set {scp::999}'s target to {scp::682}
@@ -21,33 +21,33 @@ local function face(e: entity, t: entity, 1: boolean, 2: boolean, 3: boolean):
     make 5 of angry villager at block above {scp::076} if {_3} = true
     
     
-local function int076_073():
-    int076_073_start()
-    int076_073_chat()
+local function scp076_073Int():
+    scp076_073IntStart()
+    scp076_073IntChat()
     wait 40 seconds
-    int076_073_end()
+    scp076_073IntEnd()
 
 
-local function int999_682():
-    int_999_682_start()
-    int_999_682_chat()
+local function scp999_682Int():
+    scp999_682IntStart()
+    scp999_682IntChat()
     wait 27 seconds
-    int_999_682_calm()
+    scp999_682IntCalm()
     wait 5 minutes
-    int_999_682_angry()
+    scp999_682IntAngry()
 
 
 
 
 #076 + 073 INTERACTION BELOW
-local function int076_073_start():
+local function scp076_073IntStart():
     set {int::076-073} to true
     set {scp::076}'s target to {scp::073}
     apply slowness 3 without particles to {scp::073} for 1 year
     apply resistance 255 without particles to {scp::076} for 1 year
 
 
-local function int076_073_chat():
+local function scp076_073IntChat():
     send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇&f Hello Able." to all players in radius 15 of {scp::073}
     wait 2 seconds
     send "&cAble &c&lSCP-076 &c(KETER) &8◇&f YOU!" to all players in radius 15 of {scp::076}
@@ -71,7 +71,7 @@ local function int076_073_chat():
 
 
 
-local function int076_073_end():
+local function scp076_073IntEnd():
     remove resistance from {scp::076}
     remove slowness from {scp::073}
     kill {scp::076}
@@ -85,12 +85,12 @@ local function int076_073_end():
 
 
 #682 + 999 INTERACTION BELOW
-local function int_999_682_start():
+local function scp999_682IntStart():
     set {int::999-682} to true
     apply slowness 255 without particles to {scp::682} for 1 year
 
 
-local function int_999_682_chat():
+local function scp999_682IntChat():
     face({scp::682}, {scp::999}, true, false, false)
     send "&e&lSCP-999 &r&a(SAFE) &8◇ &7&o(elated gurgles)" to all players in radius 15 around {scp::999}
     wait 3 seconds
@@ -112,7 +112,7 @@ local function int_999_682_chat():
 
 
 
-local function int_999_682_calm():
+local function scp999_682IntCalm():
     remove slowness from {scp::682}'s potion effects
     reset {scp::999}'s movement speed attribute
     delete {scp::999}'s target
@@ -120,7 +120,7 @@ local function int_999_682_calm():
     wait 5 minutes #this waits 5 mins after the interaction before 682 attackers players
 
 
-local function int_999_682_angry():
+local function scp999_682IntAngry():
     set {int::999-682} to "angry"
     apply strength 3 without particles to {scp::682} for 1 year
     apply speed 5 without particles to {scp::682} for 1 year

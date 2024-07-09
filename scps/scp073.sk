@@ -5,7 +5,7 @@ function scp073(l: location):
         set {scp::073} to entity
 
 
-local function reflect_073(p: player):
+local function scp073Reflect(p: player):
     (metadata tag "cooldown" of {_p}) is not set
     set (metadata tag "cooldown" of {_p}) to true
     push {_p} backwards at speed 0.4
@@ -25,4 +25,4 @@ on damage:
     attacker is set
     damage attacker by damage
     make 5 of angry villager at block above victim
-    reflect_073(attacker)
+    scp073Reflect(attacker)

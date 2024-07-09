@@ -11,7 +11,7 @@ function scp939(l: location):
 
 
 
-local function chat_939(p:player):
+local function scp939Chat(p:player):
     set {_i} to a random integer between 1 and 5
     if {_i} is 1:
         set {_msg} to "can someone please help me"
@@ -35,4 +35,4 @@ local function chat_939(p:player):
 on death:
     victim is a player
     attacker's name contains "&c&lSCP-939"
-    chat_939(victim)
+    scp939Chat(victim)

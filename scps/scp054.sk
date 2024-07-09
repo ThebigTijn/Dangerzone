@@ -10,7 +10,7 @@ function scp054(l: location):
 
 
         
-local function passive_054(p:player):
+local function scp054Passive(p:player):
     (metadata tag "target" of {scp::054}) = {_p}
     delete (metadata tag "target" of {scp::054})
     remove speed from {scp::054}'s potion effects
@@ -31,10 +31,10 @@ on entity target:
 
 
 on death:
-    passive_054(victim)
+    scp054Passive(victim)
 
 on quit:
-    passive_054(player)
+    scp054Passive(player)
 
 #idk really what to make it do, all its meant to do is become water and adapt with it
 #but i cant really do that soooo

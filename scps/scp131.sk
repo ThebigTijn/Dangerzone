@@ -2,10 +2,10 @@
 #be knocked back and it cant turn its head using with skript
 
 function scp131(l: location):
-    scp131spawn({_l}, "&6&lSCP-131-A &r&a(SAFE)")
-    scp131spawn({_l}, "&c&lSCP-131-B &r&a(SAFE)")
+    scp131Spawn({_l}, "&6&lSCP-131-A &r&a(SAFE)")
+    scp131Spawn({_l}, "&c&lSCP-131-B &r&a(SAFE)")
 
-local function scp131spawn(l: location, n: text):
+local function scp131Spawn(l: location, n: text):
     spawn slime at {_l}:
         add nbt from "{Size:0,PersistenceRequired:1,Silent:1b,Tags:[""131""]}" to nbt of entity
         set name of entity to {_n}

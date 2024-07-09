@@ -1,10 +1,10 @@
 on right click on entity:
     name of target entity = "CIT-9d3396529c9d"
     cancel event
-    chat_343(player)
+    scp343Chat(player)
 
 
-local function chat_343(p: player):
+local function scp343Chat(p: player):
     play sound "minecraft:entity.villager.ambient" to {_p}
     set {_c} to a random integer between 1 and 50
 

@@ -8,7 +8,7 @@ function scp076(l: location):
 
 
 
-local function death_076():
+local function scp076Death():
     set {_skull} to {scp::076}'s location
     set block at {_skull} to skeleton skull if block at {_skull} = air
 
@@ -36,4 +36,4 @@ on death:
     set {_d} to true if attacker is set
     {_d} = true
 
-    death_076()
+    scp076Death()

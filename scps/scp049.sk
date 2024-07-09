@@ -13,7 +13,7 @@ function scp049(l: location):
         set {scp::049} to entity
 
 
-function cure_049(p: player):
+function scp049Cure(p: player):
     delete (metadata tag "zombies" of {_p})
     clear {_p}'s inventory
 
@@ -71,4 +71,4 @@ on drop:
 
 on quit:
     (metadata tag "zombies" of player) is set
-    cure_049(player)
+    scp049Cure(player)

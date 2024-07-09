@@ -8,9 +8,9 @@ on right click on lever:
 on right click on dark oak sign:
     if block behind event-block is blackstone:
         cancel event
-        scp914selection(player)
+        scp914Selection(player)
 
-local function scp914selection(p:player):
+local function scp914Selection(p:player):
     create a gui with virtual hopper inventory named "           &8SCP-914 &a(Safe)":
         format gui slot 0 with black stained glass pane named "&8ROUGH":
             cancel event
@@ -65,18 +65,18 @@ local function scp914():
         if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH":
             drop(item("shard"), 4*{_amount})
         if line 3 of block at location(192, -35, 42, world "world") is "&cCOARSE":
-            scp914COARSE({_i}, {_amount})
+            scp914Coarse({_i}, {_amount})
         if line 3 of block at location(192, -35, 42, world "world") contains "1:1":
             scp914ONE({_i}, {_amount})
         if line 3 of block at location(192, -35, 42, world "world") is "&aFINE":
-            scp914FINE({_i}, {_amount})
+            scp914Fine({_i}, {_amount})
         if line 3 of block at location(192, -35, 42, world "world") is "&2VERY FINE":
-            scp914VERYFINE({_i}, {_amount})
+            scp914VeryFine({_i}, {_amount})
         kill {_e}
     else:
-        non_card_914({_e},{_amount})
+        scp914other({_e},{_amount})
 
-local function non_card_914(e:entity,amount:integer):
+local function scp914other(e:entity,amount:integer):
     if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH" or "&cCOARSE":
         drop(item("scrap"), {_amount})
         kill {_e}
@@ -85,9 +85,9 @@ local function non_card_914(e:entity,amount:integer):
 
 
 
-local function scp914COARSE(i: item, amount: integer):
+local function scp914Coarse(i: item, amount: integer):
     if {_i} = item("shard"):
-        non_card_914({_i},{_amount})
+        scp914other({_i},{_amount})
         stop
     if {_i} = item("L1"):
         set {_id} to item("shard")
@@ -127,9 +127,9 @@ local function scp914ONE(i: item, amount: integer):
     drop({_id},2*{_amount})
 
 
-local function scp914FINE(i: item, amount: integer):
+local function scp914Fine(i: item, amount: integer):
     if {_i} = item("L5") or item("shard"):
-        non_card_914({_i},{_amount})
+        scp914other({_i},{_amount})
         stop
 
     if {_i} = item("L1"):
@@ -166,9 +166,9 @@ local function scp914FINE(i: item, amount: integer):
     drop(item("shard"),{_shard}) 
 
 
-local function scp914VERYFINE(i: item, amount: integer):
+local function scp914VeryFine(i: item, amount: integer):
     if {_i} = item("L5") or item("shard"):
-        non_card_914({_i},{_amount})
+        scp914other({_i},{_amount})
         stop
 
     loop {_amount} times:
