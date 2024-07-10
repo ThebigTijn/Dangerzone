@@ -33,7 +33,7 @@ local function scp999_682Int():
     scp999_682IntChat()
     wait 27 seconds
     scp999_682IntCalm()
-    wait 5 minutes
+    wait 5 minutes #this waits 5 mins after the interaction before 682 attackers players
     scp999_682IntAngry()
 
 
@@ -43,7 +43,7 @@ local function scp999_682Int():
 local function scp076_073IntStart():
     set {int::076-073} to true
     set {scp::076}'s target to {scp::073}
-    apply slowness 3 without particles to {scp::073} for 1 year
+    apply slowness 4 without particles to {scp::073} for 1 year
     apply resistance 255 without particles to {scp::076} for 1 year
 
 
@@ -117,11 +117,11 @@ local function scp999_682IntCalm():
     reset {scp::999}'s movement speed attribute
     delete {scp::999}'s target
     set {int::999-682} to "calm"
-    wait 5 minutes #this waits 5 mins after the interaction before 682 attackers players
-
 
 local function scp999_682IntAngry():
     set {int::999-682} to "angry"
+    remove speed from {scp::682}'s potion effects
+    remove strength from {scp::682}'s potion effects
     apply strength 3 without particles to {scp::682} for 1 year
     apply speed 5 without particles to {scp::682} for 1 year
     send "&2&lSCP-682 &r&4(KETER) &8◇ &7&o(runt) &f&oinput message" to all players in radius 15 around {scp::682}

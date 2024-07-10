@@ -28,4 +28,7 @@ on damage:
     victim = {scp::073}
     attacker is set
     make 5 of angry villager at block above victim
+    if attacker = {scp::076}:
+        damage {scp::076} by 1 heart
+        push {scp::076} backwards at speed 0.3
     scp073Reflect(attacker, damage)
