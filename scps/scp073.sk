@@ -5,24 +5,27 @@ function scp073(l: location):
         set {scp::073} to entity
 
 
-local function scp073Reflect(p: player):
+local function scp073Reflect(p: player,d:number):
+    scp073Chat({_p})
     (metadata tag "cooldown" of {_p}) is not set
     set (metadata tag "cooldown" of {_p}) to true
+    damage {_p} by {_d}
     push {_p} backwards at speed 0.4
+    wait 0.25 seconds
+    delete (metadata tag "cooldown" of {_p})
+
+
+local function scp073Chat(p: player):
     set {_v} to a random integer between 1 and 5
     send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇ &fOUCH!" to {_p} if {_v} = 1
     send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇ &fHey!" to {_p} if {_v} = 2
     send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇ &fThat hurt!" to {_p} if {_v} = 3
     send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇ &fCan you not?" to {_p} if {_v} = 4
     send "&3Cain &3&lSCP-073 &6(EUCLID) &8◇ &fwhy?" to {_p} if {_v} = 5
-    wait 0.25 seconds
-    delete (metadata tag "cooldown" of {_p})
-
 
 
 on damage:
     victim = {scp::073}
     attacker is set
-    damage attacker by damage
     make 5 of angry villager at block above victim
-    scp073Reflect(attacker)
+    scp073Reflect(attacker, damage)
