@@ -21,7 +21,7 @@ local function scp076Death():
             add last dropped item to {_drop::*}
 
     delete {scp::076}
-    wait 10 seconds
+    wait "%random integer between 5 and 15% seconds" parsed as timespan #it will be minutes when released
 
     scp076(location(221, -36, 40, world "world"))
     kill {_drop::*}

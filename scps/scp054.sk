@@ -21,7 +21,7 @@ local function scp054Passive(p:player):
 on damage:
     victim = {scp::054}
     set (metadata tag "target" of {scp::054}) to attacker
-    apply speed 2 without particles to {scp::054} for 1 year
+    apply speed 3 without particles to {scp::054} for 1 year
     set target of {scp::054} to attacker
 
 on entity target:

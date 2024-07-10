@@ -2,7 +2,7 @@ function scp999(l: location):
     spawn slime at {_l}:
         add nbt from "{Size:2,PersistenceRequired:1,Invulnerable:1b,Silent:1b,Tags:[""999""]}" to nbt of entity
         set name of entity to "&e&lSCP-999 &r&a(SAFE)"
-        apply speed 1 without particles to entity for 1 year
+        apply speed 2 without particles to entity for 1 year
         set {scp::999} to entity
 
 on entity jump:
