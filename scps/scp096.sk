@@ -7,8 +7,17 @@ function scp096(l:location):
         apply resistance 5 without particles to entity for 1 year
         set {scp::096} to entity
 
+on damage: #this is so that if u punch it normally u can still move it but it wont agro
+    victim = {scp::096}
+    (metadata tag "target" of {scp::096}) != attacker
+    set (metadata tag "dmg" of {scp::096}) to attacker
+    
 on entity target:
     event-entity = {scp::096}
+    if (metadata tag "dmg" of {scp::096}) = target:
+        cancel event
+        delete (metadata tag "dmg" of {scp::096})
+        stop
     (metadata tag "target" of {scp::096}) is not set
     set (metadata tag "target" of {scp::096}) to player
     set artificial intelligence of {scp::096} to false

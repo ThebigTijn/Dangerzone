@@ -4,6 +4,8 @@ function scp076(l: location):
         set name of entity to "&cAble &c&lSCP-076 &c(KETER)"
         apply resistance 4 without particles to entity for 1 year
         apply regeneration 2 without particles to entity for 1 year
+        set max health of entity to 100
+        heal entity
         set {scp::076} to entity
 
 

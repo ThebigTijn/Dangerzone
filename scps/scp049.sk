@@ -19,10 +19,13 @@ function scp049Cure(p: player):
 
 
 local function infect(p: player):
+    loop all items in {_p}'s inventory:
+        loop-item is not enchanted with curse of vanishing
+        drop loop-item at {_p}
+    clear {_p}'s inventory
     apply blindness 255 without particles to {_p} for 5 seconds
     send " %nl%&2&lYOU HAVE BEEN INFECTED%nl% " to {_p}
     set (metadata tag "zombies" of {_p}) to true
-    clear {_p}'s inventory
     set {_p}'s helmet to zombie skull of curse of vanishing and curse of binding
     set {_p}'s chestplate to leather chestplate of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
     set {_p}'s leggings to leather leggings of curse of vanishing and curse of binding with nbt from "{Damage:0,Unbreakable:1b,display:{color:6192150}}"
@@ -33,7 +36,8 @@ local function infect(p: player):
 
 on death:
     victim is a player
-    delete (metadata tag "zombies" of victim)
+    if (metadata tag "zombies" of victim) is set:
+        scp049Cure(victim)
     if attacker = {scp::049}:
         cancel event
         infect(victim)

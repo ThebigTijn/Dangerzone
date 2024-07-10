@@ -45,7 +45,10 @@ command stats:
     aliases: stat
     trigger:
         loop all items in target block's inventory:
-            loop-item is armor
+            set {_g} to true if loop-item is armor
+            set {_g} to true if loop-item is a player head
+            delete {_g} if "%loop-item%" contains "glass"
+            {_g} is true
             add armor(loop-item) to {_armor}
             add speed(loop-item) to {_speed}
             add health(loop-item) to {_health}

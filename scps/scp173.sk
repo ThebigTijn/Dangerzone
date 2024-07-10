@@ -9,6 +9,7 @@ function scp173(l: location):
         apply speed 10 without particles to {scp::173} for 1 year
         apply strength 255 without particles to {scp::173} for 1 year
         apply resistance 5 without particles to {scp::173} for 1 year
+        set knockback resistance attribute of {scp::173} to 0.75
         
     while {scp::173} is alive:
         wait 1 tick
@@ -16,7 +17,13 @@ function scp173(l: location):
         set {_b} to a random element of all slimes in radius 15 around {scp::173}
         delete {_b} if {_b} = {scp::999}
         set {_b} to a random element of all players where [target entity of input is {scp::173}] if {_b} is not set
-        set artificial intelligence of {scp::173} to false if {_b} is set
-        set artificial intelligence of {scp::173} to true if {_b} is not set
+        set movement speed attribute of {scp::173} to 0 if {_b} is set
+        reset movement speed attribute of {scp::173} if {_b} is not set
+
+
+on damage:
+    attacker = {scp::173}
+    movement speed attribute of attacker = 0
+    cancel event
 
 #while is better for this as you cant do (on player target) ect. and you need to check fast
