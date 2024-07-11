@@ -1,6 +1,6 @@
 function scp073(l: location):
     spawn villager at {_l}:
-        add nbt from "{PersistenceRequired:1,Tags:[""073""]}" to nbt of entity
+        add nbt from "{PersistenceRequired:1,Tags:[""073"",""scp""]}" to nbt of entity
         set name of entity to "&3Cain &3&lSCP-073 &6(EUCLID)"
         set {scp::073} to entity
 

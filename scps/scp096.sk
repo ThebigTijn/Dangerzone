@@ -1,7 +1,7 @@
 function scp096(l:location):
     spawn enderman at {_l}:
         set name of entity to "&f&lSCP-096 &6(Euclid)"
-        add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""096""]}" to nbt of entity
+        add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""096"",""scp""]}" to nbt of entity
         apply strength 2 without particles to entity for 1 year
         apply speed 2 without particles to entity for 1 year
         apply resistance 5 without particles to entity for 1 year

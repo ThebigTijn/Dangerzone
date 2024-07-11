@@ -54,17 +54,20 @@ local function scpSpawn(p:player,l:location,scp:string):
 
 
 local function scpKill(p:player,scp:string):
+    set {_scp} to "scp" if {_scp} = "all"
     set block at location(210, -22, 73, world "world") to air if {_scp} = "087"
     stop if {_scp} = "087" or "914" or "268" or "500"
-    add nbt from "{Size:0}" to nbt of {scp::999} if {_scp} = "999"
+    add nbt from "{Size:0}" to nbt of {scp::999} if {_scp} = "999" or "scp"
     make {_p} execute command "kill @e[tag=%{_scp}%]" #this is so any dupe scps will also be killed
     delete {scp::%{_scp}%}
+    if {_scp} = "scp":
+        delete {scp::*}
 
 
 
 on tab complete of "/scp":
     if player is op:
-        set tab completions for position 1 to "list" and "343" and "073" and "076" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "1370" and "054" and "049" and "087" and "268"
+        set tab completions for position 1 to "list" and "343" and "073" and "076" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "all" and "054" and "049" and "087" and "268"
         set tab completions for position 2 to "spawn" and "kill" and "cell" and "tp"
     else:
         set tab completions for position 1 to "list"

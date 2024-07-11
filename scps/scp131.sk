@@ -7,7 +7,7 @@ function scp131(l: location):
 
 local function scp131Spawn(l: location, n: text):
     spawn slime at {_l}:
-        add nbt from "{Size:0,PersistenceRequired:1,Silent:1b,Tags:[""131""]}" to nbt of entity
+        add nbt from "{Size:0,PersistenceRequired:1,Silent:1b,Tags:[""131"",""scp""]}" to nbt of entity
         set name of entity to {_n}
         apply resistance 5 without particles to entity for 1 year
         set {_e} to entity

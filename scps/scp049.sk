@@ -1,6 +1,6 @@
 function scp049(l: location):
     spawn skeleton at {_l}:
-        add nbt from "{PersistenceRequired:1,Tags:[""049""]}" to nbt of entity
+        add nbt from "{PersistenceRequired:1,Tags:[""049"",""scp""]}" to nbt of entity
         set name of entity to "&8&lSCP-049 &6(Euclid)"
         set entity's helmet to skeleton skull
         set entity's chestplate to leather chestplate with nbt from "{Unbreakable:1b,display:{color:0}}"

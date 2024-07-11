@@ -1,6 +1,6 @@
 function scp076(l: location):
     spawn vindicator at {_l}:
-        add nbt from "{PersistenceRequired:1,Tags:[""076""]}" to nbt of entity
+        add nbt from "{PersistenceRequired:1,Tags:[""076"",""scp""]}" to nbt of entity
         set name of entity to "&cAble &c&lSCP-076 &c(KETER)"
         apply resistance 4 without particles to entity for 1 year
         apply regeneration 2 without particles to entity for 1 year
@@ -36,6 +36,7 @@ on death:
     victim = {scp::076}
     set {_d} to true if {int::076-073} = true
     set {_d} to true if attacker is set
+    broadcast "%attacker%"
     {_d} = true
 
     scp076Death()
