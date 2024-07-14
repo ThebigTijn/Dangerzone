@@ -1,25 +1,15 @@
 function scp096(l:location):
     spawn enderman at {_l}:
         set name of entity to "&f&lSCP-096 &6(Euclid)"
-        add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""096"",""scp""]}" to nbt of entity
+        add nbt from "{CanPickUpLoot:0,PersistenceRequired:1,Silent:1b,Tags:[""096"",""scp""]}" to nbt of entity
         apply strength 2 without particles to entity for 1 year
         apply speed 2 without particles to entity for 1 year
         apply resistance 5 without particles to entity for 1 year
         set {scp::096} to entity
 
-on damage: #this is so that if u punch it normally u can still move it but it wont agro
-    victim = {scp::096}
-    (metadata tag "target" of {scp::096}) != attacker
-    set (metadata tag "dmg" of {scp::096}) to attacker
-    
-on entity target:
-    event-entity = {scp::096}
-    if (metadata tag "dmg" of {scp::096}) = target:
-        cancel event
-        delete (metadata tag "dmg" of {scp::096})
-        stop
+local function scp096Target(p:player):
     (metadata tag "target" of {scp::096}) is not set
-    set (metadata tag "target" of {scp::096}) to player
+    set (metadata tag "target" of {scp::096}) to {_p}
     set artificial intelligence of {scp::096} to false
 
     loop 10 times:
@@ -29,15 +19,31 @@ on entity target:
     set artificial intelligence of {scp::096} to true
     play sound "minecraft:block.sculk_shrieker.shriek" with volume 5 at {scp::096}
 
-
-on death of player:
-    (metadata tag "target" of {scp::096}) is victim
+    
+local function scp096TargetClear(p:player):
+    (metadata tag "target" of {scp::096}) is {_p}
     delete (metadata tag "target" of {scp::096})
 
-on quit:
-    (metadata tag "target" of {scp::096}) is player
-    delete (metadata tag "target" of {scp::096})
+on damage: #this is so that if u punch it normally u can still move it but it wont agro
+    victim = {scp::096}
+    (metadata tag "target" of {scp::096}) != attacker
+    set (metadata tag "dmg" of {scp::096}) to attacker
+    
+on entity target:
+    event-entity = {scp::096}
+    if (metadata tag "dmg" of {scp::096}) = target: #this stops if someone punches 096 it won't agro
+        cancel event
+        delete (metadata tag "dmg" of {scp::096})
+        stop
+    scp096Target(target)
 
 on entity teleport:
     event-entity = {scp::096}
     cancel event
+
+
+on death of player:
+    scp096TargetClear(victim)
+
+on quit:
+    scp096TargetClear(player)

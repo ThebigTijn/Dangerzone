@@ -1,6 +1,6 @@
 function scp682(l: location):
     spawn ravager at {_l}:
-        add nbt from "{Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""682"",""scp""]}" to nbt of entity
+        add nbt from "{CanPickUpLoot:0,Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""682"",""scp""]}" to nbt of entity
         set {scp::682} to entity
         set name of entity to "&2&lSCP-682 &r&4(KETER)"
         apply strength 1 without particles to entity for 1 year

@@ -26,10 +26,10 @@ local function scpList(p: player):
     open book {_list} to {_p}
 
 local function scpTP(p:player,scp:string):
-    teleport {_p} to location(183, -36, 54, world "world") if {_scp} = "087"
-    teleport {_p} to location(183, -36, 50, world "world") if {_scp} = "914"
-    teleport {_p} to location(192, -36, 43, world "world") if {_scp} = "500"
-    teleport {_p} to location(206, -36, 78, world "world") if {_scp} = "268"
+    teleport {_p} to location(183, -36, 54, world "world") if {_scp} = "268"
+    teleport {_p} to location(183, -36, 50, world "world") if {_scp} = "500"
+    teleport {_p} to location(192, -36, 43, world "world") if {_scp} = "914"
+    teleport {_p} to location(206, -36, 78, world "world") if {_scp} = "087"
     make {_p} execute command "npc sel 35" if {_scp} = "343"
     make {_p} execute command "npc tp" if {_scp} = "343"
     make {_p} execute command "execute at @e[tag=%{_scp}%] run teleport @s ~ ~ ~"

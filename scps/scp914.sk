@@ -1,14 +1,49 @@
-#IM TRYING TO MAKE THIS LOOK NICER BUT ITS HARD
-#THIS IS NOT READY
+on script load:
+    load yaml "plugins/Skript/yaml/SCP/scp914.yml" as "scp914"
 
-on right click on lever:
-    if block behind event-block is blackstone:
-        scp914()
+local function drop(item:item,amount:integer):
+    drop {_amount} of {_item} at location(194.5, -35, 41.5, world "world") without velocity
 
-on right click on dark oak sign:
-    if block behind event-block is blackstone:
-        cancel event
-        scp914Selection(player)
+function scp914ItemAdd(mode:string,input:item,output:item):
+    set yaml value "%{_mode}%.%1 of {_input}%" from "scp914" to {_output}
+    save yaml "scp914"
+
+function scp914ItemDelete(mode:string,input:item):
+    delete yaml value "%{_mode}%.%1 of {_input}%" from "scp914"
+    save yaml "scp914"
+
+function scp914ItemGet(mode:string,input:item) :: string:
+    return "&c&lERROR" if yaml value "%{_mode}%.%1 of {_input}%" from "scp914" is not set
+    set {_output} to yaml value "%{_mode}%.%1 of {_input}%" from "scp914"
+    return "%{_output}%"
+
+
+local function scp914Start(): #Starting Machine
+    set {_location} to block at location(190.5, -34.5, 40.5, world "world")
+    set {_itementity} to a random element of dropped items in radius 2 around {_location} #needed to kill dropped item
+    set {_input} to item of {_itementity} #needed to be parsed as item
+    {_input} is set
+    play sound "minecraft:entity.minecart.riding" with volume 10 at location(194.5, -35, 41, world "world")
+    open block at location(194, -35, 41, world "world")
+    open block at location(190, -35, 41, world "world")
+    kill {_itementity}
+    scp914Mode({_input})
+
+local function scp914Mode(input:item): #Detecting the Mode and if we need to run
+    set {_mode} to uncolored line 3 of block at location(192, -35, 42, world "world")
+    if {_mode} = "ROUGH":
+        set {_scrap} to raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..."
+        drop({_scrap},item amount of {_input})
+        stop
+    if scp914ItemGet({_mode},{_input}) contains "&c&lERROR":
+        drop({_input}, item amount of {_input})
+        stop
+    scp914Run({_mode},{_input})
+
+local function scp914Run(mode:string,input:item): #Run machine
+    yaml value "%{_mode}%.%1 of {_input}%" from "scp914" is set
+    set {_output} to yaml value "%{_mode}%.%1 of {_input}%" from "scp914"
+    drop({_output},item amount of {_output}*item amount of {_input})
 
 local function scp914Selection(p:player):
     create a gui with virtual hopper inventory named "           &8SCP-914 &a(Safe)":
@@ -35,147 +70,11 @@ local function scp914Selection(p:player):
         open gui to {_p}
 
 
+on right click on lever:
+    if block behind event-block is blackstone:
+        scp914Start()
 
-local function item(item: string) :: item: #to find out the item using a string (using options lagged it out crazy)
-    set {_i} to raw copper named "&7&lPile of Scraps" with lore "&8&oA heap of worthless fragments" and "&8&owonder what this was before..." if {_item} = "scrap"
-    set {_i} to record fragment named "&7Keycard shard" with lore "&8&oA heap of worthless shards" and "&8&owonder what this was before.." with nbt from "{custom:{},HideFlags:-1}" if {_item} = "shard"
-    set {_i} to lime stained glass pane named "&8L1-card" with nbt from "{custom:{Keycard:""1""}}" if {_item} = "L1"
-    set {_i} to yellow stained glass pane named "&8L2-card" with nbt from "{custom:{Keycard:""2""}}" if {_item} = "L2"
-    set {_i} to orange stained glass pane named "&8L3-card" with nbt from "{custom:{Keycard:""3""}}" if {_item} = "L3"
-    set {_i} to red stained glass pane named "&8L4-card" with nbt from "{custom:{Keycard:""4""}}" if {_item} = "L4"
-    set {_i} to purple stained glass pane named "&8L5-card" with nbt from "{custom:{Keycard:""5""}}" if {_item} = "L5"
-
-    return {_i}
-
-
-local function drop(item:item,amount:integer):
-    drop {_amount} of {_item} at location(194.5, -35, 41.5, world "world") without velocity
-
-
-local function scp914():
-    set {_l} to block at location(190.5, -34.5, 40.5, world "world")
-    set {_e} to a random element of dropped items in radius 2 around {_l}
-    set {_i} to 1 of item of {_e}
-    set {_amount} to item amount of item of {_e}
-    {_i} is set
-    play sound "minecraft:entity.minecart.riding" with volume 10 at location(194.5, -35, 41, world "world")
-    open block at location(194, -35, 41, world "world")
-    open block at location(190, -35, 41, world "world")
-    if {_i} = item("L1") or item("L2") or item("L3") or item("L4") or item("L5") or item("shard"):
-        if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH":
-            drop(item("shard"), 4*{_amount})
-        if line 3 of block at location(192, -35, 42, world "world") is "&cCOARSE":
-            scp914Coarse({_i}, {_amount})
-        if line 3 of block at location(192, -35, 42, world "world") contains "1:1":
-            scp914ONE({_i}, {_amount})
-        if line 3 of block at location(192, -35, 42, world "world") is "&aFINE":
-            scp914Fine({_i}, {_amount})
-        if line 3 of block at location(192, -35, 42, world "world") is "&2VERY FINE":
-            scp914VeryFine({_i}, {_amount})
-        kill {_e}
-    else:
-        scp914other({_e},{_amount})
-
-local function scp914other(e:entity,amount:integer):
-    if line 3 of block at location(192, -35, 42, world "world") is "&8ROUGH" or "&cCOARSE":
-        drop(item("scrap"), {_amount})
-        kill {_e}
-        stop
-    teleport {_e} to location(194.5, -35, 41.5, world "world")
-
-
-
-local function scp914Coarse(i: item, amount: integer):
-    if {_i} = item("shard"):
-        scp914other({_i},{_amount})
-        stop
-    if {_i} = item("L1"):
-        set {_id} to item("shard")
-        set {_amount} to {_amount}*8
-    if {_i} = item("L2"):
-        set {_id} to item("L1")
-    if {_i} = item("L3"):
-        set {_id} to item("L2")
-    if {_i} = item("L4"):
-        set {_id} to item("L3")
-    if {_i} = item("L5"):
-        set {_id} to item("L4")
-
-    drop({_id},{_amount})
-
-
-
-local function scp914ONE(i: item, amount: integer):
-    if {_i} = item("shard"):
-        set {_r} to mod({_amount}, 8)
-        drop(item("shard"), {_r})
-        drop(item("L1"), ({_amount} - {_r}) / 8)
-        stop
-    
-    if {_i} = item("L1"):
-        set {_amount} to {_amount}*4
-        set {_id} to item("shard")
-    if {_i} = item("L2"):
-        set {_id} to item("L1")
-    if {_i} = item("L3"):
-        set {_id} to item("L2")
-    if {_i} = item("L4"):
-        set {_id} to item("L3")
-    if {_i} = item("L5"):
-        set {_id} to item("L4")
-    
-    drop({_id},2*{_amount})
-
-
-local function scp914Fine(i: item, amount: integer):
-    if {_i} = item("L5") or item("shard"):
-        scp914other({_i},{_amount})
-        stop
-
-    if {_i} = item("L1"):
-        loop {_amount} times:
-            chance of 75%:
-                add 1 to {_card}
-            else:
-                add 1 to {_shard}
-        set {_id} to item("L2")
-    if {_i} = item("L2"):
-        loop {_amount} times:
-            chance of 50%:
-                add 1 to {_card}
-            else:
-                add 1 to {_shard}
-        set {_id} to item("L3")
-    if {_i} = item("L3"):
-        loop {_amount} times:
-            chance of 25%:
-                add 1 to {_card}
-            else:
-                add 1 to {_shard}
-        set {_id} to item("L4")
-    if {_i} = item("L4"):
-        loop {_amount} times:
-            chance of 15%:
-                add 1 to {_card}
-            else:
-                add 1 to {_shard}
-        set {_id} to item("L5")
-
-
-    drop({_id},{_card}) #drop card / shards
-    drop(item("shard"),{_shard}) 
-
-
-local function scp914VeryFine(i: item, amount: integer):
-    if {_i} = item("L5") or item("shard"):
-        scp914other({_i},{_amount})
-        stop
-
-    loop {_amount} times:
-        chance of 2%:
-            add 1 to {_card}
-        else:
-            add 1 to {_shard}
-
-    drop(item("L5"), {_card})
-    drop(item("scrap"), {_shard})
+on right click on dark oak sign:
+    if block behind event-block is blackstone:
+        cancel event
+        scp914Selection(player)

@@ -2,7 +2,7 @@ function scp054(l: location):
     spawn drowned at {_l}:
         set {scp::054} to entity
         set name of entity to "&9&lSCP-054 &a(SAFE)"
-        add nbt from "{PersistenceRequired:1,Silent:1b,Tags:[""054"",""scp""]}" to nbt of entity
+        add nbt from "{CanPickUpLoot:0,PersistenceRequired:1,Silent:1b,Tags:[""054"",""scp""]}" to nbt of entity
     
     while {scp::054} is alive:
         wait 1 second

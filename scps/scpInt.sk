@@ -28,14 +28,6 @@ local function scp076_073Int():
     scp076_073IntEnd()
 
 
-local function scp999_682Int():
-    scp999_682IntStart()
-    scp999_682IntChat()
-    wait 27 seconds
-    scp999_682IntCalm()
-    wait 5 minutes #this waits 5 mins after the interaction before 682 attackers players
-    scp999_682IntAngry()
-
 
 
 
@@ -85,6 +77,15 @@ local function scp076_073IntEnd():
 
 
 #682 + 999 INTERACTION BELOW
+local function scp999_682Int():
+    scp999_682IntStart()
+    scp999_682IntChat()
+    wait 27 seconds
+    scp999_682IntCalm()
+    wait 5 minutes #this waits 5 mins after the interaction before 682 attackers players
+    scp999_682IntAngry()
+
+
 local function scp999_682IntStart():
     set {int::999-682} to true
     apply slowness 255 without particles to {scp::682} for 1 year
