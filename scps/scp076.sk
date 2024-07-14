@@ -1,31 +1,31 @@
 function scp076(l: location):
     spawn vindicator at {_l}:
-        add nbt from "{CanPickUpLoot:0,PersistenceRequired:1,Tags:[""076"",""scp""]}" to nbt of entity
-        set name of entity to "&cAble &c&lSCP-076 &c(KETER)"
+        add nbt from "{CanPickUpLoot:0,PersistenceRequired:1,Tags:[""076-2"",""scp""]}" to nbt of entity
+        set name of entity to "&cAble &c&lSCP-076-2 &c(KETER)"
         apply resistance 4 without particles to entity for 1 year
         apply regeneration 2 without particles to entity for 1 year
         set max health of entity to 50
         heal entity
-        set {scp::076} to entity
+        set {scp::076-2} to entity
 
 
 
 local function scp076Death():
-    set {_skull} to {scp::076}'s location
+    set {_skull} to {scp::076-2}'s location
     set block at {_skull} to skeleton skull if block at {_skull} = air
 
     loop 20 times:
         chance of 75%:
-            drop red dye named "076" with nbt from "{Tags:[""%random integer between 1 and 10000%""]}" at block above {scp::076}
+            drop red dye named "076" with nbt from "{Tags:[""%random integer between 1 and 10000%""]}" at block above {scp::076-2}
             add last dropped item to {_drop::*}
         else:
-            drop bone named "076" with nbt from "{Tags:[""%random integer between 1 and 10000%""]}" at block above {scp::076}
+            drop bone named "076" with nbt from "{Tags:[""%random integer between 1 and 10000%""]}" at block above {scp::076-2}
             add last dropped item to {_drop::*}
 
-    delete {scp::076}
+    delete {scp::076-2}
     wait "%random integer between 5 and 15% seconds" parsed as timespan #it will be minutes when released
 
-    scp076(location(221, -36, 40, world "world"))
+    scp076(location(218.5, -36, 39.5, world "world",90,0))
     kill {_drop::*}
     delete {_drop::*}
     set block at {_skull} to air
@@ -33,10 +33,9 @@ local function scp076Death():
 
 
 on death:
-    victim = {scp::076}
+    victim = {scp::076-2}
     set {_d} to true if {int::076-073} = true
     set {_d} to true if attacker is set
-    broadcast "%attacker%"
     {_d} = true
 
     scp076Death()

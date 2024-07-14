@@ -1,21 +1,26 @@
 on right click:
     name of 1 of player's tool contains "&cSCP-500 &a(SAFE)"
-    remove 1 red dye from player's inventory
+    scp500Use(player)
+
+local function scp500Use(p:player):
+    remove 1 red dye from {_p}'s inventory
     
     loop 3 times:
-        play sound "minecraft:entity.generic.eat" to player
+        play sound "minecraft:entity.generic.eat" to {_p}
         wait 4 ticks
 
-    clear player's potion effects #this is meant to remove good ones aswell, its not a mistake
-    apply regeneration 4 to player for 7 seconds
-    feed player
-    set player's saturation to 5
+    clear {_p}'s potion effects #this is meant to remove good ones aswell, its not a mistake
+    apply regeneration 4 to {_p} for 7 seconds
+    feed {_p}
+    set {_p}'s saturation to 5
 
-    (metadata tag "zombies" of player) is set
-    scp049Cure(player)
+    (metadata tag "zombies" of {_p}) is set
+    scp049Cure({_p})
 
+local function scp500Spawn():
+    block at location(183, -36, 50, world "world")'s inventory does not contain a red dye named "&cSCP-500 &a(SAFE)"
+    set slot 13 of block at location(183, -36, 50, world "world")'s inventory to red dye named "&cSCP-500 &a(SAFE)" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{Tags:[""%random integer between 1 and 10000%""]}"
 
 
 every 10 seconds:
-    block at location(183, -36, 50, world "world")'s inventory does not contain a red dye named "&cSCP-500 &a(SAFE)"
-    set slot 13 of block at location(183, -36, 50, world "world")'s inventory to red dye named "&cSCP-500 &a(SAFE)" with lore "&fA miraculous red pill that cures" and "&fany disease or ailment." with nbt from "{Tags:[""%random integer between 1 and 10000%""]}"
+    scp500Spawn()

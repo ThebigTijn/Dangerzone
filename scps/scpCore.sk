@@ -1,44 +1,41 @@
-command scp <text> [<text>]:
+on script load:
+    load yaml "plugins/Skript/yaml/SCP/scps.yml" as "SCPS"
+
+local function returnSCPS() :: strings:
+    return all yaml nodes from "SCPS"
+
+
+command scp <string> [<string>]:
+    permission: open
     trigger:
         if arg-1 = "list":
             scpList(player)
             stop
-        player is op
-        if arg-2 is not set:
-            send "&c&lERROR &8| &fIncorrect usage: /scp <scp> <spawn/kill/cell/tp>" to player
-            stop
+        returnSCPS() contains arg-1
         if arg-2 = "tp":
             scpTP(player,arg-1)
+            stop
         if arg-2 = "spawn":
-            scpSpawn(player,player's location,arg-1)
-            #When server updates to allow runFunction to be here it will be
+            scpSpawn(player,player's location,arg-1) #When server updates to allow runFunction to be here it will be
+            stop
         if arg-2 = "kill":
             scpKill(player,arg-1)
-
+            stop
+        else:
+            send "&c&lERROR &8| &fIncorrect usage: /scp <scp> <spawn/kill/tp>" to player
+            stop
 
 local function scpList(p: player):
-    set {_list} to a written book
-    set page 1 of book {_list} to text component of "&a&lSafe Class SCPs:%nl%  &8- &6SCP-999%nl%  &8- &7SCP-343%nl%  &8- &cSCP-500%nl%  &8- &9SCP-054%nl%  &8- &0SCP-131 &8[&6A &8/ &cB&8]"
-    set page 2 of book {_list} to text component of "&6&lEuclid Class SCPs:%nl%  &8- &8SCP-914%nl%  &8- &0SCP-096%nl%  &8- &2SCP-268%nl%  &8- &7SCP-087%nl%  &8- &6SCP-173%nl%  &8- &0SCP-049%nl%  &8- &3Cain (SCP-073)"
-    set page 3 of book {_list} to text component of "&c&lKeter Class SCPs:%nl%  &8- &cSCP-939 &8[&c3x&8]%nl%  &8- &2SCP-682%nl%  &8- &cAble (SCP-076)"
-    set book author of {_list} to "DANGERZONE"
-    set book title of {_list} to "SCP List:"
-    open book {_list} to {_p}
+    send returnSCPS() to {_p}
 
 local function scpTP(p:player,scp:string):
-    teleport {_p} to location(183, -36, 54, world "world") if {_scp} = "268"
-    teleport {_p} to location(183, -36, 50, world "world") if {_scp} = "500"
-    teleport {_p} to location(192, -36, 43, world "world") if {_scp} = "914"
-    teleport {_p} to location(206, -36, 78, world "world") if {_scp} = "087"
-    make {_p} execute command "npc sel 35" if {_scp} = "343"
-    make {_p} execute command "npc tp" if {_scp} = "343"
-    make {_p} execute command "execute at @e[tag=%{_scp}%] run teleport @s ~ ~ ~"
+    teleport {_p} to {scp::%{_scp}%}
 
 
-local function scpSpawn(p:player,l:location,scp:string):
+local function scpSpawn(p:player,l:location,scp:string): #THIS WILL BE REPLACED WITH runFunction WHEN WE UPDATE THE DEV SERVER!
     make {_p} execute command "npc sel 35" if {_scp} = "343"
     make {_p} execute command "npc tp" if {_scp} = "343"
-    scp076({_l}) if {_scp} = "076"
+    scp076({_l}) if {_scp} = "076-2"
     scp073({_l}) if {_scp} = "073"
     scp096({_l}) if {_scp} = "096"
     scp131({_l}) if {_scp} = "131"
@@ -59,23 +56,23 @@ local function scpKill(p:player,scp:string):
     stop if {_scp} = "087" or "914" or "268" or "500"
     add nbt from "{Size:0}" to nbt of {scp::999} if {_scp} = "999" or "scp"
     make {_p} execute command "kill @e[tag=%{_scp}%]" #this is so any dupe scps will also be killed
-    delete {scp::%{_scp}%}
-    if {_scp} = "scp":
-        delete {scp::*}
 
 
 
 on tab complete of "/scp":
-    if player is op:
-        set tab completions for position 1 to "list" and "343" and "073" and "076" and "096" and "131" and "173" and "500" and "682" and "914" and "939" and "999" and "all" and "054" and "049" and "087" and "268"
-        set tab completions for position 2 to "spawn" and "kill" and "cell" and "tp"
-    else:
-        set tab completions for position 1 to "list"
+    set tab completions for position 1 to returnSCPS()
+    set tab completions for position 2 to "spawn" and "kill" and "tp"
 
 on death:
     victim's name contains "SCP"
     victim is not a player
     cancel drops
-    victim's name does not contain "Able"
-    attacker is set
-    cancel event
+    if attacker is not set:
+        set {_name} to uncolored name of victim
+        replace all "SCP-" and "(SAFE)" and "(EUCLID)" and "(KETER)" and "ABLE" and "CAIN" and " " with "" in {_name}
+        delete {scp::%{_name}%}
+        stop
+    if attacker is set:
+        victim's name does not contain "Able"
+        cancel event
+        stop
