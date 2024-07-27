@@ -3,9 +3,9 @@ function scp682(l: location):
         add nbt from "{CanPickUpLoot:0,Attributes:[{Name:generic.movement_speed,Base:0.25}],PersistenceRequired:1,Silent:1b,Tags:[""682"",""scp""]}" to nbt of entity
         set {scp::682} to entity
         set name of entity to "&2&lSCP-682 &r&4(KETER)"
-        apply strength 1 without particles to entity for 1 year
-        apply speed 2 without particles to entity for 1 year
-        apply resistance 5 without particles to entity for 1 year
+        apply infinte strength 1 without particles to entity
+        apply infinte speed 2 without particles to entity
+        apply infinte resistance 5 without particles to entity
         
     while {scp::682} is alive:
         set {_i} to a random integer between 20 and 30

@@ -2,8 +2,8 @@ function scp076(l: location):
     spawn vindicator at {_l}:
         add nbt from "{CanPickUpLoot:0,PersistenceRequired:1,Tags:[""076-2"",""scp""]}" to nbt of entity
         set name of entity to "&cAble &c&lSCP-076-2 &c(KETER)"
-        apply resistance 4 without particles to entity for 1 year
-        apply regeneration 2 without particles to entity for 1 year
+        apply infinte resistance 4 without particles to entity
+        apply infinte regeneration 2 without particles to entity
         set max health of entity to 50
         heal entity
         set {scp::076-2} to entity

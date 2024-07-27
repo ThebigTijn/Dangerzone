@@ -8,8 +8,8 @@ function scp049(l: location):
         set entity's boots to leather boots with nbt from "{Unbreakable:1b,display:{color:0}}"
         set entity's tool to iron hoe
         set entity's offhand tool to shears
-        apply strength 255 without particles to entity for 1 year
-        apply resistance 5 without particles to entity for 1 year
+        apply infinte strength 255 without particles to entity
+        apply infinte resistance 5 without particles to entity
         set {scp::049} to entity
 
 

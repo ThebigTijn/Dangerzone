@@ -9,7 +9,7 @@ local function scp131Spawn(l: location, n: text):
     spawn slime at {_l}:
         add nbt from "{CanPickUpLoot:0,Size:0,PersistenceRequired:1,Silent:1b,Tags:[""131"",""scp""]}" to nbt of entity
         set name of entity to {_n}
-        apply resistance 5 without particles to entity for 1 year
+        apply infinte resistance 5 without particles to entity
         set {_e} to entity
 
     while {_e} is alive: #its better then every 1 seconds because it only works when 131 is alive

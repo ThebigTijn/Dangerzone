@@ -1,5 +1,5 @@
 on armor change:
-    apply invisibility without particles to player for 1 year if new armor item's name = "&2SCP-268 &6(EUCLID)"
+    apply infinte invisibility without particles to player if new armor item's name = "&2SCP-268 &6(EUCLID)"
     remove invisibility from player's potion effects if old armor item's name = "&2SCP-268 &6(EUCLID)"
     
 every 10 seconds:

@@ -2,9 +2,9 @@ function scp096(l:location):
     spawn enderman at {_l}:
         set name of entity to "&f&lSCP-096 &6(Euclid)"
         add nbt from "{CanPickUpLoot:0,PersistenceRequired:1,Silent:1b,Tags:[""096"",""scp""]}" to nbt of entity
-        apply strength 2 without particles to entity for 1 year
-        apply speed 2 without particles to entity for 1 year
-        apply resistance 5 without particles to entity for 1 year
+        apply infinte strength 2 without particles to entity
+        apply infinte speed 2 without particles to entity
+        apply infinte resistance 5 without particles to entity
         set {scp::096} to entity
 
 local function scp096Target(p:player):
