@@ -1,3 +1,4 @@
+# rip dz
 function scp049(l: location):
     spawn skeleton at {_l}:
         add nbt from "{CanPickUpLoot:0,PersistenceRequired:1,Tags:[""049"",""scp""]}" to nbt of entity
